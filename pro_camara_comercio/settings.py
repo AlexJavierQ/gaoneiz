@@ -55,7 +55,7 @@ MIDDLEWARE = [
     'allauth.account.middleware.AccountMiddleware',
 ]
 
-ROOT_URLCONF = 'gaoneiz.urls'
+ROOT_URLCONF = 'pro_camara_comercio.urls'
 
 # --- PLANTILLAS (TEMPLATES) ---
 TEMPLATES = [
@@ -73,7 +73,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'gaoneiz.wsgi.application'
+WSGI_APPLICATION = 'pro_camara_comercio.wsgi.application'
 
 # --- BASE DE DATOS (DATABASE) ---
 DATABASES = {
@@ -94,10 +94,9 @@ AUTHENTICATION_BACKENDS = [
 
 # Configuración de django-allauth (limpia y sin advertencias)
 SITE_ID = 1
-ACCOUNT_EMAIL_VERIFICATION = 'optional' 
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_EMAIL_VERIFICATION = 'optional'
+ACCOUNT_LOGIN_METHODS = {'email'}
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
 
 # Redirecciones
 LOGIN_REDIRECT_URL = 'web:home' # A dónde ir después de un login exitoso.
