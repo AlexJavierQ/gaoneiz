@@ -34,7 +34,7 @@
                                     </label>
                                     {{ form.nombre_completo }}
                                     {% if form.nombre_completo.errors %}
-                                        <div class="text-danger small mt-1">{{ form.nombre_completo.errors.0 }}</div>
+                                    <div class="text-danger small mt-1">{{ form.nombre_completo.errors.0 }}</div>
                                     {% endif %}
                                 </div>
                             </div>
@@ -45,7 +45,7 @@
                                     </label>
                                     {{ form.correo_electronico }}
                                     {% if form.correo_electronico.errors %}
-                                        <div class="text-danger small mt-1">{{ form.correo_electronico.errors.0 }}</div>
+                                    <div class="text-danger small mt-1">{{ form.correo_electronico.errors.0 }}</div>
                                     {% endif %}
                                 </div>
                             </div>
@@ -56,7 +56,7 @@
                                     </label>
                                     {{ form.telefono }}
                                     {% if form.telefono.errors %}
-                                        <div class="text-danger small mt-1">{{ form.telefono.errors.0 }}</div>
+                                    <div class="text-danger small mt-1">{{ form.telefono.errors.0 }}</div>
                                     {% endif %}
                                 </div>
                             </div>
@@ -67,7 +67,7 @@
                                     </label>
                                     {{ form.asunto }}
                                     {% if form.asunto.errors %}
-                                        <div class="text-danger small mt-1">{{ form.asunto.errors.0 }}</div>
+                                    <div class="text-danger small mt-1">{{ form.asunto.errors.0 }}</div>
                                     {% endif %}
                                 </div>
                             </div>
@@ -78,7 +78,7 @@
                                     </label>
                                     {{ form.mensaje }}
                                     {% if form.mensaje.errors %}
-                                        <div class="text-danger small mt-1">{{ form.mensaje.errors.0 }}</div>
+                                    <div class="text-danger small mt-1">{{ form.mensaje.errors.0 }}</div>
                                     {% endif %}
                                 </div>
                             </div>
@@ -91,14 +91,14 @@
                     </form>
                 </div>
             </div>
-            
+
             <div class="col-lg-4">
                 <div class="custom-card h-100">
                     <div class="card-body">
                         <h4 class="card-title mb-4">
                             <i class="fas fa-map-marker-alt text-primary me-2"></i>Información de Contacto
                         </h4>
-                        
+
                         <div class="info-item mb-3">
                             <i class="fas fa-map-marker-alt"></i>
                             <div>
@@ -107,7 +107,7 @@
                                 Loja, Ecuador
                             </div>
                         </div>
-                        
+
                         <div class="info-item mb-3">
                             <i class="fas fa-phone"></i>
                             <div>
@@ -115,7 +115,7 @@
                                 +593 7 257-0407
                             </div>
                         </div>
-                        
+
                         <div class="info-item mb-3">
                             <i class="fas fa-envelope"></i>
                             <div>
@@ -123,7 +123,7 @@
                                 info@camaraloja.org.ec
                             </div>
                         </div>
-                        
+
                         <div class="info-item mb-4">
                             <i class="fas fa-clock"></i>
                             <div>
@@ -132,9 +132,9 @@
                                 Sábados: 8:00 AM - 12:00 PM
                             </div>
                         </div>
-                        
+
                         <hr>
-                        
+
                         <h5 class="mb-3">
                             <i class="fas fa-share-alt text-primary me-2"></i>Síguenos
                         </h5>
@@ -166,12 +166,22 @@
             <div class="col-12">
                 <div class="custom-card">
                     <div class="card-body p-0">
-                        <div style="height: 400px; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center; border-radius: 12px;">
-                            <div class="text-center">
-                                <i class="fas fa-map fa-3x text-muted mb-3"></i>
-                                <h5 class="text-muted">Mapa de Ubicación</h5>
-                                <p class="text-muted">Aquí se mostraría el mapa interactivo de nuestra ubicación</p>
-                            </div>
+                        <h4 class="text-center mb-4 pt-4">
+                            <i class="fas fa-map-marker-alt text-primary me-2"></i>Nuestra Ubicación
+                        </h4>
+                        <div class="ratio ratio-16x9" style="border-radius: 12px; overflow: hidden;">
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3980.108155351186!2d-79.20734602572057!3d-3.998181395975548!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91cb37fe1a5adebb%3A0x4ac4a8ab7d267dbe!2sC%C3%A1mara%20de%20Comercio%20de%20Loja!5e0!3m2!1ses-419!2sec!4v1753759585751!5m2!1ses-419!2sec"
+                                style="border:0;" allowfullscreen="" loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade"
+                                title="Ubicación de la Cámara de Comercio de Loja">
+                            </iframe>
+                        </div>
+                        <div class="p-3 text-center">
+                            <p class="mb-0 text-muted">
+                                <i class="fas fa-info-circle me-1"></i>
+                                Haz clic en el mapa para ver direcciones detalladas
+                            </p>
                         </div>
                     </div>
                 </div>
