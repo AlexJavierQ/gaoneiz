@@ -1,0 +1,185 @@
+# Entornos virtuales
+venv/
+env/
+ENV/
+.env
+.venv
+
+# Archivos de entorno
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Base de datos SQLite (puedes descomentar si usas otra base de datos)
+*.sqlite3
+*.sqlite3-journal
+
+# Archivos de Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Entornos de desarrollo
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Archivos de medios y estáticos (si se suben manualmente)
+media/
+staticfiles/
+
+# Archivos de entorno de Python
+.python-version
+
+# Archivos de Jupyter Notebook
+.ipynb_checkpoints
+
+# Archivos de PyCharm
+.idea/
+
+# Archivos de VS Code
+.vscode/
+*.code-workspace
+
+# Archivos de Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Archivos de macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Archivos de Python
+*.pyc
+__pycache__/
+
+# Archivos de entorno virtual
+venv/
+ENV/
+
+# Archivos de configuración local
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Archivos de logs
+*.log
+
+# Directorio de cobertura
+htmlcov/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# Directorio de paquetes
+*.manifest
+*.spec
+
+# Archivos de PyInstaller
+*.manifest
+*.spec
+
+# Archivos de Instalador de Python
+*.mo
+*.pot
+
+# Archivos de Django
+*.log
+local_settings.py
+
+# Archivos de Flask
+instance/
+.webassets-cache
+
+# Archivos de Scrapy
+.scrapy
+
+# Archivos de Sphinx
+docs/_build/
+
+# Archivos de PyBuilder
+target/
+
+# Archivos de Jupyter Notebook
+.ipynb_checkpoints
+
+# Archivos de pyenv
+.python-version
+
+# Archivos de celery
+celerybeat-schedule
+celerybeat.pid
+
+# Archivos de SageMath
+.sage/
+
+# Archivos de Spyder
+.spyderproject
+.spyproject
+
+# Archivos de Rope
+.ropeproject
+
+# Archivos de mkdocs
+docs/_site/
+
+# Archivos de mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Archivos de Pyre
+.pyre/
+
+# Archivos de pytype
+.pytype/
+
+# Archivos de Cython
+*.so
+
+# Archivos de PyCharm
+.idea/
+*.iml
+
+# Archivos de VS Code
+.vscode/
+*.code-workspace
+
+# Archivos de Jupyter Notebook
+.ipynb_checkpoints
+
+# Archivos de Python
+*.pyc
+__pycache__/
+
+# Archivos de entorno virtual
+venv/
+ENV/
