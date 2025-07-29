@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ convenio.nombre_empresa }} - Convenios{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb -->
+<section class="py-3 bg-light">
+    <div class="container">
+        <nav class="breadcrumb-custom">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{% url 'web:home' %}">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'convenios:convenio_list' %}">Convenios</a></li>
+                <li class="breadcrumb-item active">{{ convenio.nombre_empresa }}</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+
+<!-- Convenio Detail -->
+<section class="py-5">
+    <div class="container">
+        <div class="row g-5">
+            <div class="col-lg-8">
+                <div class="custom-card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-4">
+                            <div>
+                                <span class="category-badge mb-2 d-inline-block">{{ convenio.get_categoria_display }}</span>
+                                <h1 class="card-title mb-0">{{ convenio.nombre_empresa }}</h1>
+                            </div>
+                            <span class="status-badge status-active">{{ convenio.estado }}</span>
+                        </div>
+                        
+                        {% if convenio.descripcion %}
+                            <div class="mb-4">
+                                <h4><i class="fas fa-info-circle text-primary me-2"></i>Descripción</h4>
+                                <p class="lead">{{ convenio.descripcion|linebreaks }}</p>
+                            </div>
+                        {% endif %}
+                        
+                        <!-- Beneficios -->
+                        {% if convenio.beneficios.all %}
+                            <div class="mb-4">
+                                <h4><i class="fas fa-gift text-primary me-2"></i>Beneficios Disponibles</h4>
+                                <div class="row g-3">
+                                    {% for beneficio in convenio.beneficios.all %}
+                                        {% if beneficio.activo %}
+                                            <div class="col-md-6">
+                                                <div class="custom-card">
+                                                    <div class="card-body">
+                                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                                            <h6 class="card-title mb-0">{{ beneficio.nombre }}</h6>
+                                                            <span class="category-badge">{{ beneficio.get_tipo_display }}</span>
+                                                        </div>
+                                                        <p class="card-text small">{{ beneficio.descripcion }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
+                        
+                        <!-- Información Adicional -->
+                        <div class="mb-4">
+                            <h4><i class="fas fa-calendar text-primary me-2"></i>Información del Convenio</h4>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="info-row">
+                                        <span class="info-label">Fecha de Inicio:</span>
+                                        <span class="info-value">{{ convenio.fecha_inicio|date:"d \d\e F, Y" }}</span>
+                                    </div>
+                                </div>
+                                {% if convenio.fecha_vencimiento %}
+                                    <div class="col-md-6">
+                                        <div class="info-row">
+                                            <span class="info-label">Fecha de Vencimiento:</span>
+                                            <span class="info-value">{{ convenio.fecha_vencimiento|date:"d \d\e F, Y" }}</span>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                <div class="col-md-6">
+                                    <div class="info-row">
+                                        <span class="info-label">Categoría:</span>
+                                        <span class="info-value">{{ convenio.get_categoria_display }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="info-row">
+                                        <span class="info-label">Estado:</span>
+                                        <span class="info-value">
+                                            <span class="status-badge status-active">{{ convenio.estado }}</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        {% if convenio.sitio_web %}
+                            <div class="mb-4">
+                                <a href="{{ convenio.sitio_web }}" target="_blank" class="btn btn-outline-primary">
+                                    <i class="fas fa-external-link-alt me-2"></i>Visitar Sitio Web
+                                </a>
+                            </div>
+                        {% endif %}
+                        
+                        <div class="mt-4">
+                            <a href="{% url 'convenios:convenio_list' %}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Volver a Convenios
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <!-- Access Info -->
+                <div class="custom-card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="fas fa-key text-primary me-2"></i>Acceso al Convenio
+                        </h5>
+                        {% if user.es_socio %}
+                            <div class="alert alert-success-custom">
+                                <i class="fas fa-check-circle me-2"></i>
+                                <strong>¡Tienes acceso!</strong><br>
+                                Como socio activo puedes disfrutar de todos los beneficios de este convenio.
+                            </div>
+                        {% elif user.is_authenticated %}
+                            <div class="alert alert-warning-custom">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                <strong>Afiliación requerida</strong><br>
+                                Para acceder a este convenio necesitas ser socio de la Cámara de Comercio.
+                            </div>
+                            <a href="{% url 'afiliaciones:solicitar_afiliacion' %}" class="btn btn-primary w-100">
+                                <i class="fas fa-handshake me-2"></i>Solicitar Afiliación
+                            </a>
+                        {% else %}
+                            <div class="alert alert-info-custom">
+                                <i class="fas fa-info-circle me-2"></i>
+                                <strong>Registro requerido</strong><br>
+                                Regístrate y solicita tu afiliación para acceder a este convenio.
+                            </div>
+                            <a href="{% url 'account_signup' %}" class="btn btn-primary w-100 mb-2">
+                                <i class="fas fa-user-plus me-2"></i>Registrarse
+                            </a>
+                            <a href="{% url 'account_login' %}" class="btn btn-outline-primary w-100">
+                                <i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Related Convenios -->
+                <div class="custom-card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="fas fa-handshake text-primary me-2"></i>Otros Convenios
+                        </h5>
+                        <p class="card-text">Explora más convenios disponibles en la misma categoría.</p>
+                        <a href="{% url 'convenios:convenios_por_categoria' convenio.categoria %}" class="btn btn-outline-primary w-100">
+                            <i class="fas fa-list me-2"></i>Ver {{ convenio.get_categoria_display }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

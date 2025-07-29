@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+
+{% block title %}Contacto - Cámara de Comercio de Loja{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h1 class="hero-title">Contáctanos</h1>
+                <p class="hero-subtitle">Estamos aquí para ayudarte. Envíanos tu mensaje y te responderemos pronto.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Form Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row g-5">
+            <div class="col-lg-8">
+                <div class="form-container">
+                    <h3 class="mb-4">
+                        <i class="fas fa-envelope text-primary me-2"></i>Envíanos un Mensaje
+                    </h3>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="{{ form.nombre_completo.id_for_label }}" class="form-label">
+                                        <i class="fas fa-user me-1"></i>Nombre Completo *
+                                    </label>
+                                    {{ form.nombre_completo }}
+                                    {% if form.nombre_completo.errors %}
+                                        <div class="text-danger small mt-1">{{ form.nombre_completo.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="{{ form.correo_electronico.id_for_label }}" class="form-label">
+                                        <i class="fas fa-envelope me-1"></i>Correo Electrónico *
+                                    </label>
+                                    {{ form.correo_electronico }}
+                                    {% if form.correo_electronico.errors %}
+                                        <div class="text-danger small mt-1">{{ form.correo_electronico.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="{{ form.telefono.id_for_label }}" class="form-label">
+                                        <i class="fas fa-phone me-1"></i>Teléfono
+                                    </label>
+                                    {{ form.telefono }}
+                                    {% if form.telefono.errors %}
+                                        <div class="text-danger small mt-1">{{ form.telefono.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="{{ form.asunto.id_for_label }}" class="form-label">
+                                        <i class="fas fa-tag me-1"></i>Asunto *
+                                    </label>
+                                    {{ form.asunto }}
+                                    {% if form.asunto.errors %}
+                                        <div class="text-danger small mt-1">{{ form.asunto.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="{{ form.mensaje.id_for_label }}" class="form-label">
+                                        <i class="fas fa-comment me-1"></i>Mensaje *
+                                    </label>
+                                    {{ form.mensaje }}
+                                    {% if form.mensaje.errors %}
+                                        <div class="text-danger small mt-1">{{ form.mensaje.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-paper-plane me-2"></i>Enviar Mensaje
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="custom-card h-100">
+                    <div class="card-body">
+                        <h4 class="card-title mb-4">
+                            <i class="fas fa-map-marker-alt text-primary me-2"></i>Información de Contacto
+                        </h4>
+                        
+                        <div class="info-item mb-3">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div>
+                                <strong>Dirección:</strong><br>
+                                Av. Universidad y José Antonio Eguiguren<br>
+                                Loja, Ecuador
+                            </div>
+                        </div>
+                        
+                        <div class="info-item mb-3">
+                            <i class="fas fa-phone"></i>
+                            <div>
+                                <strong>Teléfono:</strong><br>
+                                +593 7 257-0407
+                            </div>
+                        </div>
+                        
+                        <div class="info-item mb-3">
+                            <i class="fas fa-envelope"></i>
+                            <div>
+                                <strong>Email:</strong><br>
+                                info@camaraloja.org.ec
+                            </div>
+                        </div>
+                        
+                        <div class="info-item mb-4">
+                            <i class="fas fa-clock"></i>
+                            <div>
+                                <strong>Horario de Atención:</strong><br>
+                                Lunes a Viernes: 8:00 AM - 5:00 PM<br>
+                                Sábados: 8:00 AM - 12:00 PM
+                            </div>
+                        </div>
+                        
+                        <hr>
+                        
+                        <h5 class="mb-3">
+                            <i class="fas fa-share-alt text-primary me-2"></i>Síguenos
+                        </h5>
+                        <div class="d-flex gap-2">
+                            <a href="#" class="btn btn-outline-primary btn-sm">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="#" class="btn btn-outline-primary btn-sm">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#" class="btn btn-outline-primary btn-sm">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a href="#" class="btn btn-outline-primary btn-sm">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Map Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="custom-card">
+                    <div class="card-body p-0">
+                        <div style="height: 400px; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center; border-radius: 12px;">
+                            <div class="text-center">
+                                <i class="fas fa-map fa-3x text-muted mb-3"></i>
+                                <h5 class="text-muted">Mapa de Ubicación</h5>
+                                <p class="text-muted">Aquí se mostraría el mapa interactivo de nuestra ubicación</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

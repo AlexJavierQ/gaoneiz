@@ -1,58 +1,167 @@
 {% extends 'base.html' %}
 
-{% block title %}Sobre Nosotros - Cámara de Comercio de Loja{% endblock %}
+{% block title %}Nosotros - Cámara de Comercio de Loja{% endblock %}
 
 {% block content %}
-<div class="container my-5">
-    <div class="text-center mb-5">
-        <h1 class="display-5 fw-bold">Sobre la Cámara de Comercio de Loja</h1>
-        <p class="lead text-muted">Comprometidos con el desarrollo empresarial de nuestra región.</p>
-    </div>
-
-    <div class="row align-items-center mb-5">
-        <div class="col-lg-6">
-            <h3 class="fw-bold mb-3">Nuestra Misión y Visión</h3>
-            <p><strong>Misión:</strong> Apoyar la promoción de nuestra ciudad en el ámbito nacional e internacional, fomentar mejores prácticas de gestión económica y cooperar con instituciones públicas y privadas para elevar la capacidad empresarial y el desarrollo socioeconómico de los lojanos.</p>
-            <p><strong>Visión:</strong> Representar y respaldar la actividad comercial lojana a nivel nacional e internacional, impulsando el intercambio comercial, social y cultural.</p>
-        </div>
-        <div class="col-lg-6">
-            <img src="https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" class="img-fluid rounded shadow-sm" alt="Oficina de trabajo">
-        </div>
-    </div>
-</div>
-
-<div class="bg-light py-5">
+<!-- Hero Section -->
+<section class="hero-section">
     <div class="container">
-        <h3 class="text-center fw-bold mb-5">Conoce Nuestros Planes de Afiliación</h3>
-        <div class="row text-center">
-            <div class="col-md-4 mb-4">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body p-4">
-                        <h4 class="fw-bold text-primary">Plan Persona Natural</h4>
-                        <p class="text-muted">Ideal para emprendedores y microempresas.</p>
-                    </div>
-                </div>
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h1 class="hero-title">Sobre Nosotros</h1>
+                <p class="hero-subtitle">Conoce nuestra historia, misión y compromiso con el desarrollo empresarial de Loja</p>
             </div>
-            <div class="col-md-4 mb-4">
-                <div class="card h-100 shadow-sm border-primary border-3">
-                    <div class="card-body p-4">
-                        <h4 class="fw-bold text-primary">Plan Empresa</h4>
-                        <p class="text-muted">Dirigido a empresas y negocios establecidos.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body p-4">
-                        <h4 class="fw-bold text-primary">Plan Entidad Financiera</h4>
-                        <p class="text-muted">Orientado a instituciones financieras colaboradoras.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="text-center mt-4">
-            <a href="#" class="btn btn-primary btn-lg">AFÍLIATE AHORA →</a>
         </div>
     </div>
-</div>
+</section>
+
+<!-- About Content -->
+<section class="py-5">
+    <div class="container">
+        <div class="row g-5">
+            <div class="col-lg-6">
+                <div class="custom-card h-100">
+                    <div class="card-body">
+                        <h3 class="card-title">
+                            <i class="fas fa-bullseye text-primary me-2"></i>Nuestra Misión
+                        </h3>
+                        <p class="card-text">
+                            Promover el desarrollo económico y empresarial de la provincia de Loja, 
+                            brindando servicios de calidad, representación gremial y facilitando 
+                            la integración del sector privado con el público para el crecimiento 
+                            sostenible de nuestra región.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="custom-card h-100">
+                    <div class="card-body">
+                        <h3 class="card-title">
+                            <i class="fas fa-eye text-primary me-2"></i>Nuestra Visión
+                        </h3>
+                        <p class="card-text">
+                            Ser la organización líder en el fortalecimiento del sector empresarial 
+                            de Loja, reconocida por su excelencia en servicios, innovación y 
+                            compromiso con el desarrollo económico sostenible de la región.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Values Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="section-title">Nuestros Valores</h2>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <i class="fas fa-handshake fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">Integridad</h5>
+                        <p class="card-text">Actuamos con transparencia, honestidad y ética en todas nuestras actividades.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <i class="fas fa-lightbulb fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">Innovación</h5>
+                        <p class="card-text">Promovemos la creatividad y la adopción de nuevas tecnologías y metodologías.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <i class="fas fa-users fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">Colaboración</h5>
+                        <p class="card-text">Fomentamos el trabajo en equipo y las alianzas estratégicas para el crecimiento mutuo.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <i class="fas fa-award fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">Excelencia</h5>
+                        <p class="card-text">Nos comprometemos a brindar servicios de la más alta calidad a nuestros afiliados.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <i class="fas fa-leaf fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">Sostenibilidad</h5>
+                        <p class="card-text">Promovemos prácticas empresariales responsables con el medio ambiente.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <i class="fas fa-heart fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">Compromiso Social</h5>
+                        <p class="card-text">Contribuimos al desarrollo social y económico de nuestra comunidad.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- History Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="custom-card">
+                    <div class="card-body">
+                        <h2 class="section-title">Nuestra Historia</h2>
+                        <p class="lead">
+                            La Cámara de Comercio de Loja fue fundada con el objetivo de representar 
+                            y fortalecer al sector empresarial de la provincia.
+                        </p>
+                        <p>
+                            Desde nuestros inicios, hemos trabajado incansablemente para crear un 
+                            ambiente propicio para el desarrollo de los negocios, facilitando la 
+                            comunicación entre el sector público y privado, y promoviendo iniciativas 
+                            que impulsen el crecimiento económico de nuestra región.
+                        </p>
+                        <p>
+                            A lo largo de los años, hemos logrado establecer importantes convenios 
+                            comerciales, desarrollar programas de capacitación empresarial, y crear 
+                            una sólida red de contactos que beneficia a todos nuestros afiliados.
+                        </p>
+                        <p>
+                            Hoy en día, continuamos evolucionando y adaptándonos a los nuevos desafíos 
+                            del mundo empresarial, siempre manteniendo nuestro compromiso con el 
+                            desarrollo sostenible y el bienestar de nuestra comunidad empresarial.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact CTA -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="section-title">¿Quieres saber más?</h2>
+                <p class="lead mb-4">Contáctanos para conocer más sobre nuestros servicios y cómo podemos ayudarte a hacer crecer tu negocio.</p>
+                <a href="{% url 'web:contacto' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-envelope me-2"></i>Contáctanos
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock %}

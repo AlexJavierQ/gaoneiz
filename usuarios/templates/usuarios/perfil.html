@@ -1,21 +1,198 @@
 {% extends 'base.html' %}
-{% load crispy_forms_tags %}
 
-{% block title %}Editar Perfil{% endblock %}
+{% block title %}Mi Perfil - Cámara de Comercio de Loja{% endblock %}
 
 {% block content %}
-<div class="container my-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card shadow-sm p-4">
-                <h2 class="text-center mb-4">Editar Perfil</h2>
-                <form method="post">
-                    {% csrf_token %}
-                    {{ form|crispy }}
-                    <button type="submit" class="btn btn-primary mt-3">Guardar Cambios</button>
-                </form>
+<!-- Profile Header -->
+<section class="py-5">
+    <div class="container">
+        <div class="profile-header">
+            <div class="profile-avatar mx-auto">
+                {{ usuario.first_name.0|default:usuario.email.0|upper }}
+            </div>
+            <h2 class="mb-2">{{ usuario.get_full_name|default:usuario.email }}</h2>
+            <p class="mb-3">
+                {% if usuario.es_socio %}
+                    <span class="status-badge status-active">
+                        <i class="fas fa-star me-1"></i>Socio Activo
+                    </span>
+                {% else %}
+                    <span class="status-badge status-pending">
+                        <i class="fas fa-user me-1"></i>Usuario Registrado
+                    </span>
+                {% endif %}
+            </p>
+            <div class="d-flex gap-2 justify-content-center">
+                <a href="{% url 'usuarios:editar_perfil' %}" class="btn btn-logout">
+                    <i class="fas fa-edit me-2"></i>Editar Perfil
+                </a>
+                {% if usuario.is_staff %}
+                    <a href="{% url 'panel:dashboard' %}" class="btn btn-outline-light">
+                        <i class="fas fa-cog me-2"></i>Panel Admin
+                    </a>
+                {% endif %}
             </div>
         </div>
     </div>
-</div>
+</section>
+
+<!-- Profile Content -->
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4">
+            <!-- Personal Information -->
+            <div class="col-lg-6">
+                <div class="profile-info">
+                    <h4 class="mb-4">
+                        <i class="fas fa-user text-primary me-2"></i>Información Personal
+                    </h4>
+                    
+                    <div class="info-row">
+                        <span class="info-label">Nombre Completo:</span>
+                        <span class="info-value">{{ usuario.get_full_name|default:"No especificado" }}</span>
+                    </div>
+                    
+                    <div class="info-row">
+                        <span class="info-label">Email:</span>
+                        <span class="info-value">{{ usuario.email }}</span>
+                    </div>
+                    
+                    <div class="info-row">
+                        <span class="info-label">Cédula:</span>
+                        <span class="info-value">{{ usuario.cedula|default:"No especificada" }}</span>
+                    </div>
+                    
+                    <div class="info-row">
+                        <span class="info-label">Teléfono:</span>
+                        <span class="info-value">{{ usuario.telefono|default:"No especificado" }}</span>
+                    </div>
+                    
+                    <div class="info-row">
+                        <span class="info-label">Fecha de Registro:</span>
+                        <span class="info-value">{{ usuario.date_joined|date:"d \d\e F, Y" }}</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Business Information -->
+            <div class="col-lg-6">
+                {% if usuario.es_socio %}
+                    <div class="profile-info">
+                        <h4 class="mb-4">
+                            <i class="fas fa-building text-primary me-2"></i>Información Empresarial
+                        </h4>
+                        
+                        <div class="info-row">
+                            <span class="info-label">Razón Social:</span>
+                            <span class="info-value">{{ usuario.perfil_socio.razon_social }}</span>
+                        </div>
+                        
+                        <div class="info-row">
+                            <span class="info-label">RUC:</span>
+                            <span class="info-value">{{ usuario.perfil_socio.ruc }}</span>
+                        </div>
+                        
+                        <div class="info-row">
+                            <span class="info-label">Dirección:</span>
+                            <span class="info-value">{{ usuario.perfil_socio.direccion }}</span>
+                        </div>
+                        
+                        <div class="info-row">
+                            <span class="info-label">Tipo de Plan:</span>
+                            <span class="info-value">{{ usuario.perfil_socio.get_tipo_plan_display }}</span>
+                        </div>
+                        
+                        <div class="info-row">
+                            <span class="info-label">Fecha de Afiliación:</span>
+                            <span class="info-value">{{ usuario.perfil_socio.fecha_afiliacion|date:"d \d\e F, Y" }}</span>
+                        </div>
+                        
+                        <div class="info-row">
+                            <span class="info-label">Estado:</span>
+                            <span class="info-value">
+                                {% if usuario.perfil_socio.is_active %}
+                                    <span class="status-badge status-active">Activo</span>
+                                {% else %}
+                                    <span class="status-badge status-inactive">Inactivo</span>
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="custom-card">
+                        <div class="card-body text-center">
+                            <i class="fas fa-handshake fa-3x text-primary mb-3"></i>
+                            <h5 class="card-title">¿Quieres ser socio?</h5>
+                            <p class="card-text">Únete a la Cámara de Comercio y accede a beneficios exclusivos.</p>
+                            
+                            {% if usuario.solicitudafiliacion %}
+                                <div class="alert alert-info-custom">
+                                    <i class="fas fa-clock me-2"></i>
+                                    <strong>Solicitud en proceso</strong><br>
+                                    Tu solicitud de afiliación está siendo revisada.
+                                </div>
+                                <a href="{% url 'afiliaciones:mi_solicitud' %}" class="btn btn-outline-primary">
+                                    <i class="fas fa-eye me-2"></i>Ver Mi Solicitud
+                                </a>
+                            {% else %}
+                                <a href="{% url 'afiliaciones:solicitar_afiliacion' %}" class="btn btn-primary">
+                                    <i class="fas fa-handshake me-2"></i>Solicitar Afiliación
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Actions -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h3 class="section-title">Acciones Rápidas</h3>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <i class="fas fa-handshake fa-2x text-primary mb-3"></i>
+                        <h6 class="card-title">Convenios</h6>
+                        <p class="card-text small">Explora los convenios disponibles</p>
+                        <a href="{% url 'convenios:convenio_list' %}" class="btn btn-outline-primary btn-sm">Ver Convenios</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <i class="fas fa-cogs fa-2x text-primary mb-3"></i>
+                        <h6 class="card-title">Servicios</h6>
+                        <p class="card-text small">Descubre nuestros servicios</p>
+                        <a href="{% url 'servicios:servicio_list' %}" class="btn btn-outline-primary btn-sm">Ver Servicios</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <i class="fas fa-newspaper fa-2x text-primary mb-3"></i>
+                        <h6 class="card-title">Noticias</h6>
+                        <p class="card-text small">Mantente informado</p>
+                        <a href="{% url 'noticias:noticia_list' %}" class="btn btn-outline-primary btn-sm">Ver Noticias</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <i class="fas fa-users fa-2x text-primary mb-3"></i>
+                        <h6 class="card-title">Red de Socios</h6>
+                        <p class="card-text small">Conecta con otros socios</p>
+                        <a href="{% url 'usuarios:socios_list' %}" class="btn btn-outline-primary btn-sm">Ver Socios</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock %}

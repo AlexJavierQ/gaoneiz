@@ -1,7 +1,32 @@
 # usuarios/models.py
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, UserManager
 from django.utils.translation import gettext_lazy as _
+
+class UsuarioManager(UserManager):
+    """Manager personalizado para el modelo Usuario."""
+    
+    def create_user(self, email, password=None, **extra_fields):
+        """Crea y guarda un usuario con el email y contraseña dados."""
+        if not email:
+            raise ValueError('El email es obligatorio')
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+    
+    def create_superuser(self, email, password=None, **extra_fields):
+        """Crea y guarda un superusuario con el email y contraseña dados."""
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('El superusuario debe tener is_staff=True.')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('El superusuario debe tener is_superuser=True.')
+        
+        return self.create_user(email, password, **extra_fields)
 
 class Usuario(AbstractUser):
     """
@@ -18,6 +43,9 @@ class Usuario(AbstractUser):
     # Se configura el email como el campo para iniciar sesión.
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
+    
+    # Usar el manager personalizado
+    objects = UsuarioManager()
 
     def __str__(self):
         return self.get_full_name() or self.email

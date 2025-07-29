@@ -1,37 +1,141 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Inicio - Cámara de Comercio de Loja{% endblock %}
 
 {% block content %}
-<div class="section-primary-blue text-center p-5 text-white">
+<!-- Hero Section -->
+<section class="hero-section">
     <div class="container">
-        <h1 class="display-4 fw-bold">Obtén tu Firma Electrónica</h1>
-        <p class="lead">En la Cámara de Comercio de Loja</p>
+        <div class="row align-items-center">
+            <div class="col-lg-8 mx-auto">
+                <h1 class="hero-title">Cámara de Comercio de Loja</h1>
+                <p class="hero-subtitle">Fortaleciendo el desarrollo empresarial y comercial de nuestra región</p>
+                <div class="d-flex gap-3 justify-content-center flex-wrap">
+                    {% if not user.is_authenticated %}
+                        <a href="{% url 'afiliaciones:solicitar_afiliacion' %}" class="btn btn-logout btn-lg">
+                            <i class="fas fa-handshake me-2"></i>Únete a Nosotros
+                        </a>
+                    {% endif %}
+                    <a href="{% url 'web:nosotros' %}" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-info-circle me-2"></i>Conoce Más
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+</section>
 
-<div class="container my-5">
-    <div class="text-center mb-5">
-        <h2 class="fw-bold">Conoce nuestra Visión y Misión</h2>
-    </div>
-    <div class="row align-items-center">
-        <div class="col-lg-6">
-            <div class="card shadow-sm mb-4">
-                <div class="card-body p-4">
-                    <h3>VISIÓN</h3>
-                    <p class="text-muted">Promover el desarrollo empresarial y comercial brindando servicios de calidad que fortalezcan la competitividad de nuestros asociados.</p>
+<!-- Services Section -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="section-title">Nuestros Servicios</h2>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <i class="fas fa-handshake fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">Convenios Comerciales</h5>
+                        <p class="card-text">Accede a descuentos y beneficios exclusivos con empresas aliadas.</p>
+                        <a href="{% url 'convenios:convenio_list' %}" class="btn btn-primary">Ver Convenios</a>
+                    </div>
                 </div>
             </div>
-            <div class="card shadow-sm">
-                <div class="card-body p-4">
-                    <h3>MISIÓN</h3>
-                    <p class="text-muted">Ser la institución líder en el desarrollo empresarial del sur del Ecuador, reconocida por su existencia.</p>
+            <div class="col-md-6 col-lg-3">
+                <div class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <i class="fas fa-graduation-cap fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">Capacitaciones</h5>
+                        <p class="card-text">Programas de formación empresarial y desarrollo profesional.</p>
+                        <a href="{% url 'servicios:servicio_list' %}" class="btn btn-primary">Ver Servicios</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <i class="fas fa-users fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">Red de Contactos</h5>
+                        <p class="card-text">Conecta con otros empresarios y amplía tu red de negocios.</p>
+                        <a href="{% url 'usuarios:socios_list' %}" class="btn btn-primary">Ver Socios</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <i class="fas fa-newspaper fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">Noticias</h5>
+                        <p class="card-text">Mantente informado sobre el sector empresarial y comercial.</p>
+                        <a href="{% url 'noticias:noticia_list' %}" class="btn btn-primary">Ver Noticias</a>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-lg-6 d-none d-lg-block">
-            <img src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" class="img-fluid rounded shadow" alt="Equipo de trabajo">
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-3 col-6 mb-4">
+                <div class="custom-card">
+                    <div class="card-body">
+                        <i class="fas fa-building fa-2x text-primary mb-2"></i>
+                        <h3 class="fw-bold text-primary">500+</h3>
+                        <p class="mb-0">Empresas Afiliadas</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-4">
+                <div class="custom-card">
+                    <div class="card-body">
+                        <i class="fas fa-handshake fa-2x text-primary mb-2"></i>
+                        <h3 class="fw-bold text-primary">50+</h3>
+                        <p class="mb-0">Convenios Activos</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-4">
+                <div class="custom-card">
+                    <div class="card-body">
+                        <i class="fas fa-calendar fa-2x text-primary mb-2"></i>
+                        <h3 class="fw-bold text-primary">100+</h3>
+                        <p class="mb-0">Eventos Anuales</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-4">
+                <div class="custom-card">
+                    <div class="card-body">
+                        <i class="fas fa-award fa-2x text-primary mb-2"></i>
+                        <h3 class="fw-bold text-primary">25+</h3>
+                        <p class="mb-0">Años de Experiencia</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="section-title">¿Listo para hacer crecer tu negocio?</h2>
+                <p class="lead mb-4">Únete a la Cámara de Comercio de Loja y accede a todos los beneficios que tenemos para ti.</p>
+                {% if not user.is_authenticated %}
+                    <a href="{% url 'afiliaciones:solicitar_afiliacion' %}" class="btn btn-primary btn-lg me-3">
+                        <i class="fas fa-handshake me-2"></i>Solicitar Afiliación
+                    </a>
+                {% endif %}
+                <a href="{% url 'web:contacto' %}" class="btn btn-outline-primary btn-lg">
+                    <i class="fas fa-envelope me-2"></i>Contáctanos
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock %}

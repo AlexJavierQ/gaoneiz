@@ -17,35 +17,44 @@
     <header class="sticky-top shadow-sm">
         <nav class="navbar navbar-expand-lg bg-white py-3">
             <div class="container">
-                <a class="navbar-brand d-flex align-items-center" href="{% url 'app_camara_comercio:home' %}">
+                <a class="navbar-brand d-flex align-items-center" href="{% url 'web:home' %}">
                     <img src="{% static 'images/logo-camara-de-comercio-loja-cadecol.png' %}" alt="Logo" height="45" class="me-2">
+                    <span class="fw-bold">Cámara de Comercio</span>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                     <ul class="navbar-nav align-items-lg-center">
-                        <li class="nav-item"><a class="nav-link" href="{% url 'app_camara_comercio:home' %}">Inicio</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'web:home' %}">Inicio</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'noticias:noticia_list' %}">Noticias</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'app_camara_comercio:convenio_list' %}">Convenios</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'app_camara_comercio:nosotros' %}">Nosotros</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'app_camara_comercio:contacto' %}">Contacto</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'convenios:convenio_list' %}">Convenios</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'servicios:servicio_list' %}">Servicios</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'web:nosotros' %}">Nosotros</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'web:contacto' %}">Contacto</a></li>
                     </ul>
                     <div class="d-flex align-items-center gap-2 ps-lg-3">
                         {% if user.is_authenticated %}
                             <div class="dropdown">
                                 <a href="#" class="btn btn-primary dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Bienvenido, {{ user.first_name|default:user.email }}
+                                    <i class="fas fa-user me-1"></i>{{ user.first_name|default:user.email }}
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end">
-                                    <li><a class="dropdown-item" href="{% url 'app_camara_comercio:dashboard' %}"><i class="fa-solid fa-table-columns me-2"></i>Mi Dashboard</a></li>
-                                    <li><a class="dropdown-item" href="{% url 'app_camara_comercio:perfil' %}"><i class="fa-solid fa-user-edit me-2"></i>Editar Perfil</a></li>
+                                    {% if user.is_staff %}
+                                        <li><a class="dropdown-item" href="{% url 'panel:dashboard' %}"><i class="fa-solid fa-table-columns me-2"></i>Panel Admin</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                    {% endif %}
+                                    <li><a class="dropdown-item" href="{% url 'usuarios:perfil' %}"><i class="fa-solid fa-user me-2"></i>Mi Perfil</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'usuarios:editar_perfil' %}"><i class="fa-solid fa-user-edit me-2"></i>Editar Perfil</a></li>
+                                    {% if not user.es_socio and not user.solicitudafiliacion %}
+                                        <li><a class="dropdown-item" href="{% url 'afiliaciones:solicitar_afiliacion' %}"><i class="fa-solid fa-handshake me-2"></i>Solicitar Afiliación</a></li>
+                                    {% endif %}
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item text-danger" href="{% url 'account_logout' %}"><i class="fa-solid fa-right-from-bracket me-2"></i>Cerrar Sesión</a></li>
                                 </ul>
                             </div>
                         {% else %}
-                            <a href="{% url 'app_camara_comercio:afiliacion' %}" class="btn btn-primary">Afíliate</a>
+                            <a href="{% url 'afiliaciones:solicitar_afiliacion' %}" class="btn btn-primary">Afíliate</a>
                             <a href="{% url 'account_login' %}" class="btn btn-outline-primary">Ingresar</a>
                         {% endif %}
                     </div>

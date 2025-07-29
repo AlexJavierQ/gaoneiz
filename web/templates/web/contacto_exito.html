@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Mensaje Enviado - Cámara de Comercio de Loja{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="custom-card text-center">
+                    <div class="card-body py-5">
+                        <div class="mb-4">
+                            <i class="fas fa-check-circle fa-5x text-success"></i>
+                        </div>
+                        <h2 class="card-title text-success mb-3">¡Mensaje Enviado Exitosamente!</h2>
+                        <p class="card-text lead mb-4">
+                            Gracias por contactarnos. Hemos recibido tu mensaje y nos pondremos en contacto contigo pronto.
+                        </p>
+                        <div class="alert alert-info-custom">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <strong>Tiempo de respuesta:</strong> Normalmente respondemos en un plazo de 24 a 48 horas hábiles.
+                        </div>
+                        <div class="d-flex gap-3 justify-content-center flex-wrap mt-4">
+                            <a href="{% url 'web:home' %}" class="btn btn-primary">
+                                <i class="fas fa-home me-2"></i>Volver al Inicio
+                            </a>
+                            <a href="{% url 'web:contacto' %}" class="btn btn-outline-primary">
+                                <i class="fas fa-envelope me-2"></i>Enviar Otro Mensaje
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

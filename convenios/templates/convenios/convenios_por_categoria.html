@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ categoria_actual }} - Convenios{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h1 class="hero-title">Convenios de {{ categoria_actual }}</h1>
+                <p class="hero-subtitle">Descubre todos los beneficios disponibles en esta categoría</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Breadcrumb -->
+<section class="py-3 bg-light">
+    <div class="container">
+        <nav class="breadcrumb-custom">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{% url 'web:home' %}">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'convenios:convenio_list' %}">Convenios</a></li>
+                <li class="breadcrumb-item active">{{ categoria_actual }}</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+
+<!-- Filter Section -->
+<section class="py-4">
+    <div class="container">
+        <div class="filter-section">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h5 class="mb-0">
+                        <i class="fas fa-filter me-2"></i>Categorías Disponibles
+                    </h5>
+                </div>
+                <div class="col-md-6">
+                    <div class="d-flex gap-2 flex-wrap justify-content-md-end">
+                        <a href="{% url 'convenios:convenio_list' %}" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-list me-1"></i>Todos
+                        </a>
+                        {% for categoria_code, categoria_name in categorias %}
+                            <a href="{% url 'convenios:convenios_por_categoria' categoria_code %}" 
+                               class="btn btn-sm {% if categoria_code == categoria_actual %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                                {{ categoria_name }}
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Convenios List -->
+<section class="py-5">
+    <div class="container">
+        {% if convenios %}
+            <div class="mb-4">
+                <p class="text-muted">
+                    <i class="fas fa-info-circle me-1"></i>
+                    Mostrando {{ convenios|length }} convenio{{ convenios|length|pluralize }} en la categoría <strong>{{ categoria_actual }}</strong>
+                </p>
+            </div>
+            
+            <div class="row g-4">
+                {% for convenio in convenios %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="custom-card h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <span class="category-badge">{{ convenio.get_categoria_display }}</span>
+                                <span class="status-badge status-active">{{ convenio.estado }}</span>
+                            </div>
+                            
+                            <h5 class="card-title">{{ convenio.nombre_empresa }}</h5>
+                            
+                            {% if convenio.descripcion %}
+                                <p class="card-text">{{ convenio.descripcion|truncatewords:20 }}</p>
+                            {% endif %}
+                            
+                            <!-- Beneficios Preview -->
+                            {% if convenio.beneficios.all %}
+                                <div class="mb-3">
+                                    <small class="text-muted">
+                                        <i class="fas fa-gift me-1"></i>
+                                        {{ convenio.beneficios.count }} beneficio{{ convenio.beneficios.count|pluralize }} disponible{{ convenio.beneficios.count|pluralize }}
+                                    </small>
+                                </div>
+                            {% endif %}
+                            
+                            <div class="mt-3">
+                                <div class="info-item mb-2">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <small>Desde: {{ convenio.fecha_inicio|date:"d/m/Y" }}</small>
+                                </div>
+                                {% if convenio.fecha_vencimiento %}
+                                    <div class="info-item mb-2">
+                                        <i class="fas fa-calendar-times"></i>
+                                        <small>Hasta: {{ convenio.fecha_vencimiento|date:"d/m/Y" }}</small>
+                                    </div>
+                                {% endif %}
+                                {% if convenio.sitio_web %}
+                                    <div class="info-item mb-2">
+                                        <i class="fas fa-globe"></i>
+                                        <small><a href="{{ convenio.sitio_web }}" target="_blank" class="text-primary">Sitio Web</a></small>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mt-auto pt-3">
+                                <a href="{% url 'convenios:convenio_detail' convenio.pk %}" class="btn btn-primary w-100">
+                                    <i class="fas fa-eye me-2"></i>Ver Detalles
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Pagination -->
+            {% if is_paginated %}
+            <nav class="mt-5">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                                <i class="fas fa-chevron-left"></i> Anterior
+                            </a>
+                        </li>
+                    {% endif %}
+                    
+                    <li class="page-item disabled">
+                        <span class="page-link">Página {{ page_obj.number }} de {{ paginator.num_pages }}</span>
+                    </li>
+                    
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                                Siguiente <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        {% else %}
+            <div class="empty-state">
+                <i class="fas fa-handshake"></i>
+                <h3>No hay convenios en esta categoría</h3>
+                <p>Actualmente no tenemos convenios activos en la categoría <strong>{{ categoria_actual }}</strong>.</p>
+                <a href="{% url 'convenios:convenio_list' %}" class="btn btn-primary">
+                    <i class="fas fa-list me-2"></i>Ver Todos los Convenios
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- CTA Section -->
+{% if not user.es_socio %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <div class="custom-card">
+                    <div class="card-body">
+                        <h3 class="card-title">
+                            <i class="fas fa-star text-warning me-2"></i>¿Quieres acceder a estos beneficios?
+                        </h3>
+                        <p class="card-text">Únete a la Cámara de Comercio de Loja y disfruta de descuentos exclusivos en {{ categoria_actual }} y muchas otras categorías.</p>
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'afiliaciones:solicitar_afiliacion' %}" class="btn btn-primary btn-lg">
+                                <i class="fas fa-handshake me-2"></i>Solicitar Afiliación
+                            </a>
+                        {% else %}
+                            <a href="{% url 'account_signup' %}" class="btn btn-primary btn-lg">
+                                <i class="fas fa-user-plus me-2"></i>Regístrate Ahora
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}

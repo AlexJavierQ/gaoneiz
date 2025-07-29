@@ -3,47 +3,164 @@
 {% block title %}Servicios - Cámara de Comercio de Loja{% endblock %}
 
 {% block content %}
-<div class="container my-5">
-    <div class="text-center mb-5">
-        <h1 class="display-5 fw-bold">Nuestros Servicios</h1>
-        <p class="lead text-muted">Explora los beneficios y servicios disponibles para nuestros socios.</p>
-    </div>
-
-    <div class="card shadow-sm rounded">
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-hover text-center align-middle">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Servicio</th>
-                            <th>Empresa Asociada</th>
-                            <th>Categoría</th>
-                            <th>Estado</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for servicio in servicios %}
-                        <tr>
-                            <td><strong>{{ servicio.nombre }}</strong></td>
-                            <td>{{ servicio.beneficio.convenio.nombre_empresa }}</td>
-                            <td><span class="badge bg-secondary">{{ servicio.beneficio.tipo }}</span></td>
-                            <td>
-                                {% if servicio.activo %}
-                                    <span class="badge bg-success">Disponible</span>
-                                {% else %}
-                                    <span class="badge bg-danger">No Disponible</span>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="4" class="py-4">No hay servicios registrados en este momento.</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h1 class="hero-title">Nuestros Servicios</h1>
+                <p class="hero-subtitle">Descubre todos los servicios que ofrecemos para impulsar tu negocio</p>
             </div>
         </div>
     </div>
-</div>
+</section>
+
+<!-- Filter Section -->
+<section class="py-4 bg-light">
+    <div class="container">
+        <div class="filter-section">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h5 class="mb-0">
+                        <i class="fas fa-filter me-2"></i>Filtrar por Categoría
+                    </h5>
+                </div>
+                <div class="col-md-6">
+                    <div class="d-flex gap-2 flex-wrap justify-content-md-end">
+                        <a href="{% url 'servicios:servicio_list' %}" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-list me-1"></i>Todos
+                        </a>
+                        {% for categoria_code, categoria_name in servicios.0.CATEGORIA_CHOICES %}
+                        <a href="{% url 'servicios:servicios_por_categoria' categoria_code %}"
+                            class="btn btn-outline-primary btn-sm">
+                            {{ categoria_name }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services List -->
+<section class="py-5">
+    <div class="container">
+        {% if servicios %}
+        <div class="row g-4">
+            {% for servicio in servicios %}
+            <div class="col-md-6 col-lg-4">
+                <div class="custom-card h-100">
+                    {% if servicio.imagen %}
+                    <img src="{{ servicio.imagen.url }}" class="card-img-top" alt="{{ servicio.nombre }}">
+                    {% else %}
+                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center"
+                        style="height: 200px;">
+                        <i class="fas fa-cogs fa-3x text-muted"></i>
+                    </div>
+                    {% endif %}
+
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <span class="category-badge">{{ servicio.get_categoria_display }}</span>
+                            {% if servicio.solo_socios %}
+                            <span class="status-badge status-pending">
+                                <i class="fas fa-star me-1"></i>Solo Socios
+                            </span>
+                            {% endif %}
+                        </div>
+
+                        <h5 class="card-title">{{ servicio.nombre }}</h5>
+                        <p class="card-text">{{ servicio.descripcion|truncatewords:25 }}</p>
+
+                        {% if servicio.precio %}
+                        <div class="mb-3">
+                            <span class="h5 text-primary">
+                                <i class="fas fa-dollar-sign me-1"></i>${{ servicio.precio }}
+                            </span>
+                        </div>
+                        {% endif %}
+
+                        <div class="mt-auto">
+                            {% if servicio.solo_socios and not user.es_socio %}
+                            <button class="btn btn-outline-secondary w-100" disabled>
+                                <i class="fas fa-lock me-2"></i>Solo para Socios
+                            </button>
+                            {% else %}
+                            <a href="{% url 'servicios:servicio_detail' servicio.pk %}" class="btn btn-primary w-100">
+                                <i class="fas fa-eye me-2"></i>Ver Detalles
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if is_paginated %}
+        <nav class="mt-5">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                        <i class="fas fa-chevron-left"></i> Anterior
+                    </a>
+                </li>
+                {% endif %}
+
+                <li class="page-item disabled">
+                    <span class="page-link">Página {{ page_obj.number }} de {{ paginator.num_pages }}</span>
+                </li>
+
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                        Siguiente <i class="fas fa-chevron-right"></i>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-cogs"></i>
+            <h3>No hay servicios disponibles</h3>
+            <p>Actualmente no tenemos servicios activos para mostrar. Vuelve pronto para ver nuevas opciones.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- CTA Section -->
+{% if not user.es_socio %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <div class="custom-card">
+                    <div class="card-body">
+                        <h3 class="card-title">
+                            <i class="fas fa-star text-warning me-2"></i>Servicios Exclusivos para Socios
+                        </h3>
+                        <p class="card-text">Algunos de nuestros servicios están disponibles exclusivamente para socios
+                            de la Cámara de Comercio.</p>
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'afiliaciones:solicitar_afiliacion' %}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-handshake me-2"></i>Solicitar Afiliación
+                        </a>
+                        {% else %}
+                        <a href="{% url 'account_signup' %}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-user-plus me-2"></i>Regístrate Ahora
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
 {% endblock %}
