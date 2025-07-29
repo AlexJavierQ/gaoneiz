@@ -1,4 +1,4 @@
-# pro_camera_comercio/urls.py
+# gaoneiz/urls.py
 
 from django.contrib import admin
 from django.urls import path, include

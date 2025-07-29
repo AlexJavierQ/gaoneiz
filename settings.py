@@ -1,5 +1,5 @@
 """
-Django settings for pro_camara_comercio project.
+Django settings for gaoneiz project.
 """
 
 from pathlib import Path
@@ -55,7 +55,7 @@ MIDDLEWARE = [
     'allauth.account.middleware.AccountMiddleware',
 ]
 
-ROOT_URLCONF = 'pro_camara_comercio.urls'
+ROOT_URLCONF = 'gaoneiz.urls'
 
 # --- PLANTILLAS (TEMPLATES) ---
 TEMPLATES = [
@@ -73,7 +73,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'pro_camara_comercio.wsgi.application'
+WSGI_APPLICATION = 'gaoneiz.wsgi.application'
 
 # --- BASE DE DATOS (DATABASE) ---
 DATABASES = {
