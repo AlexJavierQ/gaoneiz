@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Contacto{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 p-4">
+                <div class="text-center mb-4">
+                    <h1 class="fw-bold">Formulario de Contacto</h1>
+                    <p class="text-muted">¿Tienes alguna duda? Escríbenos y te responderemos a la brevedad.</p>
+                </div>
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg">Enviar Mensaje</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

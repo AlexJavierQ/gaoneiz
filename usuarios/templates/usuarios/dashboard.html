@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Mi Dashboard{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h1 class="mb-4">Dashboard de {{ socio.get_full_name }}</h1>
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header"><h4>Reservas Activas</h4></div>
+                <div class="card-body">
+                    {% if reservas_activas %}
+                        <ul class="list-group list-group-flush">
+                        {% for reserva in reservas_activas %}
+                            <li class="list-group-item">{{ reserva.servicio_especifico.nombre }} - {{ reserva.fecha_solicitud|date:"d M Y" }}</li>
+                        {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted">No tienes reservas activas.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-header"><h4>Convenios Destacados</h4></div>
+                <ul class="list-group list-group-flush">
+                {% for convenio in convenios %}
+                    <a href="#" class="list-group-item list-group-item-action">{{ convenio.nombre_empresa }}</a>
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

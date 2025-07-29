@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Servicios - Cámara de Comercio de Loja{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold">Nuestros Servicios</h1>
+        <p class="lead text-muted">Explora los beneficios y servicios disponibles para nuestros socios.</p>
+    </div>
+
+    <div class="card shadow-sm rounded">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover text-center align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Servicio</th>
+                            <th>Empresa Asociada</th>
+                            <th>Categoría</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for servicio in servicios %}
+                        <tr>
+                            <td><strong>{{ servicio.nombre }}</strong></td>
+                            <td>{{ servicio.beneficio.convenio.nombre_empresa }}</td>
+                            <td><span class="badge bg-secondary">{{ servicio.beneficio.tipo }}</span></td>
+                            <td>
+                                {% if servicio.activo %}
+                                    <span class="badge bg-success">Disponible</span>
+                                {% else %}
+                                    <span class="badge bg-danger">No Disponible</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="py-4">No hay servicios registrados en este momento.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
