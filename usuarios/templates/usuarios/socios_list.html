@@ -1,0 +1,255 @@
+{% extends 'base.html' %}
+
+{% block title %}Directorio de Socios - Cámara de Comercio de Loja{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h1 class="hero-title">Directorio de Socios</h1>
+                <p class="hero-subtitle">Conecta con empresarios y profesionales de la región</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Search and Filter Section -->
+<section class="py-4 bg-light">
+    <div class="container">
+        <div class="filter-section">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="search-box">
+                        <input type="text" class="form-control" placeholder="Buscar por nombre o empresa..."
+                            id="searchInput">
+                        <i class="fas fa-search"></i>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="d-flex gap-2 flex-wrap justify-content-md-end">
+                        <select class="form-select" id="tipoFilter" style="max-width: 200px;">
+                            <option value="">Todos los tipos</option>
+                            <option value="NATURAL">Persona Natural</option>
+                            <option value="EMPRESA">Empresa</option>
+                            <option value="FINANCIERO">Entidad Financiera</option>
+                        </select>
+                        <button class="btn btn-outline-primary" onclick="clearFilters()">
+                            <i class="fas fa-times me-1"></i>Limpiar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Socios List -->
+<section class="py-5">
+    <div class="container">
+        {% if socios %}
+        <div class="mb-4">
+            <p class="text-muted">
+                <i class="fas fa-users me-1"></i>
+                Mostrando {{ socios|length }} socio{{ socios|length|pluralize }} activo{{ socios|length|pluralize }}
+            </p>
+        </div>
+
+        <div class="row g-4" id="sociosContainer">
+            {% for socio in socios %}
+            <div class="col-md-6 col-lg-4 socio-card" data-nombre="{{ socio.razon_social|lower }}"
+                data-tipo="{{ socio.tipo_plan }}" data-usuario="{{ socio.usuario.get_full_name|lower }}">
+                <div class="custom-card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div class="profile-avatar" style="width: 60px; height: 60px; font-size: 1.5rem;">
+                                {{ socio.razon_social.0|upper }}
+                            </div>
+                            <span class="category-badge">{{ socio.get_tipo_plan_display }}</span>
+                        </div>
+
+                        <h5 class="card-title">{{ socio.razon_social }}</h5>
+
+                        <div class="mb-3">
+                            <div class="info-item mb-2">
+                                <i class="fas fa-user"></i>
+                                <span>{{ socio.usuario.get_full_name }}</span>
+                            </div>
+
+                            {% if socio.usuario.telefono %}
+                            <div class="info-item mb-2">
+                                <i class="fas fa-phone"></i>
+                                <span>{{ socio.usuario.telefono }}</span>
+                            </div>
+                            {% endif %}
+
+                            <div class="info-item mb-2">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>{{ socio.direccion|truncatewords:5 }}</span>
+                            </div>
+
+                            <div class="info-item mb-2">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span>Socio desde {{ socio.fecha_afiliacion|date:"M Y" }}</span>
+                            </div>
+                        </div>
+
+                        <div class="mt-auto">
+                            {% if user.is_authenticated and user.es_socio %}
+                            <button class="btn btn-outline-primary btn-sm w-100"
+                                onclick="showContactInfo('{{ socio.usuario.email }}', '{{ socio.usuario.telefono|default:"
+                                No disponible" }}')">
+                                <i class="fas fa-envelope me-2"></i>Ver Contacto
+                            </button>
+                            {% else %}
+                            <div class="text-center">
+                                <small class="text-muted">
+                                    <i class="fas fa-lock me-1"></i>
+                                    Información de contacto disponible solo para socios
+                                </small>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if is_paginated %}
+        <nav class="mt-5">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                        <i class="fas fa-chevron-left"></i> Anterior
+                    </a>
+                </li>
+                {% endif %}
+
+                <li class="page-item disabled">
+                    <span class="page-link">Página {{ page_obj.number }} de {{ paginator.num_pages }}</span>
+                </li>
+
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                        Siguiente <i class="fas fa-chevron-right"></i>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-users"></i>
+            <h3>No hay socios registrados</h3>
+            <p>Aún no tenemos socios activos en nuestro directorio.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- CTA Section -->
+{% if not user.es_socio %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <div class="custom-card">
+                    <div class="card-body">
+                        <h3 class="card-title">
+                            <i class="fas fa-handshake text-primary me-2"></i>¿Quieres formar parte de esta red?
+                        </h3>
+                        <p class="card-text">Únete a la Cámara de Comercio de Loja y conecta con empresarios de toda la
+                            región.</p>
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'afiliaciones:solicitar_afiliacion' %}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-user-plus me-2"></i>Solicitar Afiliación
+                        </a>
+                        {% else %}
+                        <a href="{% url 'account_signup' %}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-user-plus me-2"></i>Regístrate Ahora
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Contact Modal -->
+<div class="modal fade" id="contactModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-address-card me-2"></i>Información de Contacto
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="info-item mb-3">
+                    <i class="fas fa-envelope"></i>
+                    <span id="contactEmail"></span>
+                </div>
+                <div class="info-item mb-3">
+                    <i class="fas fa-phone"></i>
+                    <span id="contactPhone"></span>
+                </div>
+                <div class="alert alert-info-custom">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Esta información es confidencial y solo está disponible para socios activos.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Search and Filter Functionality
+    document.getElementById('searchInput').addEventListener('input', filterSocios);
+    document.getElementById('tipoFilter').addEventListener('change', filterSocios);
+
+    function filterSocios() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const tipoFilter = document.getElementById('tipoFilter').value;
+        const socioCards = document.querySelectorAll('.socio-card');
+
+        socioCards.forEach(card => {
+            const nombre = card.dataset.nombre;
+            const usuario = card.dataset.usuario;
+            const tipo = card.dataset.tipo;
+
+            const matchesSearch = nombre.includes(searchTerm) || usuario.includes(searchTerm);
+            const matchesTipo = !tipoFilter || tipo === tipoFilter;
+
+            if (matchesSearch && matchesTipo) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    function clearFilters() {
+        document.getElementById('searchInput').value = '';
+        document.getElementById('tipoFilter').value = '';
+        filterSocios();
+    }
+
+    function showContactInfo(email, phone) {
+        document.getElementById('contactEmail').textContent = email;
+        document.getElementById('contactPhone').textContent = phone;
+        new bootstrap.Modal(document.getElementById('contactModal')).show();
+    }
+</script>
+{% endblock %}

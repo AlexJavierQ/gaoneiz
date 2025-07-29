@@ -1,0 +1,235 @@
+{% extends 'base.html' %}
+
+{% block title %}Solicitar Afiliación - Cámara de Comercio de Loja{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h1 class="hero-title">Solicitar Afiliación</h1>
+                <p class="hero-subtitle">Únete a la Cámara de Comercio de Loja y accede a todos nuestros beneficios
+                    exclusivos</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Benefits Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="section-title">Beneficios de ser Socio</h2>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <i class="fas fa-handshake fa-3x text-primary mb-3"></i>
+                        <h6 class="card-title">Convenios Comerciales</h6>
+                        <p class="card-text small">Descuentos exclusivos en cientos de establecimientos</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <i class="fas fa-graduation-cap fa-3x text-primary mb-3"></i>
+                        <h6 class="card-title">Capacitaciones</h6>
+                        <p class="card-text small">Programas de formación empresarial gratuitos</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <i class="fas fa-users fa-3x text-primary mb-3"></i>
+                        <h6 class="card-title">Networking</h6>
+                        <p class="card-text small">Conecta con otros empresarios de la región</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <i class="fas fa-certificate fa-3x text-primary mb-3"></i>
+                        <h6 class="card-title">Certificaciones</h6>
+                        <p class="card-text small">Certificados de membresía y participación</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Application Form -->
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="form-container">
+                    <h3 class="mb-4">
+                        <i class="fas fa-file-alt text-primary me-2"></i>Formulario de Solicitud
+                    </h3>
+
+                    {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}-custom">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <div class="alert alert-info-custom">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    <strong>Información importante:</strong> Todos los campos marcados con (*) son
+                                    obligatorios.
+                                    Tu solicitud será revisada por nuestro equipo en un plazo de 2-3 días hábiles.
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="{{ form.razon_social.id_for_label }}" class="form-label">
+                                        <i class="fas fa-building me-1"></i>Razón Social *
+                                    </label>
+                                    {{ form.razon_social }}
+                                    {% if form.razon_social.errors %}
+                                    <div class="text-danger small mt-1">{{ form.razon_social.errors.0 }}</div>
+                                    {% endif %}
+                                    <small class="form-text text-muted">Nombre completo de tu empresa o negocio</small>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="{{ form.ruc.id_for_label }}" class="form-label">
+                                        <i class="fas fa-id-card me-1"></i>RUC *
+                                    </label>
+                                    {{ form.ruc }}
+                                    {% if form.ruc.errors %}
+                                    <div class="text-danger small mt-1">{{ form.ruc.errors.0 }}</div>
+                                    {% endif %}
+                                    <small class="form-text text-muted">Registro Único de Contribuyentes (13
+                                        dígitos)</small>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="{{ form.direccion.id_for_label }}" class="form-label">
+                                        <i class="fas fa-map-marker-alt me-1"></i>Dirección *
+                                    </label>
+                                    {{ form.direccion }}
+                                    {% if form.direccion.errors %}
+                                    <div class="text-danger small mt-1">{{ form.direccion.errors.0 }}</div>
+                                    {% endif %}
+                                    <small class="form-text text-muted">Dirección completa de tu empresa</small>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="custom-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                            <i class="fas fa-shield-alt text-primary me-2"></i>Términos y Condiciones
+                                        </h5>
+                                        <p class="card-text small">
+                                            Al enviar esta solicitud, acepto que:
+                                        </p>
+                                        <ul class="small">
+                                            <li>La información proporcionada es veraz y completa</li>
+                                            <li>Acepto los términos y condiciones de la Cámara de Comercio de Loja</li>
+                                            <li>Autorizo el uso de mis datos para fines de afiliación</li>
+                                            <li>Me comprometo a cumplir con las obligaciones como socio</li>
+                                        </ul>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="acepto_terminos"
+                                                required>
+                                            <label class="form-check-label" for="acepto_terminos">
+                                                Acepto los términos y condiciones *
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="d-flex gap-3 justify-content-center">
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-paper-plane me-2"></i>Enviar Solicitud
+                                    </button>
+                                    <a href="{% url 'web:home' %}" class="btn btn-outline-secondary btn-lg">
+                                        <i class="fas fa-times me-2"></i>Cancelar
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="section-title">Preguntas Frecuentes</h2>
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="accordion" id="faqAccordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq1">
+                                ¿Cuánto tiempo tarda el proceso de afiliación?
+                            </button>
+                        </h2>
+                        <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                El proceso de revisión toma entre 2 a 3 días hábiles. Una vez aprobada tu solicitud,
+                                recibirás un correo de confirmación y podrás acceder inmediatamente a todos los
+                                beneficios.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq2">
+                                ¿Qué documentos necesito?
+                            </button>
+                        </h2>
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Solo necesitas completar este formulario con tu RUC válido. No se requieren documentos
+                                adicionales
+                                para la solicitud inicial.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq3">
+                                ¿Hay algún costo de afiliación?
+                            </button>
+                        </h2>
+                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                La afiliación básica es gratuita. Algunos servicios premium pueden tener costos
+                                adicionales
+                                que se informarán por separado.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

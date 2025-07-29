@@ -17,7 +17,7 @@ class SolicitarAfiliacionView(LoginRequiredMixin, CreateView):
 
     def dispatch(self, request, *args, **kwargs):
         # Verificar que el usuario no tenga ya una solicitud o sea socio
-        if hasattr(request.user, 'solicitudafiliacion') or request.user.es_socio:
+        if request.user.is_authenticated and (hasattr(request.user, 'solicitudafiliacion') or request.user.es_socio):
             return self.handle_no_permission()
         return super().dispatch(request, *args, **kwargs)
 

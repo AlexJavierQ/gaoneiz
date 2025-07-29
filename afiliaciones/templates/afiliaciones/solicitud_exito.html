@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+
+{% block title %}Solicitud Enviada - Cámara de Comercio de Loja{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="custom-card text-center">
+                    <div class="card-body py-5">
+                        <div class="mb-4">
+                            <i class="fas fa-check-circle fa-5x text-success"></i>
+                        </div>
+                        <h2 class="card-title text-success mb-3">¡Solicitud Enviada Exitosamente!</h2>
+                        <p class="card-text lead mb-4">
+                            Gracias por tu interés en formar parte de la Cámara de Comercio de Loja.
+                            Hemos recibido tu solicitud de afiliación y la estamos procesando.
+                        </p>
+
+                        <!-- Next Steps -->
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-4">
+                                <div class="custom-card h-100">
+                                    <div class="card-body">
+                                        <i class="fas fa-envelope fa-2x text-primary mb-3"></i>
+                                        <h6 class="card-title">Confirmación por Email</h6>
+                                        <p class="card-text small">Recibirás un correo de confirmación en los próximos
+                                            minutos</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="custom-card h-100">
+                                    <div class="card-body">
+                                        <i class="fas fa-search fa-2x text-primary mb-3"></i>
+                                        <h6 class="card-title">Revisión</h6>
+                                        <p class="card-text small">Nuestro equipo revisará tu solicitud en 2-3 días
+                                            hábiles</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="custom-card h-100">
+                                    <div class="card-body">
+                                        <i class="fas fa-bell fa-2x text-primary mb-3"></i>
+                                        <h6 class="card-title">Notificación</h6>
+                                        <p class="card-text small">Te notificaremos el resultado por correo electrónico
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Important Information -->
+                        <div class="alert alert-info-custom mb-4">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <strong>Información importante:</strong><br>
+                            • Puedes revisar el estado de tu solicitud en cualquier momento desde tu perfil<br>
+                            • Si tienes preguntas, no dudes en contactarnos<br>
+                            • Te notificaremos por correo cuando tengamos una respuesta
+                        </div>
+
+                        <!-- Timeline -->
+                        <div class="mb-4">
+                            <h5 class="mb-3">¿Qué sigue ahora?</h5>
+                            <div class="row text-start">
+                                <div class="col-12">
+                                    <div class="d-flex align-items-start mb-3">
+                                        <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center me-3"
+                                            style="width: 30px; height: 30px; min-width: 30px;">
+                                            <i class="fas fa-check small"></i>
+                                        </div>
+                                        <div>
+                                            <strong>Solicitud Recibida</strong>
+                                            <div class="small text-muted">Tu solicitud ha sido registrada exitosamente
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex align-items-start mb-3">
+                                        <div class="rounded-circle bg-warning text-white d-flex align-items-center justify-content-center me-3"
+                                            style="width: 30px; height: 30px; min-width: 30px;">
+                                            <i class="fas fa-clock small"></i>
+                                        </div>
+                                        <div>
+                                            <strong>En Proceso de Revisión</strong>
+                                            <div class="small text-muted">Nuestro equipo está evaluando tu solicitud
+                                                (2-3 días hábiles)</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex align-items-start mb-3">
+                                        <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-3"
+                                            style="width: 30px; height: 30px; min-width: 30px;">
+                                            <i class="fas fa-envelope small"></i>
+                                        </div>
+                                        <div>
+                                            <strong>Notificación de Resultado</strong>
+                                            <div class="small text-muted">Te enviaremos un correo con la decisión final
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex align-items-start">
+                                        <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-3"
+                                            style="width: 30px; height: 30px; min-width: 30px;">
+                                            <i class="fas fa-star small"></i>
+                                        </div>
+                                        <div>
+                                            <strong>¡Bienvenido como Socio!</strong>
+                                            <div class="small text-muted">Accede a todos los beneficios y servicios
+                                                exclusivos</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="d-flex gap-3 justify-content-center flex-wrap">
+                            <a href="{% url 'afiliaciones:mi_solicitud' %}" class="btn btn-primary btn-lg">
+                                <i class="fas fa-eye me-2"></i>Ver Mi Solicitud
+                            </a>
+                            <a href="{% url 'usuarios:perfil' %}" class="btn btn-outline-primary btn-lg">
+                                <i class="fas fa-user me-2"></i>Mi Perfil
+                            </a>
+                            <a href="{% url 'web:home' %}" class="btn btn-outline-secondary btn-lg">
+                                <i class="fas fa-home me-2"></i>Volver al Inicio
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Benefits Preview -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="section-title">Mientras tanto, conoce los beneficios que te esperan</h2>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <i class="fas fa-handshake fa-2x text-primary mb-3"></i>
+                        <h6 class="card-title">50+ Convenios</h6>
+                        <p class="card-text small">Descuentos exclusivos en restaurantes, hoteles, servicios y más</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <i class="fas fa-graduation-cap fa-2x text-primary mb-3"></i>
+                        <h6 class="card-title">Capacitaciones</h6>
+                        <p class="card-text small">Programas de formación empresarial y desarrollo profesional</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <i class="fas fa-users fa-2x text-primary mb-3"></i>
+                        <h6 class="card-title">Networking</h6>
+                        <p class="card-text small">Conecta con más de 500 empresarios de la región</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <i class="fas fa-newspaper fa-2x text-primary mb-3"></i>
+                        <h6 class="card-title">Información</h6>
+                        <p class="card-text small">Acceso prioritario a noticias y oportunidades de negocio</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

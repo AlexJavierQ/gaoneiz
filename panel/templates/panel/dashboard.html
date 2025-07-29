@@ -1,12 +1,179 @@
-{% extends "panel/panel_base.html" %} {% block title %}{{ title }}{% endblock %}
-{% block content %}
-<h1 class="h2">{{ title }}</h1>
-<p>
-  Bienvenido al panel de gestión. Desde aquí podrás administrar los contenidos y
-  servicios de la Cámara de Comercio.
-</p>
+{% extends 'panel/panel_base.html' %}
 
-<div class="alert alert-info mt-4">
-  Próximamente: Aquí verás tus KPIs, gráficos y listas de acciones rápidas.
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1>{{ title }}</h1>
+  <div class="text-muted">
+    <i class="fas fa-calendar me-1"></i>
+    {% now "d \\d\\e F, Y" %}
+  </div>
+</div>
+
+<!-- KPIs Cards -->
+<div class="row g-4 mb-5">
+  <div class="col-md-6 col-xl-3">
+    <div class="info-card">
+      <div class="d-flex align-items-center">
+        <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3"
+          style="width: 50px; height: 50px;">
+          <i class="fas fa-users"></i>
+        </div>
+        <div>
+          <h3 class="mb-0 text-primary">{{ total_usuarios }}</h3>
+          <p class="mb-0 text-muted">Usuarios Registrados</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-xl-3">
+    <div class="info-card">
+      <div class="d-flex align-items-center">
+        <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center me-3"
+          style="width: 50px; height: 50px;">
+          <i class="fas fa-handshake"></i>
+        </div>
+        <div>
+          <h3 class="mb-0 text-success">{{ total_socios }}</h3>
+          <p class="mb-0 text-muted">Socios Activos</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-xl-3">
+    <div class="info-card">
+      <div class="d-flex align-items-center">
+        <div class="rounded-circle bg-warning text-white d-flex align-items-center justify-content-center me-3"
+          style="width: 50px; height: 50px;">
+          <i class="fas fa-clock"></i>
+        </div>
+        <div>
+          <h3 class="mb-0 text-warning">{{ solicitudes_pendientes }}</h3>
+          <p class="mb-0 text-muted">Solicitudes Pendientes</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-xl-3">
+    <div class="info-card">
+      <div class="d-flex align-items-center">
+        <div class="rounded-circle bg-info text-white d-flex align-items-center justify-content-center me-3"
+          style="width: 50px; height: 50px;">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <div>
+          <h3 class="mb-0 text-info">{{ total_usuarios|add:total_socios }}</h3>
+          <p class="mb-0 text-muted">Total Miembros</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row g-4 mb-5">
+  <div class="col-md-6">
+    <div class="info-card">
+      <h4 class="card-title-custom">
+        <i class="fas fa-bolt text-warning me-2"></i>Acciones Rápidas
+      </h4>
+      <div class="d-grid gap-2">
+        <a href="{% url 'panel:solicitudes_afiliacion' %}" class="btn btn-outline-primary">
+          <i class="fas fa-user-plus me-2"></i>Gestionar Solicitudes
+          {% if solicitudes_pendientes > 0 %}
+          <span class="badge bg-warning text-dark ms-2">{{ solicitudes_pendientes }}</span>
+          {% endif %}
+        </a>
+        <a href="{% url 'panel:gestion_socios' %}" class="btn btn-outline-success">
+          <i class="fas fa-users me-2"></i>Gestionar Socios
+        </a>
+        <a href="{% url 'admin:index' %}" class="btn btn-outline-info">
+          <i class="fas fa-cog me-2"></i>Panel de Administración
+        </a>
+        <a href="{% url 'panel:registro_actividad' %}" class="btn btn-outline-secondary">
+          <i class="fas fa-history me-2"></i>Registro de Actividad
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="info-card">
+      <h4 class="card-title-custom">
+        <i class="fas fa-chart-bar text-primary me-2"></i>Resumen de Actividad
+      </h4>
+      {% if actividad_reciente %}
+      <div class="list-group list-group-flush">
+        {% for actividad in actividad_reciente|slice:":5" %}
+        <div class="list-group-item border-0 px-0">
+          <div class="d-flex justify-content-between align-items-start">
+            <div class="flex-grow-1">
+              <small class="text-muted">
+                {% if actividad.actor %}
+                {{ actividad.actor.get_full_name|default:actividad.actor.email }}
+                {% else %}
+                Sistema
+                {% endif %}
+              </small>
+              <div class="small">{{ actividad.accion }}</div>
+            </div>
+            <small class="text-muted">{{ actividad.timestamp|timesince }} ago</small>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="text-center mt-3">
+        <a href="{% url 'panel:registro_actividad' %}" class="btn btn-sm btn-outline-primary">
+          Ver Todo el Registro
+        </a>
+      </div>
+      {% else %}
+      <p class="text-muted">No hay actividad reciente registrada.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<!-- Recent Activity & Notifications -->
+<div class="row g-4">
+  <div class="col-12">
+    <div class="info-card">
+      <h4 class="card-title-custom">
+        <i class="fas fa-bell text-info me-2"></i>Notificaciones y Alertas
+      </h4>
+
+      {% if solicitudes_pendientes > 0 %}
+      <div class="alert alert-warning d-flex align-items-center">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        <div class="flex-grow-1">
+          <strong>{{ solicitudes_pendientes }} solicitud{{ solicitudes_pendientes|pluralize:"es" }} de afiliación
+            pendiente{{ solicitudes_pendientes|pluralize }}</strong>
+          <div class="small">Requieren tu atención para ser procesadas</div>
+        </div>
+        <a href="{% url 'panel:solicitudes_afiliacion' %}" class="btn btn-warning btn-sm">
+          Revisar
+        </a>
+      </div>
+      {% endif %}
+
+      <div class="alert alert-info d-flex align-items-center">
+        <i class="fas fa-info-circle me-2"></i>
+        <div class="flex-grow-1">
+          <strong>Sistema funcionando correctamente</strong>
+          <div class="small">Todos los servicios están operativos</div>
+        </div>
+      </div>
+
+      <div class="alert alert-success d-flex align-items-center">
+        <i class="fas fa-check-circle me-2"></i>
+        <div class="flex-grow-1">
+          <strong>Bienvenido al Panel de Administración</strong>
+          <div class="small">Desde aquí puedes gestionar todos los aspectos de la Cámara de Comercio</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

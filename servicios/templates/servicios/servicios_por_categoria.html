@@ -1,0 +1,247 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ categoria_actual }} - Servicios{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h1 class="hero-title">Servicios de {{ categoria_actual }}</h1>
+                <p class="hero-subtitle">Descubre todos los servicios disponibles en esta categoría</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Breadcrumb -->
+<section class="py-3 bg-light">
+    <div class="container">
+        <nav class="breadcrumb-custom">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{% url 'web:home' %}">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'servicios:servicio_list' %}">Servicios</a></li>
+                <li class="breadcrumb-item active">{{ categoria_actual }}</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+
+<!-- Filter Section -->
+<section class="py-4">
+    <div class="container">
+        <div class="filter-section">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h5 class="mb-0">
+                        <i class="fas fa-filter me-2"></i>Categorías Disponibles
+                    </h5>
+                </div>
+                <div class="col-md-6">
+                    <div class="d-flex gap-2 flex-wrap justify-content-md-end">
+                        <a href="{% url 'servicios:servicio_list' %}" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-list me-1"></i>Todos
+                        </a>
+                        {% for categoria_code, categoria_name in categorias %}
+                        <a href="{% url 'servicios:servicios_por_categoria' categoria_code %}"
+                            class="btn btn-sm {% if categoria_code == categoria_actual %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                            {{ categoria_name }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services List -->
+<section class="py-5">
+    <div class="container">
+        {% if servicios %}
+        <div class="mb-4">
+            <p class="text-muted">
+                <i class="fas fa-info-circle me-1"></i>
+                Mostrando {{ servicios|length }} servicio{{ servicios|length|pluralize }} en la categoría <strong>{{
+                    categoria_actual }}</strong>
+            </p>
+        </div>
+
+        <div class="row g-4">
+            {% for servicio in servicios %}
+            <div class="col-md-6 col-lg-4">
+                <div class="custom-card h-100">
+                    {% if servicio.imagen %}
+                    <img src="{{ servicio.imagen.url }}" class="card-img-top" alt="{{ servicio.nombre }}">
+                    {% else %}
+                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center"
+                        style="height: 200px;">
+                        {% if servicio.categoria == 'CAPACITACION' %}
+                        <i class="fas fa-graduation-cap fa-3x text-muted"></i>
+                        {% elif servicio.categoria == 'CONSULTORIA' %}
+                        <i class="fas fa-user-tie fa-3x text-muted"></i>
+                        {% elif servicio.categoria == 'TRAMITES' %}
+                        <i class="fas fa-file-alt fa-3x text-muted"></i>
+                        {% elif servicio.categoria == 'EVENTOS' %}
+                        <i class="fas fa-calendar-alt fa-3x text-muted"></i>
+                        {% else %}
+                        <i class="fas fa-cogs fa-3x text-muted"></i>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <span class="category-badge">{{ servicio.get_categoria_display }}</span>
+                            {% if servicio.solo_socios %}
+                            <span class="status-badge status-pending">
+                                <i class="fas fa-star me-1"></i>Solo Socios
+                            </span>
+                            {% endif %}
+                        </div>
+
+                        <h5 class="card-title">{{ servicio.nombre }}</h5>
+                        <p class="card-text">{{ servicio.descripcion|truncatewords:25 }}</p>
+
+                        {% if servicio.precio %}
+                        <div class="mb-3">
+                            <span class="h5 text-primary">
+                                <i class="fas fa-dollar-sign me-1"></i>${{ servicio.precio }}
+                            </span>
+                        </div>
+                        {% endif %}
+
+                        <div class="mt-auto">
+                            {% if servicio.solo_socios and not user.es_socio %}
+                            <button class="btn btn-outline-secondary w-100" disabled>
+                                <i class="fas fa-lock me-2"></i>Solo para Socios
+                            </button>
+                            <small class="text-muted d-block text-center mt-2">
+                                <a href="{% url 'afiliaciones:solicitar_afiliacion' %}" class="text-primary">Solicitar
+                                    afiliación</a>
+                            </small>
+                            {% else %}
+                            <a href="{% url 'servicios:servicio_detail' servicio.pk %}" class="btn btn-primary w-100">
+                                <i class="fas fa-eye me-2"></i>Ver Detalles
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if is_paginated %}
+        <nav class="mt-5">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                        <i class="fas fa-chevron-left"></i> Anterior
+                    </a>
+                </li>
+                {% endif %}
+
+                <li class="page-item disabled">
+                    <span class="page-link">Página {{ page_obj.number }} de {{ paginator.num_pages }}</span>
+                </li>
+
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                        Siguiente <i class="fas fa-chevron-right"></i>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-cogs"></i>
+            <h3>No hay servicios en esta categoría</h3>
+            <p>Actualmente no tenemos servicios activos en la categoría <strong>{{ categoria_actual }}</strong>.</p>
+            <a href="{% url 'servicios:servicio_list' %}" class="btn btn-primary">
+                <i class="fas fa-list me-2"></i>Ver Todos los Servicios
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Category Description -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="custom-card">
+                    <div class="card-body text-center">
+                        <h3 class="card-title">
+                            {% if categoria_actual == 'CAPACITACION' %}
+                            <i class="fas fa-graduation-cap text-primary me-2"></i>Capacitación Empresarial
+                            {% elif categoria_actual == 'CONSULTORIA' %}
+                            <i class="fas fa-user-tie text-primary me-2"></i>Consultoría Especializada
+                            {% elif categoria_actual == 'TRAMITES' %}
+                            <i class="fas fa-file-alt text-primary me-2"></i>Trámites y Gestiones
+                            {% elif categoria_actual == 'EVENTOS' %}
+                            <i class="fas fa-calendar-alt text-primary me-2"></i>Eventos y Networking
+                            {% endif %}
+                        </h3>
+                        <p class="card-text">
+                            {% if categoria_actual == 'CAPACITACION' %}
+                            Programas de formación diseñados para fortalecer las competencias empresariales y
+                            profesionales
+                            de nuestros socios y la comunidad empresarial en general.
+                            {% elif categoria_actual == 'CONSULTORIA' %}
+                            Servicios de asesoría especializada para el desarrollo y crecimiento de tu empresa,
+                            con expertos en diferentes áreas del conocimiento empresarial.
+                            {% elif categoria_actual == 'TRAMITES' %}
+                            Facilitamos la gestión de trámites y documentos necesarios para el funcionamiento
+                            legal y administrativo de tu empresa.
+                            {% elif categoria_actual == 'EVENTOS' %}
+                            Espacios de encuentro, networking y desarrollo profesional que conectan a la
+                            comunidad empresarial de la región.
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+{% if not user.es_socio %}
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <div class="custom-card">
+                    <div class="card-body">
+                        <h3 class="card-title">
+                            <i class="fas fa-star text-warning me-2"></i>Servicios Exclusivos para Socios
+                        </h3>
+                        <p class="card-text">
+                            Algunos de nuestros servicios en {{ categoria_actual }} están disponibles exclusivamente
+                            para socios de la Cámara de Comercio con tarifas preferenciales.
+                        </p>
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'afiliaciones:solicitar_afiliacion' %}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-handshake me-2"></i>Solicitar Afiliación
+                        </a>
+                        {% else %}
+                        <a href="{% url 'account_signup' %}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-user-plus me-2"></i>Regístrate Ahora
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}
