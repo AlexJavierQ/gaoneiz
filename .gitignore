@@ -41,6 +41,10 @@ wheels/
 # Entornos de desarrollo
 .idea/
 .vscode/
+.kiro/
+.kirortmp
+*.sln
+*.suo
 *.swp
 *.swo
 *~
