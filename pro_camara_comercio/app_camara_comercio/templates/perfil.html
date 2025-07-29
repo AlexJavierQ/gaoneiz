@@ -1,0 +1,112 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Perfil - {{ user.get_full_name }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body class="dashboard-body">
+
+<div class="dashboard-wrapper">
+    <!-- Barra Lateral (Sidebar) -->
+    <aside class="dashboard-sidebar">
+        <div class="sidebar-header">
+            <img src="{% static 'images/logo-camara-de-comercio-loja-cadecol.png' %}" alt="Logo Cámara de Loja" class="sidebar-logo">
+        </div>
+        <p class="sidebar-menu-title">Menú</p>
+        <ul class="sidebar-nav">
+            <li class="sidebar-item active"><a href="{% url 'app_camara_comercio:perfil' %}"><i class="bi bi-person-fill"></i> Perfil</a></li>
+            <li class="sidebar-item"><a href="#"><i class="bi bi-calendar-check-fill"></i> Reservas</a></li>
+            <li class="sidebar-item"><a href="#"><i class="bi bi-star-fill"></i> Convenios</a></li>
+            <li class="sidebar-item"><a href="#"><i class="bi bi-newspaper"></i> Noticias</a></li>
+            <li class="sidebar-item"><a href="#"><i class="bi bi-bell-fill"></i> Notificaciones</a></li>
+        </ul>
+        <p class="sidebar-menu-title mt-4">Configuraciones</p>
+        <ul class="sidebar-nav">
+            <li class="sidebar-item"><a href="#"><i class="bi bi-gear-fill"></i> Configuración</a></li>
+        </ul>
+        <div class="sidebar-footer">
+            <form action="{% url 'app_camara_comercio:logout' %}" method="post" class="d-grid">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-logout w-100">Cerrar Sesión</button>
+            </form>
+        </div>
+    </aside>
+
+    <!-- Contenido Principal -->
+    <main class="dashboard-content">
+        <!-- Cabecera Flotante -->
+        <div class="content-header">
+            <h2>Editar Perfil</h2>
+        </div>
+
+        <!-- Contenido del Body -->
+        <div class="content-body">
+            <div class="info-card">
+                <form method="post">
+                    {# LA SOLUCIÓN ESTÁ AQUÍ. AÑADIMOS EL CSRF TOKEN #}
+                    {% csrf_token %}
+                    
+                    <h4 class="card-title-custom">TUS DATOS</h4>
+                    <p class="text-muted">Aquí puedes actualizar tu información de contacto y de tu negocio.</p>
+                    <hr>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{{ form.first_name.label }}</label>
+                            {{ form.first_name }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{{ form.last_name.label }}</label>
+                            {{ form.last_name }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{{ form.telf.label }}</label>
+                            {{ form.telf }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{{ form.cedula.label }}</label>
+                            {{ form.cedula }}
+                        </div>
+                        <hr class="my-3">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{{ form.razon_social.label }}</label>
+                            {{ form.razon_social }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{{ form.nombre_comercial.label }}</label>
+                            {{ form.nombre_comercial }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{{ form.RUC.label }}</label>
+                            {{ form.RUC }}
+                        </div>
+                         <div class="col-md-6 mb-3">
+                            <label class="form-label">{{ form.ciudad.label }}</label>
+                            {{ form.ciudad }}
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label class="form-label">{{ form.direccion.label }}</label>
+                            {{ form.direccion }}
+                        </div>
+                    </div>
+                    
+                    <div class="text-end mt-3">
+                        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

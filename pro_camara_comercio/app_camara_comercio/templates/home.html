@@ -1,0 +1,203 @@
+{% extends 'base.html' %}
+
+{% block title %}Inicio - Cámara de Comercio de Loja{% endblock %}
+
+{% block content %}
+<!-- Sección Hero -->
+<div class="section-primary-blue text-center p-5">
+    <div class="container">
+        <h1 class="display-4">Obtén tu Firma Electrónica</h1>
+        <p class="lead">En la Cámara de Comercio de Loja</p>
+    </div>
+</div>
+
+<!-- Sección Visión y Misión -->
+<div class="container my-5">
+    <h2 class="text-center mb-5">Conoce nuestra Visión y Misión</h2>
+    <div class="row align-items-center">
+        <div class="col-lg-6">
+            <div class="card-shape card-vision-mision">
+                <h3>VISIÓN</h3>
+                <p>Promover el desarrollo empresarial y comercial brindando servicios de calidad que fortalezcan la competitividad de nuestros asociados.</p>
+            </div>
+            <div class="card-shape card-vision-mision mt-4">
+                <h3>MISIÓN</h3>
+                <p>Ser la institución líder en el desarrollo empresarial del sur del Ecuador, reconocida por su existencia.</p>
+            </div>
+        </div>
+        <div class="col-lg-6 d-none d-lg-block">
+            <img src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" class="img-fluid rounded shadow" alt="Equipo de trabajo">
+        </div>
+    </div>
+</div>
+
+<!-- Sección Planes de Afiliación -->
+<div class="section-dark-blue">
+    <div class="container">
+        <h2 class="text-center mb-5 text-white">Conoce nuestros Planes</h2>
+        <div class="row text-dark text-center">
+            <div class="col-lg-4">
+                <div class="card-shape card-shape-blob-left">
+                    <h4>Plan Persona Natural</h4>
+                    <p>Ideal para emprendedores y profesionales independientes que buscan crecer.</p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                 <div class="card-shape">
+                    <h4>Plan Empresa</h4>
+                    <p>Diseñado para pequeñas y medianas empresas que desean expandir su alcance.</p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                 <div class="card-shape card-shape-blob-right">
+                    <h4>Plan Entidad Financiera</h4>
+                    <p>Beneficios exclusivos y convenios para el sector financiero.</p>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <a href="{% url 'app_camara_comercio:afiliacion' %}" class="btn btn-gold btn-lg">Afíliate Ahora <i class="bi bi-arrow-right"></i></a>
+        </div>
+    </div>
+</div>
+
+<!-- ================================================== -->
+<!-- INICIO DE LAS NUEVAS SECCIONES AÑADIDAS HACIA ABAJO -->
+<!-- ================================================== -->
+
+<!-- Sección de Servicios -->
+<div class="container my-5 py-5">
+    <h2 class="text-center mb-5">Servicios</h2>
+    <div class="row">
+        <!-- Tarjeta de Servicio 1 -->
+        <div class="col-md-4 mb-4">
+            <div class="service-card">
+                <img src="https://images.pexels.com/photos/7551620/pexels-photo-7551620.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" class="card-img-top" alt="Seguro de Vida">
+                <div class="card-body p-4">
+                    <h5 class="card-title">Seguro de Vida</h5>
+                    <p class="card-text text-muted">Protección y tranquilidad para ti y los tuyos con nuestros planes exclusivos.</p>
+                </div>
+            </div>
+        </div>
+        <!-- Tarjeta de Servicio 2 -->
+        <div class="col-md-4 mb-4">
+            <div class="service-card">
+                <img src="https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" class="card-img-top" alt="Alquiler de Salones">
+                <div class="card-body p-4">
+                    <h5 class="card-title">Alquiler de Salones</h5>
+                    <p class="card-text text-muted">Espacios modernos y equipados para tus eventos, reuniones y capacitaciones.</p>
+                </div>
+            </div>
+        </div>
+        <!-- Tarjeta de Servicio 3 -->
+        <div class="col-md-4 mb-4">
+            <div class="service-card">
+                <img src="https://images.pexels.com/photos/4386321/pexels-photo-4386321.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" class="card-img-top" alt="Firma Electrónica">
+                <div class="card-body p-4">
+                    <h5 class="card-title">Firma Electrónica</h5>
+                    <p class="card-text text-muted">Agiliza tus trámites y documentos de forma segura y con validez legal.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="text-center mt-3">
+        <a href="#" class="btn btn-gold">Ver Más</a>
+    </div>
+</div>
+
+<!-- Sección Convenio Destacado -->
+<div class="section-primary-blue text-center p-5">
+    <div class="container">
+        <img src="https://i.imgur.com/L4u5gLd.png" alt="Logo Clínica San José" class="mb-4" style="max-height: 80px;">
+        <h3 class="text-white mb-4">Accede a convenios exclusivos en las mejores instituciones</h3>
+        <a href="{% url 'app_camara_comercio:convenio_list' %}" class="btn btn-gold">Todos los Convenios</a>
+    </div>
+</div>
+
+<!-- ================================================== -->
+<!--          SECCIÓN DE BENEFICIOS REEMPLAZADA         -->
+<!-- ================================================== -->
+
+<!-- Sección Empresas que Confían en Nosotros -->
+<div class="container my-5 py-5">
+    <h2 class="text-center">EMPRESAS QUE CONFIAN EN NOSOTROS</h2>
+    <p class="text-center text-muted mb-5">Trabajamos junto con varias empresas</p>
+    <div class="row">
+        <!-- Empresa 1 -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="partner-card">
+                <img src="/static/images/channels4_profile.jpg" alt="Logo Banco de Loja" class="partner-logo img-fluid" style="width: 150px; height: auto;">
+                <h5 class="partner-name">Banco de Loja</h5>
+                <span class="partner-tag">Financiero</span>
+                <p class="partner-description">Institución financiera líder en la región sur del Ecuador.</p>
+            </div>
+        </div>
+        <!-- Empresa 2 -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="partner-card">
+                <img src="/static/images/jep.png" alt="Cooperativa JEP" class="partner-logo img-fluid" style="width: 300px; height: auto;">
+                <h5 class="partner-name">Cooperativa JEP</h5>
+                <span class="partner-tag">Financiero</span>
+                <p class="partner-description">Cooperativa de ahorro y crédito con amplia trayectoria.</p>
+            </div>
+        </div>
+        <!-- Empresa 3 -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="partner-card">
+                <img src="/static/images/LaHora.jpg" alt="La Hora" class="partner-logo img-fluid" style="width: 150px; height: auto;">
+                <h5 class="partner-name">Diario La Hora</h5>
+                <span class="partner-tag">Comunicación</span>
+                <p class="partner-description">Medio de comunicación regional con mayor cobertura.</p>
+            </div>
+        </div>
+        <!-- Empresa 4 -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="partner-card">
+                <img src="/static/images/HotelLibertador.png" alt="Hotel Libertador" class="partner-logo img-fluid" style="width: 150px; height: auto;">
+                <h5 class="partner-name">Hotel Libertador</h5>
+                <span class="partner-tag">Hotelería</span>
+                <p class="partner-description">Cadena hotelera de prestigio internacional.</p>
+            </div>
+        </div>
+        <!-- Empresa 5 -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="partner-card">
+                <img src="/static/images/LOGO-CF.png" alt="Coorporativa la Favorita" class="partner-logo img-fluid" style="width: 150px; height: auto;">
+                <h5 class="partner-name">Corporación Favorita</h5>
+                <span class="partner-tag">Retail</span>
+                <p class="partner-description">Empresa líder en comercio y distribución.</p>
+            </div>
+        </div>
+        <!-- Empresa 6 -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="partner-card">
+                <img src="/static/images/Logo-hcsa.jpg" alt="Hospital Clinica San Agustin" class="partner-logo img-fluid" style="width: 150px; height: auto;">
+                <h5 class="partner-name">Clínica San Agustín</h5>
+                <span class="partner-tag">Salud</span>
+                <p class="partner-description">Centro médico especializado de alta complejidad.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Sección Estadísticas -->
+<div class="stats-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 stat-item mb-4 mb-md-0">
+                <div class="count">+{{ socios_activos }}</div>
+                <div class="label">Socios Activos</div>
+            </div>
+            <div class="col-md-4 d-flex justify-content-center align-items-center mb-4 mb-md-0">
+                <a href="{% url 'app_camara_comercio:afiliacion' %}" class="btn btn-gold btn-lg">¡Afíliate Ahora!</a>
+            </div>
+            <div class="col-md-4 stat-item">
+                <div class="count">+{{ convenios_activos }}</div>
+                <div class="label">Convenios</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

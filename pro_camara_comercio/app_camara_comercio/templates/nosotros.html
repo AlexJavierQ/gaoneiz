@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %}Nosotros - Cámara de Comercio de Loja{% endblock %}
+
+{% block content %}
+<section class="bg-white py-5">
+  <div class="container text-center">
+    <h2 class="text-primary fw-bold mb-3">Afiliaciones</h2>
+    <p class="text-muted">En la Cámara de Comercio de Loja</p>
+  </div>
+</section>
+
+<section class="bg-light py-5">
+  <div class="container">
+    <h3 class="text-center fw-bold mb-4">Nuestra Misión y Visión</h3>
+    <p><strong>Misión:</strong> Apoyar la promoción de nuestra ciudad en el ámbito nacional e internacional, fomentar mejores prácticas de gestión económica y cooperar con instituciones públicas y privadas para elevar la capacidad empresarial y el desarrollo socioeconómico de los lojanos.</p>
+    <p><strong>Visión:</strong> Representar y respaldar la actividad comercial lojano a nivel nacional e internacional, impulsando el intercambio comercial, social y cultural, especialmente con la región norte del Perú. :contentReference[oaicite:2]{index=2}</p>
+  </div>
+</section>
+
+<section class="bg-primary text-white py-5">
+  <div class="container text-center">
+    <h3 class="fw-bold mb-4">Conoce nuestros planes de afiliación</h3>
+    <div class="row justify-content-center mb-5">
+      <div class="col-md-4 mb-4">
+        <div class="bg-white text-dark p-4 rounded shadow">
+          <h4 class="fw-bold text-primary">Plan Persona Natural</h4>
+          <ul class="text-start ps-3">
+            <li>Ideal para emprendedores, microempresas y personas naturales.</li>
+            <li>Acceso a asesorías técnicas, legales y comerciales.</li>
+            <li>Uso de salones sociales con tarifas preferenciales.</li>
+            <li>Descuentos en convenios médicos, exequiales, farmacia y más.</li>
+            <li>Suscripción a boletines y oportunidades de negocio. :contentReference[oaicite:3]{index=3}</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="bg-white text-dark p-4 rounded shadow border-warning border-5">
+          <h4 class="fw-bold text-primary">Plan Empresa</h4>
+          <ul class="text-start ps-3">
+            <li>Dirigido a empresas y negocios establecidos.</li>
+            <li>Acceso a asesorías especializadas en comercio exterior, finanzas y marketing.</li>
+            <li>Beneficios extendidos de convenio: hasta el 32 % en educación, descuentos en salud y exequiales. :contentReference[oaicite:4]{index=4}</li>
+            <li>Participación en ruedas de negocio y networking institucional.</li>
+            <li>Uso estratégico de nuestras instalaciones y espacios gremiales.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="bg-white text-dark p-4 rounded shadow">
+          <h4 class="fw-bold text-primary">Plan Entidad Financiera</h4>
+          <ul class="text-start ps-3">
+            <li>Orientado a instituciones financieras colaboradoras.</li>
+            <li>Acceso premium a alianzas estratégicas y visibilidad gremial.</li>
+            <li>Participación en iniciativas sectoriales, ferias y eventos empresariales.</li>
+            <li>Integración institucional con convenios y servicios preferenciales.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <a href="{% url 'app_camara_comercio:afiliacion' %}" class="btn btn-warning btn-lg text-white fw-bold">
+      AFÍLIATE AHORA →
+    </a>
+  </div>
+</section>
+
+<section class="bg-white py-5">
+  <div class="container">
+    <h3 class="text-center fw-bold mb-4">Beneficios para nuestros socios</h3>
+    <ul class="list-unstyled">
+      <li><i class="bi bi-check-circle-fill text-primary"></i> Descuentos con empresas aliadas, incluidos servicios médicos, exequiales y seguros de vida.</li>
+      <li><i class="bi bi-check-circle-fill text-primary"></i> Asesorías técnicas, legales y comercio exterior.</li>
+      <li><i class="bi bi-check-circle-fill text-primary"></i> Uso preferencial de salones sociales.</li>
+      <li><i class="bi bi-check-circle-fill text-primary"></i> Acceso a convenios educativos (ej. UTPL hasta 32 % de descuento). :contentReference[oaicite:5]{index=5}</li>
+      <li><i class="bi bi-check-circle-fill text-primary"></i> Participación en ruedas de negocio, eventos institucionales, ferias y networking.</li>
+    </ul>
+  </div>
+</section>
+{% endblock %}

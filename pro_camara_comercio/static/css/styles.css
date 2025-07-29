@@ -1,0 +1,600 @@
+/* styles.css */
+
+/* ----------- Variables ----------- */
+:root {
+  --primary-color: #0d2c54;
+  --accent-color: #fbb03b;
+  --light-bg: #f8f9fa;
+  --text-color: #333;
+  --dark-gray: #444;
+  --border-color: #e0e0e0;
+  --sidebar-width: 280px;
+  --header-height: 80px;
+}
+
+/* ----------- Generales ----------- */
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: var(--light-bg);
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+a {
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+a:hover {
+  color: var(--accent-color);
+}
+
+/* ----------- Navbar (if used elsewhere, not directly in dashboard.html) ----------- */
+.navbar-brand span {
+  font-size: 1.1rem;
+  color: var(--primary-color);
+}
+
+.nav-link {
+  font-weight: 500;
+  color: var(--dark-gray);
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: var(--primary-color);
+}
+
+/* ----------- Botones ----------- */
+.btn {
+  border-radius: 50px;
+  padding: 0.5rem 1.2rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #0a2140;
+  border-color: #0a2140;
+}
+
+.btn-outline-primary {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+/* New: Dashboard Specific Buttons */
+.btn-logout {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  color: var(--primary-color);
+  font-weight: 700;
+  padding: 0.75rem 1.5rem;
+  box-shadow: 0 4px 8px rgba(251, 176, 59, 0.2);
+}
+
+.btn-logout:hover {
+  background-color: #da9b30;
+  border-color: #da9b30;
+  color: var(--primary-color);
+}
+
+.btn-dark-pill {
+  background-color: var(--primary-color);
+  color: white;
+  border-radius: 25px;
+  padding: 0.6rem 1.5rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-dark-pill:hover {
+  background-color: #0a2140;
+}
+
+/* ----------- Footer (if used elsewhere) ----------- */
+.footer-custom {
+  background-color: var(--primary-color);
+  font-size: 0.9rem;
+  color: white;
+  padding: 1.5rem 0;
+}
+
+/* ----------- Utilidades ----------- */
+.shadow-sm {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* ----------- Dashboard Layout ----------- */
+.dashboard-body {
+  overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+.dashboard-wrapper {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--light-bg);
+}
+
+/* ----------- Sidebar ----------- */
+.dashboard-sidebar {
+  width: var(--sidebar-width);
+  min-width: var(--sidebar-width); /* Ensure it doesn't shrink */
+  background: linear-gradient(180deg, var(--primary-color) 0%, #081d38 100%);
+  color: white;
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
+  position: sticky; /* Makes the sidebar sticky */
+  top: 0;
+  height: 100vh; /* Full height */
+  overflow-y: auto; /* Enable scrolling for long content */
+}
+
+.sidebar-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-logo {
+  max-width: 150px;
+  height: auto;
+  filter: brightness(0) invert(1); /* Makes the logo white */
+}
+
+.sidebar-menu-title {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  padding-left: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.sidebar-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1; /* Allows nav to take available space */
+}
+
+.sidebar-item {
+  margin-bottom: 0.5rem;
+}
+
+.sidebar-item a {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  color: rgba(255, 255, 255, 0.85);
+  border-radius: 8px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.sidebar-item a i {
+  font-size: 1.2rem;
+  margin-right: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+  transition: color 0.3s ease;
+}
+
+.sidebar-item a:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.sidebar-item a:hover i {
+  color: var(--accent-color);
+}
+
+.sidebar-item.active a {
+  background-color: var(--accent-color);
+  color: var(--primary-color);
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar-item.active a i {
+  color: var(--primary-color);
+}
+
+.sidebar-footer {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+
+/* ----------- Main Content ----------- */
+.dashboard-content {
+  flex-grow: 1;
+  padding: 0; /* Remove default padding, content-body will handle it */
+  position: relative;
+  background-color: var(--light-bg);
+}
+
+.content-header {
+  background-color: white;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.content-header h2 {
+  margin: 0;
+  font-size: 1.8rem;
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
+.content-body {
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(300px, 1fr)
+  ); /* Responsive grid */
+  gap: 1.5rem;
+}
+
+/* ----------- Info Cards ----------- */
+.info-card {
+  background-color: white;
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border-color);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.info-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+}
+
+.card-title-custom {
+  color: var(--primary-color);
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.info-card hr {
+  border-color: var(--border-color);
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  color: var(--text-color);
+}
+
+.info-item i {
+  font-size: 1.1rem;
+  color: var(--accent-color);
+  margin-right: 0.75rem;
+  width: 25px; /* Fixed width for icons */
+  text-align: center;
+}
+
+/* ----------- Convenios Section ----------- */
+.convenio-logo-card {
+  background-color: var(--light-bg);
+  border: 1px dashed var(--border-color);
+  border-radius: 8px;
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px; /* Fixed height for consistency */
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
+}
+
+.convenio-logo-card:hover {
+  border-color: var(--accent-color);
+  background-color: rgba(251, 176, 59, 0.1);
+  transform: translateY(-3px);
+}
+
+.convenio-placeholder-logo {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin: 0;
+  text-transform: uppercase;
+}
+
+/* ----------- Reservas Table ----------- */
+.reservas-table {
+  width: 100%;
+  margin-top: 1rem;
+  border-collapse: separate; /* For rounded corners */
+  border-spacing: 0;
+  overflow: hidden; /* To apply border-radius to inner elements */
+}
+
+.reservas-table thead th {
+  background-color: var(--primary-color);
+  color: white;
+  font-weight: 600;
+  padding: 0.8rem 1.2rem;
+  text-align: left;
+  border-bottom: none; /* Remove default bootstrap border */
+}
+
+.reservas-table tbody tr {
+  background-color: white;
+  transition: background-color 0.2s ease;
+}
+
+.reservas-table tbody tr:nth-child(even) {
+  background-color: #fcfcfc; /* Subtle stripe effect */
+}
+
+.reservas-table tbody tr:hover {
+  background-color: rgba(var(--accent-color), 0.1);
+}
+
+.reservas-table td {
+  padding: 0.8rem 1.2rem;
+  vertical-align: middle;
+  border-top: 1px solid var(--border-color);
+}
+
+/* Rounded corners for table */
+.reservas-table thead tr:first-child th:first-child {
+  border-top-left-radius: 8px;
+}
+.reservas-table thead tr:first-child th:last-child {
+  border-top-right-radius: 8px;
+}
+.reservas-table tbody tr:last-child td:first-child {
+  border-bottom-left-radius: 8px;
+}
+.reservas-table tbody tr:last-child td:last-child {
+  border-bottom-right-radius: 8px;
+}
+
+.badge-custom-success {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 0.4em 0.8em;
+  border-radius: 20px;
+  font-size: 0.85em;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.action-link {
+  color: var(--primary-color);
+  font-weight: 500;
+}
+
+.action-link:hover {
+  color: var(--accent-color);
+  text-decoration: underline;
+}
+
+.text-muted {
+  color: #6c757d !important;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+  .dashboard-sidebar {
+    width: 250px;
+    min-width: 250px;
+  }
+  .content-header h2 {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-wrapper {
+    flex-direction: column;
+  }
+
+  .dashboard-sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    padding-bottom: 1rem;
+  }
+
+  .sidebar-header {
+    border-bottom: none;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .sidebar-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .sidebar-item {
+    flex: 1 1 auto; /* Allows items to wrap */
+    margin-bottom: 0;
+  }
+
+  .sidebar-item a {
+    justify-content: center;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .sidebar-item a i {
+    margin-right: 0.5rem;
+    font-size: 1rem;
+  }
+
+  .sidebar-menu-title {
+    text-align: center;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .sidebar-footer {
+    border-top: none;
+    padding-top: 1rem;
+  }
+
+  .dashboard-content {
+    padding-top: 0;
+  }
+
+  .content-header {
+    padding: 1rem 1.5rem;
+  }
+
+  .content-header h2 {
+    font-size: 1.3rem;
+  }
+
+  .content-body {
+    padding: 1.5rem;
+    grid-template-columns: 1fr; /* Stack cards on small screens */
+  }
+
+  .info-card {
+    padding: 1.2rem 1.5rem;
+  }
+
+  .card-title-custom {
+    font-size: 1.1rem;
+  }
+
+  .info-item {
+    font-size: 0.95rem;
+  }
+
+  .reservas-table thead {
+    display: none; /* Hide table headers on small screens */
+  }
+
+  .reservas-table,
+  .reservas-table tbody,
+  .reservas-table tr,
+  .reservas-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .reservas-table tr {
+    margin-bottom: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  }
+
+  .reservas-table td {
+    border: none;
+    position: relative;
+    padding-left: 50%; /* Space for pseudo-element label */
+    text-align: right;
+  }
+
+  .reservas-table td:before {
+    content: attr(data-label); /* Use data-label for content */
+    position: absolute;
+    left: 10px;
+    width: calc(50% - 20px);
+    padding-right: 10px;
+    white-space: nowrap;
+    text-align: left;
+    font-weight: 600;
+    color: var(--primary-color);
+  }
+
+  /* Specific labels for table cells */
+  .reservas-table td:nth-of-type(1):before {
+    content: "Fecha Reserva";
+  }
+  .reservas-table td:nth-of-type(2):before {
+    content: "Sala/Servicio";
+  }
+  .reservas-table td:nth-of-type(3):before {
+    content: "Estado";
+  }
+  .reservas-table td:nth-of-type(4):before {
+    content: "Acción";
+  }
+
+  .reservas-table td:first-child {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+  .reservas-table td:last-child {
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+  }
+
+  .convenio-logo-card {
+    height: 80px;
+  }
+  .convenio-placeholder-logo {
+    font-size: 1.5rem;
+  }
+}
+
+/* Extra small devices (less than 576px) */
+@media (max-width: 575.98px) {
+  .sidebar-nav {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .sidebar-item a {
+    justify-content: flex-start;
+  }
+  .info-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .info-item i {
+    margin-bottom: 0.5rem;
+    margin-right: 0;
+  }
+  .reservas-table td {
+    padding-left: 10px; /* Adjust for smaller screens */
+    text-align: left;
+  }
+  .reservas-table td:before {
+    position: static;
+    display: block;
+    width: auto;
+    padding-right: 0;
+    margin-bottom: 5px;
+  }
+}

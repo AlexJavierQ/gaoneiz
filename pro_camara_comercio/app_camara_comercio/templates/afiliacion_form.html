@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block title %}Formulario de Afiliación - Cámara de Comercio de Loja{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card-shape p-4 p-md-5">
+                <h1 class="text-center mb-4">Formulario de Afiliación</h1>
+                <p class="text-center text-muted mb-5">
+                    Completa tus datos para empezar el proceso. Un administrador revisará tu solicitud.
+                </p>
+
+                <form method="post" novalidate>
+                    {% csrf_token %}
+
+                    <!-- Errores generales del formulario -->
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.non_field_errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <fieldset class="mb-4">
+                        <legend class="h5 mb-3" style="border-bottom: 2px solid var(--primary-blue); padding-bottom: 10px;">Datos del Contacto Principal</legend>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">{{ form.first_name.label_tag }} {{ form.first_name }}</div>
+                            <div class="col-md-6 mb-3">{{ form.last_name.label_tag }} {{ form.last_name }}</div>
+                            <div class="col-md-6 mb-3">{{ form.email.label_tag }} {{ form.email }}</div>
+                            <div class="col-md-6 mb-3">{{ form.telf.label_tag }} {{ form.telf }}</div>
+                            <div class="col-md-6 mb-3">{{ form.cedula.label_tag }} {{ form.cedula }}</div>
+                            <div class="col-md-6 mb-3">{{ form.password.label_tag }} {{ form.password }}<small class="form-text text-muted">Crea una contraseña para tu cuenta.</small></div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="mb-4">
+                        <legend class="h5 mb-3" style="border-bottom: 2px solid var(--primary-blue); padding-bottom: 10px;">Datos del Negocio o Empresa</legend>
+                        <div class="mb-3">{{ form.tipo_plan.label_tag }} {{ form.tipo_plan }}</div>
+                        <div class="mb-3">{{ form.razon_social.label_tag }} {{ form.razon_social }}</div>
+                        <div class="mb-3">{{ form.nombre_comercial.label_tag }} {{ form.nombre_comercial }}</div>
+                        <div class="mb-3">{{ form.RUC.label_tag }} {{ form.RUC }}</div>
+                        <div class="mb-3">{{ form.direccion.label_tag }} {{ form.direccion }}</div>
+                        <div class="mb-3">{{ form.ciudad.label_tag }} {{ form.ciudad }}</div>
+                        <div class="mb-3">{{ form.tipo_negocio.label_tag }} {{ form.tipo_negocio }}</div>
+                    </fieldset>
+
+                    <fieldset class="mb-4">
+                        <legend class="h5 mb-3" style="border-bottom: 2px solid var(--primary-blue); padding-bottom: 10px;">Información Adicional</legend>
+                        <div class="mb-3">{{ form.nombre_representante_legal.label_tag }} {{ form.nombre_representante_legal }}</div>
+                        <div class="mb-3">{{ form.cedula_representante.label_tag }} {{ form.cedula_representante }}</div>
+                        <div class="mb-3">{{ form.red_social_preferida.label_tag }} {{ form.red_social_preferida }}</div>
+                    </fieldset>
+
+                    <div class="form-check mb-4">
+                        {{ form.acepta_terminos }}
+                        <label class="form-check-label" for="{{ form.acepta_terminos.id_for_label }}">
+                            Acepto los términos y condiciones y la política de tratamiento de datos.
+                        </label>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary btn-lg">Enviar Solicitud de Afiliación</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Estilos para que los campos del formulario tomen la apariencia de Bootstrap */
+    form input:not([type=checkbox]), form select, form textarea {
+        display: block;
+        width: 100%;
+        padding: .375rem .75rem;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #212529;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+        transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    }
+    form label {
+        margin-bottom: .5rem;
+        font-weight: 500;
+    }
+</style>
+{% endblock %}
