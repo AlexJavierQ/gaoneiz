@@ -9,14 +9,9 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # --- CONFIGURACIÓN DE SEGURIDAD ---
-# IMPORTANTE: En producción, esta clave debe ser secreta.
 SECRET_KEY = 'django-insecure-uz3ql(3+5!n!e!zmpgct#m^pniywg=50_2grb8*90o$ozxof1j'
-
-# IMPORTANTE: En producción, DEBUG siempre debe ser False.
 DEBUG = True
-
 ALLOWED_HOSTS = []
-
 
 # --- APLICACIONES (INSTALLED_APPS) ---
 INSTALLED_APPS = [
@@ -27,7 +22,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
-    # --- Mis Aplicaciones (NUEVA ESTRUCTURA) ---
+    # Mis Aplicaciones
     'usuarios.apps.UsuariosConfig',
     'web.apps.WebConfig',
     'noticias.apps.NoticiasConfig',
@@ -36,7 +31,9 @@ INSTALLED_APPS = [
     'afiliaciones.apps.AfiliacionesConfig',
     'panel.apps.PanelConfig',
     
-    # Apps de Terceros
+    # Apps de Terceros (Crispy Forms debe estar aquí)
+    'crispy_forms',
+    'crispy_bootstrap5',
     'rest_framework',
     'allauth',
     'allauth.account',
@@ -84,46 +81,37 @@ DATABASES = {
 }
 
 # --- CONFIGURACIÓN DE AUTENTICACIÓN ---
-# Apunta al nuevo modelo de usuario en la app 'usuarios'
 AUTH_USER_MODEL = 'usuarios.Usuario'
-
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-# Configuración de django-allauth (limpia y sin advertencias)
+# Configuración de django-allauth
 SITE_ID = 1
-ACCOUNT_EMAIL_VERIFICATION = 'optional'
-ACCOUNT_LOGIN_METHODS = {'email'}
-ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
+ACCOUNT_EMAIL_VERIFICATION = 'optional' 
 
-# Redirecciones
-LOGIN_REDIRECT_URL = 'web:home' # A dónde ir después de un login exitoso.
-LOGIN_URL = 'account_login' # Usa la URL de allauth para la página de login.
-LOGOUT_REDIRECT_URL = 'web:home' # A dónde ir después de cerrar sesión.
+# Configuración para usar email en lugar de username
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+# --- FIN DE LA SECCIÓN ---
 
-# Validadores de Contraseña
-AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
-]
+LOGIN_REDIRECT_URL = 'app_camara_comercio:dashboard'
+LOGIN_URL = 'app_camara_comercio:login'
+LOGOUT_REDIRECT_URL = 'app_camara_comercio:home'
 
-# --- INTERNACIONALIZACIÓN ---
-LANGUAGE_CODE = 'es-ec'
-TIME_ZONE = 'America/Guayaquil'
-USE_I18N = True
-USE_TZ = True
 
 # --- ARCHIVOS ESTÁTICOS Y MEDIA ---
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# --- CONFIGURACIONES DE TERCEROS (CRISPY FORMS) ---
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 # --- LLAVE PRIMARIA POR DEFECTO ---
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
