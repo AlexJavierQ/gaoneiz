@@ -1,0 +1,21 @@
+{% extends 'panel/panel_base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}{% if object %}Editar Noticia{% else %}Crear Noticia{% endif %}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="info-card">
+            <h3 class="mb-4">{% if object %}Editar Noticia{% else %}Crear Nueva Noticia{% endif %}</h3>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                    <a href="{% url 'panel:noticia_panel_list' %}" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
