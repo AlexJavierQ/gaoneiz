@@ -35,6 +35,11 @@ from .forms import (
     NoticiaForm, ServicioForm
 )
 from .mixins import StaffRequiredMixin
+from .utils import (
+    registrar_actividad, registrar_aprobacion_solicitud, 
+    registrar_rechazo_solicitud, registrar_creacion,
+    registrar_actualizacion, registrar_eliminacion
+)
 
 # ==============================================================================
 # VISTA PRINCIPAL DEL PANEL
@@ -91,6 +96,10 @@ class AprobarSolicitudView(LoginRequiredMixin, StaffRequiredMixin, View):
             solicitud.fecha_revision = timezone.now()
             solicitud.revisado_por = request.user
             solicitud.save()
+            
+            # Registrar actividad
+            registrar_aprobacion_solicitud(request.user, solicitud)
+            
             messages.success(request, f"Solicitud de {solicitud.usuario.get_full_name()} aprobada.")
         return redirect("panel:solicitudes_afiliacion")
 
@@ -102,6 +111,10 @@ class RechazarSolicitudView(LoginRequiredMixin, StaffRequiredMixin, View):
             solicitud.fecha_revision = timezone.now()
             solicitud.revisado_por = request.user
             solicitud.save()
+            
+            # Registrar actividad
+            registrar_rechazo_solicitud(request.user, solicitud)
+            
             messages.warning(request, f"Solicitud de {solicitud.usuario.get_full_name()} rechazada.")
         return redirect("panel:solicitudes_afiliacion")
 
@@ -178,6 +191,10 @@ class ConvenioCreateView(StaffRequiredMixin, CreateView):
         convenio = form.save(commit=False)
         convenio.created_by = self.request.user
         convenio.save()
+        
+        # Registrar actividad
+        registrar_creacion(self.request.user, convenio, "convenio")
+        
         messages.success(self.request, "Convenio creado exitosamente.")
         return super().form_valid(form)
 
@@ -188,6 +205,9 @@ class ConvenioUpdateView(StaffRequiredMixin, UpdateView):
     success_url = reverse_lazy('panel:convenio_list')
 
     def form_valid(self, form):
+        # Registrar actividad
+        registrar_actualizacion(self.request.user, form.instance, "convenio")
+        
         messages.success(self.request, "Convenio actualizado exitosamente.")
         return super().form_valid(form)
 
@@ -197,6 +217,9 @@ class ConvenioDeleteView(StaffRequiredMixin, DeleteView):
     success_url = reverse_lazy('panel:convenio_list')
 
     def form_valid(self, form):
+        # Registrar actividad antes de eliminar
+        registrar_eliminacion(self.request.user, self.object, "convenio")
+        
         messages.success(self.request, "Convenio eliminado exitosamente.")
         return super().form_valid(form)
 
@@ -289,4 +312,44 @@ class RegistroActividadView(LoginRequiredMixin, StaffRequiredMixin, ListView):
     paginate_by = 50
 
     def get_queryset(self):
-        return RegistroActividad.objects.select_related("actor").order_by("-timestamp")
+        queryset = RegistroActividad.objects.select_related("actor", "content_type").order_by("-timestamp")
+        
+        # Filtro de búsqueda
+        query = self.request.GET.get('q')
+        if query:
+            queryset = queryset.filter(
+                Q(accion__icontains=query) |
+                Q(actor__first_name__icontains=query) |
+                Q(actor__last_name__icontains=query) |
+                Q(actor__email__icontains=query)
+            )
+        
+        # Filtro por tipo de contenido
+        content_type = self.request.GET.get('tipo')
+        if content_type:
+            queryset = queryset.filter(content_type__model=content_type)
+        
+        # Filtro por fecha
+        fecha = self.request.GET.get('fecha')
+        if fecha:
+            try:
+                from datetime import datetime
+                fecha_obj = datetime.strptime(fecha, '%Y-%m-%d').date()
+                queryset = queryset.filter(timestamp__date=fecha_obj)
+            except ValueError:
+                pass
+        
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['current_query'] = self.request.GET.get('q', '')
+        context['current_tipo'] = self.request.GET.get('tipo', '')
+        context['current_fecha'] = self.request.GET.get('fecha', '')
+        
+        # Estadísticas adicionales
+        from django.utils import timezone
+        today = timezone.now().date()
+        context['actividades_hoy'] = RegistroActividad.objects.filter(timestamp__date=today).count()
+        
+        return context

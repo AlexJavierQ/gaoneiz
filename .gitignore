@@ -204,3 +204,4 @@ htmlcov/
 
 # Local development
 local_settings.py
+*.pyc
