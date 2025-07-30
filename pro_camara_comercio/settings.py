@@ -97,9 +97,9 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 # --- FIN DE LA SECCIÓN ---
 
-LOGIN_REDIRECT_URL = 'app_camara_comercio:dashboard'
-LOGIN_URL = 'app_camara_comercio:login'
-LOGOUT_REDIRECT_URL = 'app_camara_comercio:home'
+LOGIN_REDIRECT_URL = 'web:home'
+LOGIN_URL = 'account_login'
+LOGOUT_REDIRECT_URL = 'web:home'
 
 
 # --- ARCHIVOS ESTÁTICOS Y MEDIA ---

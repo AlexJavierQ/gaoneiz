@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Cerrar Sesión - Cámara de Comercio de Loja{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-xl-9">
+                <div class="card login-card o-hidden border-0 shadow-lg my-5 animate__animated animate__fadeIn">
+                    <div class="card-body p-0">
+                        <div class="row">
+                            <div class="col-lg-6 d-none d-lg-flex bg-login-image">
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="p-5">
+                                    <div class="text-center">
+                                        <img src="{% static 'images/logo-camara-de-comercio-loja-cadecol.png' %}"
+                                            alt="Logo Cámara de Loja" style="max-height: 50px;" class="mb-4">
+                                        <h1 class="h4 text-gray-900 mb-4">¿Cerrar Sesión?</h1>
+                                        <p class="text-muted mb-4">¿Estás seguro de que deseas cerrar tu sesión?</p>
+                                    </div>
+
+                                    <form method="post" action="{% url 'account_logout' %}" class="user">
+                                        {% csrf_token %}
+                                        {% if redirect_field_value %}
+                                            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                                        {% endif %}
+
+                                        <div class="d-grid gap-2">
+                                            <button type="submit" class="btn btn-danger btn-user">
+                                                <i class="fa-solid fa-right-from-bracket me-2"></i>
+                                                Sí, Cerrar Sesión
+                                            </button>
+                                            <a href="{% url 'web:home' %}" class="btn btn-outline-secondary btn-user">
+                                                <i class="fa-solid fa-arrow-left me-2"></i>
+                                                Cancelar
+                                            </a>
+                                        </div>
+
+                                        <hr>
+                                        <div class="text-center">
+                                            <p class="small text-muted">
+                                                Gracias por usar la plataforma de la Cámara de Comercio de Loja
+                                            </p>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
