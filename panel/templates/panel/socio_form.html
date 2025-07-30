@@ -1,0 +1,37 @@
+{% extends 'panel/panel_base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Editar Socio{% endblock %}
+
+{% block content %}
+<div class.row justify-content-center>
+    <div class="col-lg-10">
+        <h1 class="mb-4">Editar Socio: {{ object.get_full_name }}</h1>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="info-card h-100">
+                        <h5 class="card-title-custom">Datos Personales (Usuario)</h5>
+                        <hr>
+                        {{ form|crispy }}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="info-card h-100">
+                        <h5 class="card-title-custom">Datos del Perfil (Socio)</h5>
+                        <hr>
+                        {{ perfil_form|crispy }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                <a href="{% url 'panel:gestion_socios' %}" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

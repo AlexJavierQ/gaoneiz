@@ -1,0 +1,21 @@
+{% extends 'panel/panel_base.html' %}
+
+{% block title %}Confirmar Eliminación{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="info-card text-center">
+            <h3 class="text-danger">Confirmar Eliminación</h3>
+            <p class="lead my-4">¿Estás seguro de que quieres eliminar permanentemente el servicio <strong>"{{
+                    object.nombre }}"</strong>?</p>
+            <p>Esta acción no se puede deshacer.</p>
+            <form method="post">
+                {% csrf_token %}
+                <a href="{% url 'panel:servicio_panel_list' %}" class="btn btn-secondary">Cancelar</a>
+                <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

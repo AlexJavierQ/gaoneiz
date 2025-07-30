@@ -1,0 +1,20 @@
+{% extends 'panel/panel_base.html' %}
+{% block title %}Confirmar Eliminación{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="info-card text-center">
+            <h3 class="text-danger">Confirmar Eliminación de Perfil de Socio</h3>
+            <p class="lead my-4">¿Estás seguro de que quieres eliminar permanentemente el perfil de socio de <strong>"{{
+                    object.razon_social }}"</strong>?</p>
+            <p class="text-muted">Esto no eliminará la cuenta de usuario, solo revocará su estatus de socio.</p>
+            <form method="post">
+                {% csrf_token %}
+                <a href="{% url 'panel:gestion_socios' %}" class="btn btn-secondary">Cancelar</a>
+                <button type="submit" class="btn btn-danger">Sí, eliminar perfil de socio</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
