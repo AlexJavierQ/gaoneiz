@@ -1,56 +1,33 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import Usuario
+from .models import Usuario, PerfilSocio    
+from allauth.account.forms import SignupForm # <-- Importamos el formulario base de allauth
 
+class CustomSignupForm(SignupForm):
+    """
+    Formulario de registro personalizado que hereda de allauth
+    y añade los campos de nombre y apellido.
+    """
+    first_name = forms.CharField(max_length=30, label='Nombre', widget=forms.TextInput(attrs={'placeholder': 'Nombre'}))
+    last_name = forms.CharField(max_length=30, label='Apellido', widget=forms.TextInput(attrs={'placeholder': 'Apellido'}))
 
-class CustomSignupForm(UserCreationForm):
-    """Formulario personalizado de registro usando email en lugar de username."""
-    
-    email = forms.EmailField(
-        required=True,
-        widget=forms.EmailInput(attrs={
-            'class': 'form-control form-control-user',
-            'placeholder': 'Correo Electrónico'
-        })
-    )
-    first_name = forms.CharField(
-        max_length=30,
-        required=True,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control form-control-user',
-            'placeholder': 'Nombre'
-        })
-    )
-    last_name = forms.CharField(
-        max_length=30,
-        required=True,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control form-control-user',
-            'placeholder': 'Apellido'
-        })
-    )
-    password1 = forms.CharField(
-        widget=forms.PasswordInput(attrs={
-            'class': 'form-control form-control-user',
-            'placeholder': 'Contraseña'
-        })
-    )
-    password2 = forms.CharField(
-        widget=forms.PasswordInput(attrs={
-            'class': 'form-control form-control-user',
-            'placeholder': 'Confirmar Contraseña'
-        })
-    )
-
-    class Meta:
-        model = Usuario
-        fields = ('email', 'first_name', 'last_name', 'password1', 'password2')
-
-    def save(self, commit=True):
-        user = super().save(commit=False)
-        user.email = self.cleaned_data['email']
+    def save(self, request):
+        # Llama al método save original de allauth para crear el usuario
+        user = super(CustomSignupForm, self).save(request)
+        # Guarda los campos adicionales en el nuevo objeto de usuario
         user.first_name = self.cleaned_data['first_name']
         user.last_name = self.cleaned_data['last_name']
-        if commit:
-            user.save()
+        user.save()
         return user
+
+class PerfilForm(forms.ModelForm):
+    """Formulario para que un usuario edite su información básica."""
+    class Meta:
+        model = Usuario
+        fields = ['first_name', 'last_name', 'cedula', 'telefono']
+
+class PerfilSocioForm(forms.ModelForm):
+    """Formulario para que un socio edite la información de su perfil."""
+    class Meta:
+        model = PerfilSocio
+        fields = ['razon_social', 'ruc', 'direccion']        

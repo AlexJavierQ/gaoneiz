@@ -1,0 +1,21 @@
+{% extends 'panel/panel_base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}{% if object %}Editar Tipo de Lugar{% else %}Crear Tipo de Lugar{% endif %}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="info-card">
+            <h3 class="mb-4">{% if object %}Editar Tipo de Lugar{% else %}Crear Nuevo Tipo de Lugar{% endif %}</h3>
+            <form method="post">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <a href="{% url 'panel:tipo_lugar_list' %}" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

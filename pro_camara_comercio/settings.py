@@ -91,6 +91,9 @@ AUTHENTICATION_BACKENDS = [
 # Configuración de django-allauth
 SITE_ID = 1
 ACCOUNT_EMAIL_VERIFICATION = 'optional' 
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
 
 # Configuración para usar email en lugar de username (nueva sintaxis)
 ACCOUNT_LOGIN_METHODS = {'email'}
@@ -122,3 +125,4 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 # --- LLAVE PRIMARIA POR DEFECTO ---
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

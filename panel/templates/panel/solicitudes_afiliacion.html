@@ -38,21 +38,10 @@
                     <td>{{ solicitud.ruc }}</td>
                     <td>{{ solicitud.fecha_solicitud|date:"d M Y, H:i" }}</td>
                     <td class="text-center">
-                        <form method="post" action="{% url 'panel:aprobar_solicitud' solicitud.pk %}" class="d-inline">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-sm btn-success" title="Aprobar"
-                                onclick="return confirm('¿Estás seguro de APROBAR esta solicitud?')">
-                                <i class="fas fa-check"></i> Aprobar
-                            </button>
-                        </form>
-                        <form method="post" action="{% url 'panel:rechazar_solicitud' solicitud.pk %}"
-                            class="d-inline ms-1">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-sm btn-danger" title="Rechazar"
-                                onclick="return confirm('¿Estás seguro de RECHAZAR esta solicitud?')">
-                                <i class="fas fa-times"></i> Rechazar
-                            </button>
-                        </form>
+                        {# --- ENLACE ACTUALIZADO --- #}
+                        <a href="{% url 'panel:solicitud_revisar' solicitud.pk %}" class="btn btn-sm btn-primary">
+                            <i class="fas fa-search me-1"></i> Revisar
+                        </a>
                     </td>
                 </tr>
                 {% empty %}

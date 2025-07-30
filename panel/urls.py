@@ -12,6 +12,7 @@ urlpatterns = [
     path('solicitudes/', views.SolicitudesAfiliacionView.as_view(), name='solicitudes_afiliacion'),
     path('solicitudes/<int:pk>/aprobar/', views.AprobarSolicitudView.as_view(), name='aprobar_solicitud'),
     path('solicitudes/<int:pk>/rechazar/', views.RechazarSolicitudView.as_view(), name='rechazar_solicitud'),
+    path('solicitudes/<int:pk>/revisar/', views.SolicitudAfiliacionDetailView.as_view(), name='solicitud_revisar'),
 
     # 3. Gestión de Socios
     path('socios/', views.GestionSociosView.as_view(), name='gestion_socios'),
@@ -38,4 +39,16 @@ urlpatterns = [
     
     # 7. Sistema
     path('actividad/', views.RegistroActividadView.as_view(), name='registro_actividad'),
+
+    path('reservas/', views.ReservaPanelListView.as_view(), name='reserva_panel_list'),
+    path('reservas/<int:pk>/editar/', views.ReservaPanelUpdateView.as_view(), name='reserva_update'),
+    
+    path('lugares/', views.LugarListView.as_view(), name='lugar_list'),
+    path('lugares/nuevo/', views.LugarCreateView.as_view(), name='lugar_create'),
+    path('lugares/<int:pk>/editar/', views.LugarUpdateView.as_view(), name='lugar_update'),
+    
+    path('tipos-lugar/', views.TipoLugarListView.as_view(), name='tipo_lugar_list'),
+    path('tipos-lugar/nuevo/', views.TipoLugarCreateView.as_view(), name='tipo_lugar_create'),
+    path('tipos-lugar/<int:pk>/editar/', views.TipoLugarUpdateView.as_view(), name='tipo_lugar_update'),
+    
 ]

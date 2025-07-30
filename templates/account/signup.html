@@ -1,89 +1,38 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load static %}
+{% load crispy_forms_tags %}
 
-{% block title %}Crear Cuenta - Cámara de Comercio de Loja{% endblock %}
+{% block title %}Crear una Cuenta{% endblock %}
 
 {% block content %}
-<div class="login-container">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-10 col-xl-9">
-                <div class="card login-card o-hidden border-0 shadow-lg my-5 animate__animated animate__fadeIn">
-                    <div class="card-body p-0">
-                        <div class="row">
-                            <div class="col-lg-6 d-none d-lg-flex bg-login-image">
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="p-5">
-                                    <div class="text-center">
-                                        <img src="{% static 'images/logo-camara-de-comercio-loja-cadecol.png' %}"
-                                            alt="Logo Cámara de Loja" style="max-height: 50px;" class="mb-4">
-                                        <h1 class="h4 text-gray-900 mb-4">¡Crea tu Cuenta!</h1>
-                                        <p class="text-muted small mb-4">Únete a la Cámara de Comercio de Loja</p>
-                                    </div>
-
-                                    {% if form.errors %}
-                                    <div class="alert alert-danger text-center small p-2">
-                                        {% for field, errors in form.errors.items %}
-                                        {% for error in errors %}
-                                        {{ error }}<br>
-                                        {% endfor %}
-                                        {% endfor %}
-                                    </div>
-                                    {% endif %}
-
-                                    <form method="post" class="user">
-                                        {% csrf_token %}
-
-                                        <div class="form-group mb-3">
-                                            {{ form.email }}
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-sm-6 mb-3">
-                                                {{ form.first_name }}
-                                            </div>
-                                            <div class="col-sm-6 mb-3">
-                                                {{ form.last_name }}
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group mb-3">
-                                            {{ form.password1 }}
-                                        </div>
-
-                                        <div class="form-group mb-3">
-                                            {{ form.password2 }}
-                                        </div>
-
-                                        <div class="form-group mb-3">
-                                            <div class="form-check">
-                                                <input type="checkbox" class="form-check-input" id="terms" required>
-                                                <label class="form-check-label small" for="terms">
-                                                    Acepto los <a href="#" class="text-primary">términos y
-                                                        condiciones</a>
-                                                </label>
-                                            </div>
-                                        </div>
-
-                                        <button type="submit" class="btn btn-primary btn-user w-100">
-                                            Crear Cuenta
-                                        </button>
-
-                                        <hr>
-                                        <div class="text-center">
-                                            <a class="small" href="{% url 'account_login' %}">¿Ya tienes una cuenta?
-                                                ¡Inicia Sesión!</a>
-                                        </div>
-                                        <div class="text-center">
-                                            <a class="small" href="{% url 'afiliaciones:solicitar_afiliacion' %}">¿Eres
-                                                una empresa? ¡Afíliate aquí!</a>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
+<div class.container my-5>
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-lg border-0">
+                <div class="card-body p-4 p-md-5">
+                    <div class="text-center mb-4">
+                        <img src="{% static 'images/logo-camara-de-comercio-loja-cadecol.png' %}" alt="Logo"
+                            style="max-height: 50px;" class="mb-4">
+                        <h2 class="card-title fw-bold">¡Crea tu Cuenta!</h2>
+                        <p class="text-muted">Únete a la Cámara de Comercio de Loja para acceder a beneficios
+                            exclusivos.</p>
                     </div>
+
+                    <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+                        {% csrf_token %}
+
+                        {{ form|crispy }}
+
+                        <div class="d-grid mt-4">
+                            <button class="btn btn-primary btn-lg" type="submit">Crear Cuenta</button>
+                        </div>
+                    </form>
+
+                    <hr class="my-4">
+
+                    <p class="text-center">
+                        ¿Ya tienes una cuenta? <a href="{% url 'account_login' %}">Inicia sesión aquí</a>.
+                    </p>
                 </div>
             </div>
         </div>

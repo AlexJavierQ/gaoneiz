@@ -6,6 +6,7 @@ from afiliaciones.models import SolicitudAfiliacion
 from usuarios.models import Usuario, PerfilSocio
 from noticias.models import Noticia
 from servicios.models import Servicio
+from reservas.models import TipoLugar, Lugar, Reserva # <-- Nuevas importaciones
 
 
 class ConvenioForm(forms.ModelForm):
@@ -117,4 +118,43 @@ class AfiliacionAdminForm(forms.ModelForm):
         fields = ["estado"]
         widgets = {
             "estado": forms.Select(attrs={"class": "form-select"}),
+        }
+
+class TipoLugarForm(forms.ModelForm):
+    class Meta:
+        model = TipoLugar
+        fields = '__all__'
+        widgets = {
+            'nombre': forms.TextInput(attrs={'class': 'form-control'}),
+            'descripcion': forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),
+            'capacidad_maxima': forms.NumberInput(attrs={'class': 'form-control'}),
+            'precio_por_hora': forms.NumberInput(attrs={'class': 'form-control'}),
+            'activo': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        }
+
+class LugarForm(forms.ModelForm):
+    class Meta:
+        model = Lugar
+        fields = '__all__'
+        widgets = {
+            'nombre': forms.TextInput(attrs={'class': 'form-control'}),
+            'tipo': forms.Select(attrs={'class': 'form-select'}),
+            'ubicacion': forms.TextInput(attrs={'class': 'form-control'}),
+            'descripcion': forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),
+            'equipamiento': forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),
+            'activo': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        }
+
+class ReservaPanelForm(forms.ModelForm):
+    class Meta:
+        model = Reserva
+        fields = ['lugar', 'usuario', 'fecha_inicio', 'fecha_fin', 'proposito', 'estado', 'notas_admin']
+        widgets = {
+            'fecha_inicio': forms.DateTimeInput(attrs={'type': 'datetime-local', 'class': 'form-control'}),
+            'fecha_fin': forms.DateTimeInput(attrs={'type': 'datetime-local', 'class': 'form-control'}),
+            'lugar': forms.Select(attrs={'class': 'form-select'}),
+            'usuario': forms.Select(attrs={'class': 'form-select'}),
+            'proposito': forms.TextInput(attrs={'class': 'form-control'}),
+            'estado': forms.Select(attrs={'class': 'form-select'}),
+            'notas_admin': forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),
         }

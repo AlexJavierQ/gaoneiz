@@ -11,6 +11,20 @@
   --sidebar-width: 280px;
   --header-height: 80px;
 }
+.icon-circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sidebar-heading {
+  padding: 0.5rem 0.75rem;
+  font-weight: bold;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+}
 
 /* ----------- Generales ----------- */
 body {
