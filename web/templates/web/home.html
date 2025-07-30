@@ -13,9 +13,9 @@
                 <p class="hero-subtitle">Fortaleciendo el desarrollo empresarial y comercial de nuestra región</p>
                 <div class="d-flex gap-3 justify-content-center flex-wrap">
                     {% if not user.is_authenticated %}
-                        <a href="{% url 'afiliaciones:solicitar_afiliacion' %}" class="btn btn-logout btn-lg">
-                            <i class="fas fa-handshake me-2"></i>Únete a Nosotros
-                        </a>
+                    <a href="{% url 'afiliaciones:solicitar_afiliacion' %}" class="btn btn-logout btn-lg">
+                        <i class="fas fa-handshake me-2"></i>Únete a Nosotros
+                    </a>
                     {% endif %}
                     <a href="{% url 'web:nosotros' %}" class="btn btn-outline-light btn-lg">
                         <i class="fas fa-info-circle me-2"></i>Conoce Más
@@ -125,11 +125,12 @@
         <div class="row">
             <div class="col-lg-8 mx-auto text-center">
                 <h2 class="section-title">¿Listo para hacer crecer tu negocio?</h2>
-                <p class="lead mb-4">Únete a la Cámara de Comercio de Loja y accede a todos los beneficios que tenemos para ti.</p>
+                <p class="lead mb-4">Únete a la Cámara de Comercio de Loja y accede a todos los beneficios que tenemos
+                    para ti.</p>
                 {% if not user.is_authenticated %}
-                    <a href="{% url 'afiliaciones:solicitar_afiliacion' %}" class="btn btn-primary btn-lg me-3">
-                        <i class="fas fa-handshake me-2"></i>Solicitar Afiliación
-                    </a>
+                <a href="{% url 'afiliaciones:solicitar_afiliacion' %}" class="btn btn-primary btn-lg me-3">
+                    <i class="fas fa-handshake me-2"></i>Solicitar Afiliación
+                </a>
                 {% endif %}
                 <a href="{% url 'web:contacto' %}" class="btn btn-outline-primary btn-lg">
                     <i class="fas fa-envelope me-2"></i>Contáctanos

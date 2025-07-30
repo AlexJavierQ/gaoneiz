@@ -1,0 +1,238 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Nueva Reserva - Cámara de Comercio de Loja{% endblock %}
+
+{% block extra_css %}
+<style>
+    .lugar-info {
+        background: #f8f9fa;
+        border-left: 4px solid #007bff;
+        padding: 15px;
+        margin: 15px 0;
+        border-radius: 0 5px 5px 0;
+    }
+
+    .costo-estimado {
+        background: #e8f5e8;
+        border: 1px solid #28a745;
+        padding: 10px;
+        border-radius: 5px;
+        margin-top: 15px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow border-0">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-calendar-plus me-2"></i>
+                        Nueva Reserva
+                    </h4>
+                </div>
+                <div class="card-body">
+                    {% if form.errors %}
+                    <div class="alert alert-danger">
+                        <h6><i class="fas fa-exclamation-triangle me-2"></i>Por favor corrige los siguientes errores:
+                        </h6>
+                        <ul class="mb-0">
+                            {% for field, errors in form.errors.items %}
+                            {% for error in errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+
+                    <form method="post" id="reservaForm">
+                        {% csrf_token %}
+
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="{{ form.lugar.id_for_label }}" class="form-label">
+                                    <i class="fas fa-map-marker-alt me-2"></i>{{ form.lugar.label }}
+                                </label>
+                                {{ form.lugar }}
+                                <div class="form-text">Selecciona el lugar que deseas reservar</div>
+                            </div>
+                        </div>
+
+                        <!-- Información del lugar seleccionado -->
+                        <div id="lugar-info" class="lugar-info" style="display: none;">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <strong>Capacidad:</strong> <span id="capacidad"></span> personas
+                                </div>
+                                <div class="col-md-6">
+                                    <strong>Precio:</strong> $<span id="precio"></span> por hora
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <strong>Equipamiento:</strong> <span id="equipamiento"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.fecha_inicio.id_for_label }}" class="form-label">
+                                    <i class="fas fa-calendar me-2"></i>{{ form.fecha_inicio.label }}
+                                </label>
+                                {{ form.fecha_inicio }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.fecha_fin.id_for_label }}" class="form-label">
+                                    <i class="fas fa-calendar me-2"></i>{{ form.fecha_fin.label }}
+                                </label>
+                                {{ form.fecha_fin }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.numero_personas.id_for_label }}" class="form-label">
+                                    <i class="fas fa-users me-2"></i>{{ form.numero_personas.label }}
+                                </label>
+                                {{ form.numero_personas }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.proposito.id_for_label }}" class="form-label">
+                                    <i class="fas fa-tag me-2"></i>{{ form.proposito.label }}
+                                </label>
+                                {{ form.proposito }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.descripcion.id_for_label }}" class="form-label">
+                                <i class="fas fa-comment me-2"></i>{{ form.descripcion.label }}
+                            </label>
+                            {{ form.descripcion }}
+                        </div>
+
+                        <!-- Costo estimado -->
+                        <div id="costo-estimado" class="costo-estimado" style="display: none;">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <strong>Duración estimada:</strong> <span id="duracion">0</span> horas
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <strong class="text-success">Costo total: $<span
+                                            id="costo-total">0.00</span></strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="{% url 'reservas:lugares_list' %}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Volver
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane me-2"></i>Enviar Solicitud
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Información adicional -->
+            <div class="card mt-4 border-info">
+                <div class="card-header bg-info text-white">
+                    <h6 class="mb-0"><i class="fas fa-info-circle me-2"></i>Información Importante</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="mb-0">
+                        <li>Las reservas están disponibles de 8:00 AM a 10:00 PM</li>
+                        <li>Duración mínima: 1 hora, máxima: 8 horas</li>
+                        <li>Solo los socios pueden realizar reservas</li>
+                        <li>Las reservas requieren aprobación administrativa</li>
+                        <li>Puedes cancelar tu reserva hasta 24 horas antes</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const lugarSelect = document.getElementById('{{ form.lugar.id_for_label }}');
+        const fechaInicio = document.getElementById('{{ form.fecha_inicio.id_for_label }}');
+        const fechaFin = document.getElementById('{{ form.fecha_fin.id_for_label }}');
+        const numeroPersonas = document.getElementById('{{ form.numero_personas.id_for_label }}');
+
+        const lugarInfo = document.getElementById('lugar-info');
+        const costoEstimado = document.getElementById('costo-estimado');
+
+        // Datos de lugares (pasados desde el backend)
+        const lugaresData = {
+        {% for lugar in lugares %}
+        { { lugar.id } }: {
+            capacidad: { { lugar.tipo.capacidad_maxima } },
+            precio: { { lugar.tipo.precio_por_hora } },
+            equipamiento: "{{ lugar.equipamiento|default:'No especificado' }}"
+        } {% if not forloop.last %}, {% endif %}
+        {% endfor %}
+    };
+
+    function actualizarInfoLugar() {
+        const lugarId = lugarSelect.value;
+        if (lugarId && lugaresData[lugarId]) {
+            const lugar = lugaresData[lugarId];
+            document.getElementById('capacidad').textContent = lugar.capacidad;
+            document.getElementById('precio').textContent = lugar.precio;
+            document.getElementById('equipamiento').textContent = lugar.equipamiento;
+            lugarInfo.style.display = 'block';
+
+            // Actualizar límite de personas
+            numeroPersonas.max = lugar.capacidad;
+
+            calcularCosto();
+        } else {
+            lugarInfo.style.display = 'none';
+            costoEstimado.style.display = 'none';
+        }
+    }
+
+    function calcularCosto() {
+        const lugarId = lugarSelect.value;
+        const inicio = new Date(fechaInicio.value);
+        const fin = new Date(fechaFin.value);
+
+        if (lugarId && lugaresData[lugarId] && inicio && fin && fin > inicio) {
+            const lugar = lugaresData[lugarId];
+            const horas = (fin - inicio) / (1000 * 60 * 60);
+            const costo = horas * lugar.precio;
+
+            document.getElementById('duracion').textContent = horas.toFixed(1);
+            document.getElementById('costo-total').textContent = costo.toFixed(2);
+            costoEstimado.style.display = 'block';
+        } else {
+            costoEstimado.style.display = 'none';
+        }
+    }
+
+    // Event listeners
+    lugarSelect.addEventListener('change', actualizarInfoLugar);
+    fechaInicio.addEventListener('change', calcularCosto);
+    fechaFin.addEventListener('change', calcularCosto);
+
+    // Inicializar si hay un lugar preseleccionado
+    if (lugarSelect.value) {
+        actualizarInfoLugar();
+    }
+
+    // Preseleccionar lugar si viene en la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const lugarParam = urlParams.get('lugar');
+    if (lugarParam) {
+        lugarSelect.value = lugarParam;
+        actualizarInfoLugar();
+    }
+});
+</script>
+{% endblock %}

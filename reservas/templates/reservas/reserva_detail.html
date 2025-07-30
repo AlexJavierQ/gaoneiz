@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Detalle de Reserva - Cámara de Comercio de Loja{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow border-0">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">
+                        <i class="fas fa-calendar-alt me-2"></i>
+                        Detalle de Reserva
+                    </h4>
+                    {% if reserva.estado == 'pendiente' %}
+                    <span class="badge bg-warning fs-6">{{ reserva.get_estado_display }}</span>
+                    {% elif reserva.estado == 'aprobada' %}
+                    <span class="badge bg-success fs-6">{{ reserva.get_estado_display }}</span>
+                    {% elif reserva.estado == 'rechazada' %}
+                    <span class="badge bg-danger fs-6">{{ reserva.get_estado_display }}</span>
+                    {% elif reserva.estado == 'cancelada' %}
+                    <span class="badge bg-secondary fs-6">{{ reserva.get_estado_display }}</span>
+                    {% else %}
+                    <span class="badge bg-info fs-6">{{ reserva.get_estado_display }}</span>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <!-- Información del lugar -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h5 class="text-primary border-bottom pb-2">
+                                <i class="fas fa-map-marker-alt me-2"></i>Información del Lugar
+                            </h5>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Lugar:</strong> {{ reserva.lugar.nombre }}</p>
+                            <p><strong>Tipo:</strong> {{ reserva.lugar.tipo.nombre }}</p>
+                            <p><strong>Ubicación:</strong> {{ reserva.lugar.ubicacion }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Capacidad máxima:</strong> {{ reserva.lugar.tipo.capacidad_maxima }} personas</p>
+                            <p><strong>Precio por hora:</strong> ${{ reserva.lugar.tipo.precio_por_hora }}</p>
+                        </div>
+                        {% if reserva.lugar.equipamiento %}
+                        <div class="col-12">
+                            <p><strong>Equipamiento disponible:</strong></p>
+                            <p class="text-muted">{{ reserva.lugar.equipamiento }}</p>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Información de la reserva -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h5 class="text-primary border-bottom pb-2">
+                                <i class="fas fa-calendar-check me-2"></i>Detalles de la Reserva
+                            </h5>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Fecha:</strong> {{ reserva.fecha_inicio|date:"l, d de F de Y" }}</p>
+                            <p><strong>Hora de inicio:</strong> {{ reserva.fecha_inicio|time:"H:i" }}</p>
+                            <p><strong>Hora de fin:</strong> {{ reserva.fecha_fin|time:"H:i" }}</p>
+                            <p><strong>Duración:</strong> {{ reserva.duracion_horas|floatformat:1 }} horas</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Número de personas:</strong> {{ reserva.numero_personas }}</p>
+                            <p><strong>Propósito:</strong> {{ reserva.proposito }}</p>
+                            <p><strong>Costo total:</strong> <span class="text-success">${{
+                                    reserva.costo_total|floatformat:2 }}</span></p>
+                        </div>
+                        {% if reserva.descripcion %}
+                        <div class="col-12">
+                            <p><strong>Descripción adicional:</strong></p>
+                            <p class="text-muted">{{ reserva.descripcion }}</p>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Información de gestión -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h5 class="text-primary border-bottom pb-2">
+                                <i class="fas fa-cogs me-2"></i>Información de Gestión
+                            </h5>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Fecha de solicitud:</strong> {{ reserva.fecha_solicitud|date:"d/m/Y H:i" }}</p>
+                            <p><strong>Última actualización:</strong> {{ reserva.fecha_actualizacion|date:"d/m/Y H:i" }}
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            {% if reserva.aprobada_por %}
+                            <p><strong>Aprobada por:</strong> {{ reserva.aprobada_por.get_full_name }}</p>
+                            <p><strong>Fecha de aprobación:</strong> {{ reserva.fecha_aprobacion|date:"d/m/Y H:i" }}</p>
+                            {% endif %}
+                        </div>
+                        {% if reserva.notas_admin %}
+                        <div class="col-12">
+                            <div class="alert alert-info">
+                                <h6><i class="fas fa-sticky-note me-2"></i>Notas del Administrador:</h6>
+                                <p class="mb-0">{{ reserva.notas_admin }}</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Estado y acciones -->
+                    {% if reserva.estado == 'pendiente' %}
+                    <div class="alert alert-warning">
+                        <i class="fas fa-clock me-2"></i>
+                        <strong>Reserva Pendiente:</strong> Tu solicitud está siendo revisada por el equipo
+                        administrativo.
+                        Recibirás una notificación cuando sea aprobada o rechazada.
+                    </div>
+                    {% elif reserva.estado == 'aprobada' %}
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle me-2"></i>
+                        <strong>Reserva Aprobada:</strong> Tu reserva ha sido confirmada.
+                        Por favor, preséntate en el lugar reservado a la hora indicada.
+                    </div>
+                    {% elif reserva.estado == 'rechazada' %}
+                    <div class="alert alert-danger">
+                        <i class="fas fa-times-circle me-2"></i>
+                        <strong>Reserva Rechazada:</strong> Lamentablemente tu solicitud no pudo ser aprobada.
+                        {% if reserva.notas_admin %}Revisa las notas del administrador para más información.{% endif %}
+                    </div>
+                    {% elif reserva.estado == 'cancelada' %}
+                    <div class="alert alert-secondary">
+                        <i class="fas fa-ban me-2"></i>
+                        <strong>Reserva Cancelada:</strong> Esta reserva ha sido cancelada.
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="card-footer bg-light">
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'reservas:mis_reservas' %}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>Volver a Mis Reservas
+                        </a>
+                        {% if reserva.estado in 'pendiente,aprobada' %}
+                        <a href="{% url 'reservas:cancelar_reserva' reserva.pk %}" class="btn btn-danger"
+                            onclick="return confirm('¿Estás seguro de que deseas cancelar esta reserva?')">
+                            <i class="fas fa-times me-2"></i>Cancelar Reserva
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

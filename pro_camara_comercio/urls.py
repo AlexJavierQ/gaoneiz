@@ -19,6 +19,7 @@ urlpatterns = [
     path('convenios/', include('convenios.urls')),
     path('servicios/', include('servicios.urls')),
     path('afiliaciones/', include('afiliaciones.urls')),
+    path('reservas/', include('reservas.urls')),
     
     # 4. Rutas de la App de Usuarios (perfil, etc.)
     # Se usa un prefijo para evitar conflictos, ej: /usuario/perfil/

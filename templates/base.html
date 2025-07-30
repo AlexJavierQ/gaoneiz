@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,13 +13,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
+
 <body class="d-flex flex-column min-vh-100">
 
     <header class="sticky-top shadow-sm">
         <nav class="navbar navbar-expand-lg bg-white py-3">
             <div class="container">
                 <a class="navbar-brand d-flex align-items-center" href="{% url 'web:home' %}">
-                    <img src="{% static 'images/logo-camara-de-comercio-loja-cadecol.png' %}" alt="Logo" height="45" class="me-2">
+                    <img src="{% static 'images/logo-camara-de-comercio-loja-cadecol.png' %}" alt="Logo" height="45"
+                        class="me-2">
                     <span class="fw-bold">Cámara de Comercio</span>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -27,35 +30,65 @@
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                     <ul class="navbar-nav align-items-lg-center">
                         <li class="nav-item"><a class="nav-link" href="{% url 'web:home' %}">Inicio</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'noticias:noticia_list' %}">Noticias</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'convenios:convenio_list' %}">Convenios</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'servicios:servicio_list' %}">Servicios</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'noticias:noticia_list' %}">Noticias</a>
+                        </li>
+                        <li class="nav-item"><a class="nav-link"
+                                href="{% url 'convenios:convenio_list' %}">Convenios</a></li>
+                        <li class="nav-item"><a class="nav-link"
+                                href="{% url 'servicios:servicio_list' %}">Servicios</a></li>
+                        {% if user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                Reservas
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{% url 'reservas:lugares_list' %}">
+                                        <i class="fas fa-map-marker-alt me-2"></i>Lugares Disponibles</a></li>
+                                <li><a class="dropdown-item" href="{% url 'reservas:nueva_reserva' %}">
+                                        <i class="fas fa-plus me-2"></i>Nueva Reserva</a></li>
+                                <li><a class="dropdown-item" href="{% url 'reservas:mis_reservas' %}">
+                                        <i class="fas fa-calendar-alt me-2"></i>Mis Reservas</a></li>
+                            </ul>
+                        </li>
+                        {% endif %}
                         <li class="nav-item"><a class="nav-link" href="{% url 'web:nosotros' %}">Nosotros</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'web:contacto' %}">Contacto</a></li>
                     </ul>
                     <div class="d-flex align-items-center gap-2 ps-lg-3">
                         {% if user.is_authenticated %}
-                            <div class="dropdown">
-                                <a href="#" class="btn btn-primary dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fas fa-user me-1"></i>{{ user.first_name|default:user.email }}
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-end">
-                                    {% if user.is_staff %}
-                                        <li><a class="dropdown-item" href="{% url 'panel:dashboard' %}"><i class="fa-solid fa-table-columns me-2"></i>Panel Admin</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                    {% endif %}
-                                    <li><a class="dropdown-item" href="{% url 'usuarios:perfil' %}"><i class="fa-solid fa-user me-2"></i>Mi Perfil</a></li>
-                                    <li><a class="dropdown-item" href="{% url 'usuarios:editar_perfil' %}"><i class="fa-solid fa-user-edit me-2"></i>Editar Perfil</a></li>
-                                    {% if not user.es_socio and not user.solicitudafiliacion %}
-                                        <li><a class="dropdown-item" href="{% url 'afiliaciones:solicitar_afiliacion' %}"><i class="fa-solid fa-handshake me-2"></i>Solicitar Afiliación</a></li>
-                                    {% endif %}
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item text-danger" href="{% url 'account_logout' %}"><i class="fa-solid fa-right-from-bracket me-2"></i>Cerrar Sesión</a></li>
-                                </ul>
-                            </div>
+                        <div class="dropdown">
+                            <a href="#" class="btn btn-primary dropdown-toggle" role="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                <i class="fas fa-user me-1"></i>{{ user.first_name|default:user.email }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                {% if user.is_staff %}
+                                <li><a class="dropdown-item" href="{% url 'panel:dashboard' %}"><i
+                                            class="fa-solid fa-table-columns me-2"></i>Panel Admin</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                {% endif %}
+                                {% comment %}
+                                <li><a class="dropdown-item" href="{% url 'usuarios:perfil' %}"><i
+                                            class="fa-solid fa-user me-2"></i>Mi Perfil</a></li>
+                                <li><a class="dropdown-item" href="{% url 'usuarios:editar_perfil' %}"><i
+                                            class="fa-solid fa-user-edit me-2"></i>Editar Perfil</a></li>
+                                {% endcomment %}
+                                {% if not user.es_socio and not user.solicitudafiliacion %}
+                                <li><a class="dropdown-item" href="{% url 'afiliaciones:solicitar_afiliacion' %}"><i
+                                            class="fa-solid fa-handshake me-2"></i>Solicitar Afiliación</a></li>
+                                {% endif %}
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item text-danger" href="{% url 'account_logout' %}"><i
+                                            class="fa-solid fa-right-from-bracket me-2"></i>Cerrar Sesión</a></li>
+                            </ul>
+                        </div>
                         {% else %}
-                            <a href="{% url 'afiliaciones:solicitar_afiliacion' %}" class="btn btn-primary">Afíliate</a>
-                            <a href="{% url 'account_login' %}" class="btn btn-outline-primary">Ingresar</a>
+                        <a href="{% url 'usuarios:signup' %}" class="btn btn-success me-2">Registrarse</a>
+                        <a href="{% url 'account_login' %}" class="btn btn-outline-primary">Ingresar</a>
                         {% endif %}
                     </div>
                 </div>
@@ -75,4 +108,5 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

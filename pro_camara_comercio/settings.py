@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'servicios.apps.ServiciosConfig',
     'afiliaciones.apps.AfiliacionesConfig',
     'panel.apps.PanelConfig',
+    'reservas.apps.ReservasConfig',
     
     # Apps de Terceros (Crispy Forms debe estar aquí)
     'crispy_forms',
@@ -91,10 +92,16 @@ AUTHENTICATION_BACKENDS = [
 SITE_ID = 1
 ACCOUNT_EMAIL_VERIFICATION = 'optional' 
 
-# Configuración para usar email en lugar de username
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = False
+# Configuración para usar email en lugar de username (nueva sintaxis)
+ACCOUNT_LOGIN_METHODS = {'email'}
+ACCOUNT_SIGNUP_FIELDS = ['email', 'password1', 'password2']
+ACCOUNT_FORMS = {
+    'signup': 'usuarios.forms.CustomSignupForm',
+}
+
+# Configuración adicional para evitar problemas con username
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_USER_MODEL_EMAIL_FIELD = 'email'
 # --- FIN DE LA SECCIÓN ---
 
 LOGIN_REDIRECT_URL = 'web:home'
