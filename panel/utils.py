@@ -4,13 +4,17 @@ from .models import RegistroActividad
 
 def registrar_actividad(actor, accion, content_object=None):
     """
-    Registra una actividad en el sistema.
+    Registra una actividad en el sistema solo si el usuario es administrador.
     
     Args:
         actor: Usuario que realiza la acción
         accion: Descripción de la acción realizada
         content_object: Objeto relacionado con la acción (opcional)
     """
+    # Solo registrar actividades de usuarios administradores (staff)
+    if not actor or not actor.is_staff:
+        return None
+    
     actividad = RegistroActividad(
         actor=actor,
         accion=accion

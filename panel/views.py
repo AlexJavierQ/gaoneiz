@@ -53,7 +53,9 @@ class DashboardView(LoginRequiredMixin, StaffRequiredMixin, TemplateView):
         context["total_usuarios"] = Usuario.objects.count()
         context["total_socios"] = PerfilSocio.objects.filter(is_active=True).count()
         context["solicitudes_pendientes"] = SolicitudAfiliacion.objects.filter(estado="PENDIENTE").count()
-        context["actividad_reciente"] = RegistroActividad.objects.select_related("actor")[:10]
+        context["actividad_reciente"] = RegistroActividad.objects.select_related("actor").filter(
+            actor__is_staff=True
+        )[:10]
         return context
 
 # ==============================================================================
@@ -312,7 +314,10 @@ class RegistroActividadView(LoginRequiredMixin, StaffRequiredMixin, ListView):
     paginate_by = 50
 
     def get_queryset(self):
-        queryset = RegistroActividad.objects.select_related("actor", "content_type").order_by("-timestamp")
+        # Solo mostrar actividades de usuarios administradores (staff)
+        queryset = RegistroActividad.objects.select_related("actor", "content_type").filter(
+            actor__is_staff=True
+        ).order_by("-timestamp")
         
         # Filtro de búsqueda
         query = self.request.GET.get('q')
@@ -347,9 +352,12 @@ class RegistroActividadView(LoginRequiredMixin, StaffRequiredMixin, ListView):
         context['current_tipo'] = self.request.GET.get('tipo', '')
         context['current_fecha'] = self.request.GET.get('fecha', '')
         
-        # Estadísticas adicionales
+        # Estadísticas adicionales (solo de administradores)
         from django.utils import timezone
         today = timezone.now().date()
-        context['actividades_hoy'] = RegistroActividad.objects.filter(timestamp__date=today).count()
+        context['actividades_hoy'] = RegistroActividad.objects.filter(
+            timestamp__date=today,
+            actor__is_staff=True
+        ).count()
         
         return context
