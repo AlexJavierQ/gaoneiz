@@ -148,13 +148,16 @@ class LugarForm(forms.ModelForm):
 class ReservaPanelForm(forms.ModelForm):
     class Meta:
         model = Reserva
-        fields = ['lugar', 'usuario', 'fecha_inicio', 'fecha_fin', 'proposito', 'estado', 'notas_admin']
+        # --- LÍNEA CORREGIDA ---
+        # Asegúrate de que estos campos existan en tu modelo 'Reserva'
+        fields = ['usuario', 'lugar', 'fecha_inicio', 'fecha_fin', 'estado', 'notas_adicionales']
+        
         widgets = {
-            'fecha_inicio': forms.DateTimeInput(attrs={'type': 'datetime-local', 'class': 'form-control'}),
-            'fecha_fin': forms.DateTimeInput(attrs={'type': 'datetime-local', 'class': 'form-control'}),
-            'lugar': forms.Select(attrs={'class': 'form-select'}),
-            'usuario': forms.Select(attrs={'class': 'form-select'}),
-            'proposito': forms.TextInput(attrs={'class': 'form-control'}),
-            'estado': forms.Select(attrs={'class': 'form-select'}),
-            'notas_admin': forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),
+            'fecha_inicio': forms.DateTimeInput(attrs={'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
+            'fecha_fin': forms.DateTimeInput(attrs={'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['fecha_inicio'].input_formats = ('%Y-%m-%dT%H:%M',)
+        self.fields['fecha_fin'].input_formats = ('%Y-%m-%dT%H:%M',)

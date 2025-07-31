@@ -1,5 +1,5 @@
 """
-Django settings for gaoneiz project.
+Django settings for pro_camara_comercio project.
 """
 
 from pathlib import Path
@@ -32,7 +32,7 @@ INSTALLED_APPS = [
     'panel.apps.PanelConfig',
     'reservas.apps.ReservasConfig',
     
-    # Apps de Terceros (Crispy Forms debe estar aquí)
+    # Apps de Terceros
     'crispy_forms',
     'crispy_bootstrap5',
     'rest_framework',
@@ -50,7 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware',
+    'allauth.account.middleware.AccountMiddleware', # Middleware de Allauth
 ]
 
 ROOT_URLCONF = 'pro_camara_comercio.urls'
@@ -81,41 +81,48 @@ DATABASES = {
     }
 }
 
-# --- CONFIGURACIÓN DE AUTENTICACIÓN ---
+# --- CONFIGURACIÓN DE AUTENTICACIÓN Y DJANGO-ALLAUTH ---
+
+# Modelo de usuario personalizado
 AUTH_USER_MODEL = 'usuarios.Usuario'
+
+# Backends de autenticación (necesario para allauth)
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-# Configuración de django-allauth
+# ID del sitio para allauth
 SITE_ID = 1
-ACCOUNT_EMAIL_VERIFICATION = 'optional' 
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = False
 
-# Configuración para usar email en lugar de username (nueva sintaxis)
-ACCOUNT_LOGIN_METHODS = {'email'}
-ACCOUNT_SIGNUP_FIELDS = ['email', 'password1', 'password2']
+# Configuraciones principales de Allauth (versión actualizada)
+ACCOUNT_LOGIN_METHODS = ['email']       # Se usará el email para iniciar sesión.
+ACCOUNT_EMAIL_VERIFICATION = 'optional'  # Verificación de correo obligatoria.
+ACCOUNT_LOGOUT_ON_GET = True              # Permite cerrar sesión con una petición GET.
+ACCOUNT_EMAIL_REQUIRED = True             # El email es requerido para registrarse.
+ACCOUNT_UNIQUE_EMAIL = True               # Asegura que los correos sean únicos.
+ACCOUNT_USERNAME_REQUIRED = False         # El nombre de usuario no es requerido.
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None  # Indica que no hay campo de username en el modelo.
+ACCOUNT_AUTHENTICATION_METHOD = 'email'   # Método de autenticación es el email.
+
+# Formulario de registro personalizado
 ACCOUNT_FORMS = {
     'signup': 'usuarios.forms.CustomSignupForm',
 }
 
-# Configuración adicional para evitar problemas con username
-ACCOUNT_USER_MODEL_USERNAME_FIELD = None
-ACCOUNT_USER_MODEL_EMAIL_FIELD = 'email'
-# --- FIN DE LA SECCIÓN ---
-
+# Redirecciones después de login/logout
 LOGIN_REDIRECT_URL = 'web:home'
 LOGIN_URL = 'account_login'
 LOGOUT_REDIRECT_URL = 'web:home'
 
+# Backend de correo para desarrollo (imprime emails en la consola)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # --- ARCHIVOS ESTÁTICOS Y MEDIA ---
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
@@ -125,4 +132,3 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 # --- LLAVE PRIMARIA POR DEFECTO ---
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

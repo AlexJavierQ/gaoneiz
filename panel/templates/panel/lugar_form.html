@@ -1,15 +1,26 @@
 {% extends 'panel/panel_base.html' %}
 {% load crispy_forms_tags %}
-{% block title %}{% if object %}Editar Lugar{% else %}Crear Lugar{% endif %}{% endblock %}
+{% block title %}{{ titulo }}{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-lg-8">
         <div class="info-card">
-            <h3 class="mb-4">{% if object %}Editar Lugar{% else %}Crear Nuevo Lugar{% endif %}</h3>
-            <form method="post">
+            <h3 class="mb-4">{{ titulo }}</h3>
+
+            <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
+
+                {% if form.instance.imagen %}
+                <div class="mb-3">
+                    <p class="form-label">Imagen Actual:</p>
+                    <img src="{{ form.instance.imagen.url }}" alt="Imagen de {{ form.instance.nombre }}"
+                        class="img-fluid rounded" style="max-height: 200px;">
+                </div>
+                {% endif %}
+
                 {{ form|crispy }}
+
                 <div class="mt-4">
                     <button type="submit" class="btn btn-primary">Guardar</button>
                     <a href="{% url 'panel:lugar_list' %}" class="btn btn-secondary">Cancelar</a>
