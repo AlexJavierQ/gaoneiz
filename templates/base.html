@@ -35,7 +35,11 @@
                                 href="{% url 'convenios:convenio_list' %}">Convenios</a></li>
                         <li class="nav-item"><a class="nav-link"
                                 href="{% url 'servicios:servicio_list' %}">Servicios</a></li>
-
+                        {% if user.is_authenticated and user.es_socio %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'usuarios:socios_list' %}">Socios</a>
+                        </li>
+                        {% endif %}
                         <!-- NUEVO: Menú Reservas -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
