@@ -42,6 +42,7 @@ urlpatterns = [
 
     path('reservas/', views.ReservaPanelListView.as_view(), name='reserva_panel_list'),
     path('reservas/<int:pk>/editar/', views.ReservaPanelUpdateView.as_view(), name='reserva_update'),
+    path('reservas/<int:pk>/eliminar/', views.ReservaPanelDeleteView.as_view(), name='reserva_delete'),
     
     path('lugares/', views.LugarListView.as_view(), name='lugar_list'),
     path('lugares/nuevo/', views.LugarCreateView.as_view(), name='lugar_create'),

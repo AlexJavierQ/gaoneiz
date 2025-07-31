@@ -28,10 +28,16 @@
                         <span class="badge bg-info text-dark">{{ reserva.get_estado_display }}</span>
                     </td>
                     <td class="text-end">
-                        <a href="{% url 'panel:reserva_update' reserva.pk %}" class="btn btn-sm btn-outline-primary"
-                            title="Revisar y Editar">
-                            <i class="fas fa-pen"></i>
-                        </a>
+                        <div class="btn-group" role="group">
+                            <a href="{% url 'panel:reserva_update' reserva.pk %}" class="btn btn-sm btn-outline-primary"
+                                title="Revisar y Editar">
+                                <i class="fas fa-pen"></i>
+                            </a>
+                            <a href="{% url 'panel:reserva_delete' reserva.pk %}" class="btn btn-sm btn-outline-danger"
+                                title="Eliminar Reserva">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </div>
                     </td>
                 </tr>
                 {% empty %}

@@ -76,17 +76,24 @@
                         </div>
                     </div>
 
-                    <div id="costo-estimado-panel" class="dynamic-info" style="display: none;">
-                        <div class="alert alert-success p-4">
-                            <h5 class="alert-heading fw-bold">Costo Estimado</h5>
-                            <hr>
-                            <div class="d-flex justify-content-between">
-                                <span>Duración:</span>
-                                <span id="duracion" class="fw-bold">0 horas</span>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.fecha_inicio.id_for_label }}" class="form-label">
+                                    <i class="fas fa-calendar me-2"></i>{{ form.fecha_inicio.label }}
+                                </label>
+                                <input type="datetime-local" name="{{ form.fecha_inicio.name }}" 
+                                       id="{{ form.fecha_inicio.id_for_label }}" 
+                                       class="form-control" required
+                                       value="{{ form.fecha_inicio.value|date:'Y-m-d\TH:i' }}">
                             </div>
-                            <div class="d-flex justify-content-between fs-4 mt-2">
-                                <span class="fw-bold">Total:</span>
-                                <span id="costo-total" class="fw-bolder">$0.00</span>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.fecha_fin.id_for_label }}" class="form-label">
+                                    <i class="fas fa-calendar me-2"></i>{{ form.fecha_fin.label }}
+                                </label>
+                                <input type="datetime-local" name="{{ form.fecha_fin.name }}" 
+                                       id="{{ form.fecha_fin.id_for_label }}" 
+                                       class="form-control" required
+                                       value="{{ form.fecha_fin.value|date:'Y-m-d\TH:i' }}">
                             </div>
                         </div>
                     </div>
@@ -126,28 +133,23 @@
         const lugarInfoPanel = document.getElementById('lugar-info-panel');
         const costoEstimadoPanel = document.getElementById('costo-estimado-panel');
 
-        // Elementos de texto a actualizar
-        const capacidadSpan = document.getElementById('capacidad');
-        const precioSpan = document.getElementById('precio');
-        const duracionSpan = document.getElementById('duracion');
-        const costoTotalSpan = document.getElementById('costo-total');
+        // Datos de lugares (pasados desde el backend)
+        const lugaresData = JSON.parse(document.getElementById('lugares-data').textContent);
 
-        // --- DATOS Y ESTADO ---
-        const lugaresJson = JSON.parse(document.getElementById('lugares-data').textContent);
-        const lugaresData = lugaresJson.reduce((obj, item) => {
-            obj[item.id] = {
-                nombre: item.nombre,
-                capacidad: item.tipo__capacidad_maxima,
-                precio: item.tipo__precio_por_hora
-            };
-            return obj;
-        }, {});
-        let lugarSeleccionado = null;
+    function actualizarInfoLugar() {
+        const lugarId = lugarSelect.value;
+        if (lugarId && lugaresData[lugarId]) {
+            const lugar = lugaresData[lugarId];
+            document.getElementById('capacidad').textContent = lugar.capacidad;
+            document.getElementById('precio').textContent = lugar.precio.toFixed(2);
+            document.getElementById('equipamiento').textContent = lugar.equipamiento;
+            lugarInfo.style.display = 'block';
 
-        // --- FUNCIONES ---
-        function actualizarInfoLugar() {
-            const lugarId = lugarSelect.value;
-            lugarSeleccionado = lugarId && lugaresData[lugarId] ? lugaresData[lugarId] : null;
+            // Actualizar límite de personas
+            numeroPersonas.max = lugar.capacidad;
+            if (parseInt(numeroPersonas.value) > lugar.capacidad) {
+                numeroPersonas.value = lugar.capacidad;
+            }
 
             if (lugarSeleccionado) {
                 capacidadSpan.textContent = `${lugarSeleccionado.capacidad} personas`;
@@ -179,15 +181,28 @@
             }
         }
 
-        // --- EVENT LISTENERS ---
-        if (lugarSelect) lugarSelect.addEventListener('change', actualizarInfoLugar);
-        if (fechaInicioInput) fechaInicioInput.addEventListener('change', calcularCosto);
-        if (fechaFinInput) fechaFinInput.addEventListener('change', calcularCosto);
+    // Event listeners
+    if (lugarSelect) lugarSelect.addEventListener('change', actualizarInfoLugar);
+    if (fechaInicio) fechaInicio.addEventListener('change', calcularCosto);
+    if (fechaFin) fechaFin.addEventListener('change', calcularCosto);
 
-        // --- INICIALIZACIÓN ---
-        if (lugarSelect) {
+    // Inicializar si hay un lugar preseleccionado
+    if (lugarSelect && lugarSelect.value) {
+        actualizarInfoLugar();
+    }
+
+    // Preseleccionar lugar si viene en la URL
+    if (typeof URLSearchParams !== 'undefined') {
+        const urlParams = new URLSearchParams(window.location.search);
+        const lugarParam = urlParams.get('lugar');
+        if (lugarParam && lugarSelect) {
+            lugarSelect.value = lugarParam;
             actualizarInfoLugar();
         }
-    });
+    }
+});
 </script>
+
+{{ lugares_data|json_script:"lugares-data" }}
+
 {% endblock %}

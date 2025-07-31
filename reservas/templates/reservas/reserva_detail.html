@@ -35,17 +35,23 @@
                         </div>
                         <div class="col-md-6">
                             <p><strong>Lugar:</strong> {{ reserva.lugar.nombre }}</p>
+                            {% if reserva.lugar.tipo %}
                             <p><strong>Tipo:</strong> {{ reserva.lugar.tipo.nombre }}</p>
-                            <p><strong>Ubicación:</strong> {{ reserva.lugar.ubicacion }}</p>
+                            {% endif %}
+                            <p><strong>Ubicación:</strong> {{ reserva.lugar.ubicacion|default:"No especificada" }}</p>
                         </div>
                         <div class="col-md-6">
-                            <p><strong>Capacidad máxima:</strong> {{ reserva.lugar.tipo.capacidad_maxima }} personas</p>
-                            <p><strong>Precio por hora:</strong> ${{ reserva.lugar.tipo.precio_por_hora }}</p>
+                            {% if reserva.lugar.capacidad_maxima %}
+                            <p><strong>Capacidad máxima:</strong> {{ reserva.lugar.capacidad_maxima }} personas</p>
+                            {% endif %}
+                            {% if reserva.lugar.precio_por_hora %}
+                            <p><strong>Precio por hora:</strong> ${{ reserva.lugar.precio_por_hora|floatformat:2 }}</p>
+                            {% endif %}
                         </div>
                         {% if reserva.lugar.equipamiento %}
                         <div class="col-12">
                             <p><strong>Equipamiento disponible:</strong></p>
-                            <p class="text-muted">{{ reserva.lugar.equipamiento }}</p>
+                            <p class="text-muted">{{ reserva.sala.equipamiento|linebreaks }}</p>
                         </div>
                         {% endif %}
                     </div>
@@ -58,24 +64,29 @@
                             </h5>
                         </div>
                         <div class="col-md-6">
-                            <p><strong>Fecha:</strong> {{ reserva.fecha_inicio|date:"l, d" }} de {{
-                                reserva.fecha_inicio|date:"F" }} de {{ reserva.fecha_inicio|date:"Y" }}</p>
-                            <p>
-                                <strong>Horario:</strong>
-                                {{ reserva.fecha_inicio|time:"h:i A" }} - {{ reserva.fecha_fin|time:"h:i A" }}
-                            </p>
+                            <p><strong>Fecha de inicio:</strong> {{ reserva.fecha_inicio|date:"l, d \d\e F \d\e Y" }} a las {{ reserva.fecha_inicio|time:"H:i" }}</p>
+                            <p><strong>Fecha de fin:</strong> {{ reserva.fecha_fin|date:"l, d \d\e F \d\e Y" }} a las {{ reserva.fecha_fin|time:"H:i" }}</p>
+                            {% if reserva.duracion_horas %}
                             <p><strong>Duración:</strong> {{ reserva.duracion_horas|floatformat:1 }} horas</p>
+                            {% endif %}
                         </div>
                         <div class="col-md-6">
-                            <p><strong>Número de personas:</strong> {{ reserva.numero_personas }}</p>
+                            {% if reserva.proposito %}
                             <p><strong>Propósito:</strong> {{ reserva.proposito }}</p>
-                            <p><strong>Total:</strong> <span class="text-success">${{
-                                    reserva.costo_total|floatformat:2}}</span></p>
+                            {% endif %}
+                            {% if reserva.notas_adicionales %}
+                            <p><strong>Notas adicionales:</strong> {{ reserva.notas_adicionales|linebreaksbr }}</p>
+                            {% endif %}
+                            <p class="mt-3">
+                                <strong>Costo total:</strong> 
+                                <span class="text-success fw-bold">${{ reserva.costo_total|floatformat:2 }}</span>
+                                <small class="text-muted">({{ reserva.duracion_horas|floatformat:1 }} horas x ${{ reserva.lugar.tipo.precio_por_hora|floatformat:2 }} por hora)</small>
+                            </p>
                         </div>
-                        {% if reserva.descripcion %}
+                        {% if reserva.observaciones %}
                         <div class="col-12">
-                            <p><strong>Descripción adicional:</strong></p>
-                            <p class="text-muted">{{ reserva.descripcion }}</p>
+                            <p><strong>Observaciones adicionales:</strong></p>
+                            <p class="text-muted">{{ reserva.observaciones|linebreaks }}</p>
                         </div>
                         {% endif %}
                     </div>
@@ -88,21 +99,29 @@
                             </h5>
                         </div>
                         <div class="col-md-6">
-                            <p><strong>Solicitada:</strong> {{ reserva.fecha_solicitud|date:"d/m/Y H:i" }}</p>
-                            <p><strong>Última actualización:</strong> {{ reserva.fecha_actualizacion|date:"d/m/Y H:i" }}
-                            </p>
+                            <p><strong>Fecha de solicitud:</strong> {{ reserva.fecha_creacion|date:"d/m/Y H:i" }}</p>
+                            <p><strong>Última actualización:</strong> {{ reserva.fecha_actualizacion|date:"d/m/Y H:i" }}</p>
                         </div>
                         <div class="col-md-6">
-                            {% if reserva.aprobada_por %}
-                            <p><strong>Aprobada por:</strong> {{ reserva.aprobada_por.get_full_name }}</p>
-                            <p><strong>Fecha de aprobación:</strong> {{ reserva.fecha_aprobacion|date:"d/m/Y H:i" }}</p>
+                            {% if reserva.estado == 'aprobada' and reserva.usuario %}
+                            <p><strong>Reservado por:</strong> {{ reserva.usuario.get_full_name|default:reserva.usuario.username }}</p>
                             {% endif %}
+                            <p><strong>Fecha de creación:</strong> {{ reserva.fecha_creacion|date:"d/m/Y H:i" }}</p>
                         </div>
-                        {% if reserva.notas_admin %}
+                        {% if reserva.motivo_rechazo and reserva.estado == 'rechazada' %}
+                        <div class="col-12">
+                            <div class="alert alert-warning">
+                                <h6><i class="fas fa-exclamation-triangle me-2"></i>Motivo del Rechazo:</h6>
+                                <p class="mb-0">{{ reserva.motivo_rechazo }}</p>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if reserva.observaciones_administrativas %}
                         <div class="col-12">
                             <div class="alert alert-info">
                                 <h6><i class="fas fa-sticky-note me-2"></i>Notas del Administrador:</h6>
-                                <p class="mb-0">{{ reserva.notas_admin }}</p>
+                                <p class="mb-0">{{ reserva.observaciones_administrativas|linebreaks }}</p>
                             </div>
                         </div>
                         {% endif %}
@@ -112,8 +131,7 @@
                     {% if reserva.estado == 'pendiente' %}
                     <div class="alert alert-warning">
                         <i class="fas fa-clock me-2"></i>
-                        <strong>Reserva Pendiente:</strong> Tu solicitud está siendo revisada por el equipo
-                        administrativo.
+                        <strong>Reserva Pendiente:</strong> Tu solicitud está siendo revisada por el equipo administrativo.
                         Recibirás una notificación cuando sea aprobada o rechazada.
                     </div>
                     {% elif reserva.estado == 'aprobada' %}
@@ -140,11 +158,22 @@
                         <a href="{% url 'reservas:mis_reservas' %}" class="btn btn-secondary">
                             <i class="fas fa-arrow-left me-2"></i>Volver a Mis Reservas
                         </a>
-                        {% if reserva.estado in 'pendiente,aprobada' %}
-                        <a href="{% url 'reservas:cancelar_reserva' reserva.pk %}" class="btn btn-danger"
+                        {% if reserva.puede_ser_cancelada %}
+                        <a href="{% url 'reservas:cancelar_reserva' reserva.id %}" class="btn btn-danger"
                             onclick="return confirm('¿Estás seguro de que deseas cancelar esta reserva?')">
                             <i class="fas fa-times me-2"></i>Cancelar Reserva
                         </a>
+                        {% endif %}
+
+                        {% if user.is_staff and reserva.estado == 'pendiente' %}
+                        <div class="btn-group ms-2">
+                            <a href="{% url 'panel:aprobar_reserva' reserva.id %}" class="btn btn-success">
+                                <i class="fas fa-check me-2"></i>Aprobar
+                            </a>
+                            <a href="{% url 'panel:rechazar_reserva' reserva.id %}" class="btn btn-warning">
+                                <i class="fas fa-times me-2"></i>Rechazar
+                            </a>
+                        </div>
                         {% endif %}
                     </div>
                 </div>

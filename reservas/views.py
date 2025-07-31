@@ -91,7 +91,9 @@ class ReservaDetailView(LoginRequiredMixin, DetailView):
     context_object_name = "reserva"
 
     def get_queryset(self):
-        return Reserva.objects.filter(usuario=self.request.user)
+        return Reserva.objects.filter(usuario=self.request.user).select_related(
+            "lugar", "lugar__tipo", "usuario"
+        )
 
 
 @login_required

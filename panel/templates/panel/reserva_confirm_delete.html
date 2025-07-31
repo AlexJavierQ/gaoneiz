@@ -1,0 +1,56 @@
+{% extends 'panel/panel_base.html' %}
+
+{% block title %}Confirmar Eliminación de Reserva{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="info-card">
+            <h3 class="text-danger">Confirmar Eliminación de Reserva</h3>
+            
+            <div class="alert alert-warning" role="alert">
+                <h5 class="alert-heading">¡Atención!</h5>
+                <p>¿Estás seguro de que deseas eliminar permanentemente la siguiente reserva?</p>
+            </div>
+            
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Detalles de la Reserva #{{ object.id }}</h5>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Lugar:</strong> {{ object.lugar.nombre }}</p>
+                            <p><strong>Fecha:</strong> {{ object.fecha_inicio|date:"d/m/Y" }}</p>
+                            <p><strong>Hora de inicio:</strong> {{ object.fecha_inicio|time:"H:i" }}</p>
+                            <p><strong>Hora de fin:</strong> {{ object.fecha_fin|time:"H:i" }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Solicitante:</strong> {{ object.usuario.get_full_name|default:object.usuario.username }}</p>
+                            <p><strong>Estado:</strong> {{ object.get_estado_display }}</p>
+                            <p><strong>Propósito:</strong> {{ object.proposito|default:"No especificado" }}</p>
+                            <p><strong>Costo total:</strong> ${{ object.costo_total|floatformat:2 }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="alert alert-danger" role="alert">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <strong>¡Esta acción no se puede deshacer!</strong> Se eliminarán todos los datos asociados a esta reserva.
+            </div>
+            
+            <form method="post" class="mt-4">
+                {% csrf_token %}
+                <div class="d-flex justify-content-between">
+                    <a href="{% url 'panel:reserva_panel_list' %}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Cancelar y volver
+                    </a>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash-alt me-2"></i>Sí, eliminar reserva
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

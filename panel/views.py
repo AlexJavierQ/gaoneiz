@@ -632,3 +632,22 @@ class ReservaPanelUpdateView(StaffRequiredMixin, UpdateView):
         reserva.save()
         messages.success(self.request, "Reserva actualizada exitosamente.")
         return super().form_valid(form)
+
+
+class ReservaPanelDeleteView(LoginRequiredMixin, StaffRequiredMixin, DeleteView):
+    model = Reserva
+    template_name = "panel/reserva_confirm_delete.html"
+    success_url = reverse_lazy("panel:reserva_panel_list")
+    context_object_name = "reserva"
+
+    def form_valid(self, form):
+        # Registrar la actividad antes de eliminar
+        registrar_eliminacion(
+            self.request.user,
+            self.object,
+            f"reserva #{self.object.id} - {self.object.lugar.nombre}"
+        )
+        # Mostrar mensaje de éxito
+        messages.success(self.request, "La reserva ha sido eliminada exitosamente.")
+        # Eliminar la reserva
+        return super().form_valid(form)
