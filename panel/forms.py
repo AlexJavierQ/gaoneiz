@@ -23,15 +23,9 @@ class ConvenioForm(forms.ModelForm):
             "imagen",
         ]
         widgets = {
-            "fecha_inicio": forms.DateInput(
-                attrs={"type": "date", "class": "form-control"}
-            ),
-            "fecha_vencimiento": forms.DateInput(
-                attrs={"type": "date", "class": "form-control"}
-            ),
-            "imagen": forms.FileInput(
-                attrs={"class": "form-control-file", "accept": "image/*"}
-            ),
+            "fecha_inicio": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
+            "fecha_vencimiento": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
+            "imagen": forms.FileInput(attrs={"class": "form-control-file", "accept": "image/*"}),
             "descripcion": forms.Textarea(attrs={"rows": 4, "class": "form-control"}),
             "nombre_empresa": forms.TextInput(attrs={"class": "form-control"}),
             "categoria": forms.Select(attrs={"class": "form-select"}),
@@ -41,9 +35,7 @@ class ConvenioForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Asegurarse de que el campo de imagen no sea requerido
         self.fields['imagen'].required = False
-
 
 class UsuarioEditForm(forms.ModelForm):
     """Formulario para editar los datos base del usuario."""
@@ -104,21 +96,22 @@ class NoticiaForm(forms.ModelForm):
 class ServicioForm(forms.ModelForm):
     class Meta:
         model = Servicio
-        # --- CORRECCIÓN AQUÍ ---
-        # Cambiamos 'exclusivo_para_socios' por 'solo_socios', que es el nombre correcto en el modelo.
-        fields = ['nombre', 'descripcion', 'categoria', 'solo_socios', 'activo']
+        # --- CAMBIO AQUÍ: Se añade 'imagen' a la lista de campos ---
+        fields = ['nombre', 'descripcion', 'categoria', 'precio', 'solo_socios', 'activo', 'imagen']
         widgets = {
             'nombre': forms.TextInput(attrs={'class': 'form-control'}),
             'descripcion': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
             'categoria': forms.Select(attrs={'class': 'form-select'}),
+            'precio': forms.NumberInput(attrs={'class': 'form-control'}),
             'solo_socios': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'activo': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            # --- CAMBIO AQUÍ: Se añade un widget para el campo de imagen ---
+            'imagen': forms.FileInput(attrs={'class': 'form-control'}),
         }
         labels = {
             'solo_socios': '¿Este servicio es exclusivo para socios?',
             'activo': '¿Este servicio está activo y visible?'
         }
-
 
 # Formulario para que el admin gestione las solicitudes
 class AfiliacionAdminForm(forms.ModelForm):

@@ -1,157 +1,125 @@
 {% extends 'base.html' %}
+{% load static crispy_forms_tags %}
 
 {% block title %}Contacto - Cámara de Comercio de Loja{% endblock %}
 
+{% block extra_css %}
+<style>
+    .hero-contact {
+        background: linear-gradient(135deg, rgba(30, 58, 138, 0.9), rgba(59, 130, 246, 0.8)), url('https://images.unsplash.com/photo-1556761175-b413da4b248b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w9NTI4fDB8MXxzZWFyY2h8MTB8fGJ1c2luZXNzJTIwbWVldGluZ3xlbnwwfDB8fHwxNzIyNDMxMjM2fDA&ixlib=rb-4.0.3&q=80&w=1080');
+        background-size: cover;
+        background-position: center;
+        padding: 6rem 0;
+        color: white;
+    }
+
+    .contact-info-card {
+        background-color: #f8f9fa;
+        border-radius: 0.75rem;
+    }
+
+    .contact-info-card .list-group-item {
+        background-color: transparent;
+        border: none;
+    }
+
+    .social-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+    }
+
+    .social-icon:hover {
+        transform: translateY(-3px);
+        background-color: var(--bs-primary);
+        color: white !important;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<!-- Hero Section -->
-<section class="hero-section">
+<section class="hero-contact text-center">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-8 mx-auto text-center">
-                <h1 class="hero-title">Contáctanos</h1>
-                <p class="hero-subtitle">Estamos aquí para ayudarte. Envíanos tu mensaje y te responderemos pronto.</p>
-            </div>
-        </div>
+        <h1 class="display-4 fw-bold">Contáctanos</h1>
+        <p class="lead col-lg-8 mx-auto">Estamos aquí para ayudarte. Completa el formulario o utiliza nuestros canales
+            de contacto directo. Tu opinión es importante para nosotros.</p>
     </div>
 </section>
 
-<!-- Contact Form Section -->
 <section class="py-5">
     <div class="container">
         <div class="row g-5">
-            <div class="col-lg-8">
-                <div class="form-container">
-                    <h3 class="mb-4">
-                        <i class="fas fa-envelope text-primary me-2"></i>Envíanos un Mensaje
-                    </h3>
-                    <form method="post">
-                        {% csrf_token %}
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="{{ form.nombre_completo.id_for_label }}" class="form-label">
-                                        <i class="fas fa-user me-1"></i>Nombre Completo *
-                                    </label>
-                                    {{ form.nombre_completo }}
-                                    {% if form.nombre_completo.errors %}
-                                    <div class="text-danger small mt-1">{{ form.nombre_completo.errors.0 }}</div>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="{{ form.correo_electronico.id_for_label }}" class="form-label">
-                                        <i class="fas fa-envelope me-1"></i>Correo Electrónico *
-                                    </label>
-                                    {{ form.correo_electronico }}
-                                    {% if form.correo_electronico.errors %}
-                                    <div class="text-danger small mt-1">{{ form.correo_electronico.errors.0 }}</div>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="{{ form.telefono.id_for_label }}" class="form-label">
-                                        <i class="fas fa-phone me-1"></i>Teléfono
-                                    </label>
-                                    {{ form.telefono }}
-                                    {% if form.telefono.errors %}
-                                    <div class="text-danger small mt-1">{{ form.telefono.errors.0 }}</div>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="{{ form.asunto.id_for_label }}" class="form-label">
-                                        <i class="fas fa-tag me-1"></i>Asunto *
-                                    </label>
-                                    {{ form.asunto }}
-                                    {% if form.asunto.errors %}
-                                    <div class="text-danger small mt-1">{{ form.asunto.errors.0 }}</div>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <label for="{{ form.mensaje.id_for_label }}" class="form-label">
-                                        <i class="fas fa-comment me-1"></i>Mensaje *
-                                    </label>
-                                    {{ form.mensaje }}
-                                    {% if form.mensaje.errors %}
-                                    <div class="text-danger small mt-1">{{ form.mensaje.errors.0 }}</div>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <button type="submit" class="btn btn-primary btn-lg">
-                                    <i class="fas fa-paper-plane me-2"></i>Enviar Mensaje
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+            <div class="col-lg-7">
+                <div class="card border-0 shadow-sm rounded-4 h-100">
+                    <div class="card-body p-4 p-md-5">
+                        <h3 class="mb-4 fw-bold text-dark">
+                            <i class="fas fa-paper-plane text-primary me-2"></i>Envíanos un Mensaje
+                        </h3>
+                        <form method="post" novalidate>
+                            {% csrf_token %}
+                            {{ form|crispy }}
+                            <button type="submit" class="btn btn-primary btn-lg mt-3 w-100">
+                                <i class="fas fa-check-circle me-2"></i>Enviar Mensaje
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
 
-            <div class="col-lg-4">
-                <div class="custom-card h-100">
-                    <div class="card-body">
-                        <h4 class="card-title mb-4">
-                            <i class="fas fa-map-marker-alt text-primary me-2"></i>Información de Contacto
-                        </h4>
-
-                        <div class="info-item mb-3">
-                            <i class="fas fa-map-marker-alt"></i>
+            <div class="col-lg-5">
+                <div class="contact-info-card p-4 h-100">
+                    <h4 class="fw-bold text-dark mb-4">
+                        <i class="fas fa-info-circle text-primary me-2"></i>Información
+                    </h4>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex align-items-start px-0 mb-3">
+                            <i class="fas fa-map-marker-alt fa-fw fs-5 text-primary mt-1 me-3"></i>
                             <div>
-                                <strong>Dirección:</strong><br>
-                                Av. Universidad y José Antonio Eguiguren<br>
-                                Loja, Ecuador
+                                <strong class="d-block">Dirección</strong>
+                                <span class="text-muted">Av. Universitaria y José Antonio Eguiguren, Loja,
+                                    Ecuador</span>
                             </div>
-                        </div>
-
-                        <div class="info-item mb-3">
-                            <i class="fas fa-phone"></i>
+                        </li>
+                        <li class="list-group-item d-flex align-items-start px-0 mb-3">
+                            <i class="fas fa-phone fa-fw fs-5 text-primary mt-1 me-3"></i>
                             <div>
-                                <strong>Teléfono:</strong><br>
-                                +593 7 257-0407
+                                <strong class="d-block">Teléfono</strong>
+                                <span class="text-muted">+593 7 257-0407</span>
                             </div>
-                        </div>
-
-                        <div class="info-item mb-3">
-                            <i class="fas fa-envelope"></i>
+                        </li>
+                        <li class="list-group-item d-flex align-items-start px-0 mb-3">
+                            <i class="fas fa-envelope fa-fw fs-5 text-primary mt-1 me-3"></i>
                             <div>
-                                <strong>Email:</strong><br>
-                                info@camaraloja.org.ec
+                                <strong class="d-block">Email</strong>
+                                <span class="text-muted">info@camaraloja.org.ec</span>
                             </div>
-                        </div>
-
-                        <div class="info-item mb-4">
-                            <i class="fas fa-clock"></i>
+                        </li>
+                        <li class="list-group-item d-flex align-items-start px-0">
+                            <i class="fas fa-clock fa-fw fs-5 text-primary mt-1 me-3"></i>
                             <div>
-                                <strong>Horario de Atención:</strong><br>
-                                Lunes a Viernes: 8:00 AM - 5:00 PM<br>
-                                Sábados: 8:00 AM - 12:00 PM
+                                <strong class="d-block">Horario de Atención</strong>
+                                <span class="text-muted">Lunes a Viernes: 8:00 AM - 5:00 PM</span>
                             </div>
-                        </div>
-
-                        <hr>
-
-                        <h5 class="mb-3">
-                            <i class="fas fa-share-alt text-primary me-2"></i>Síguenos
-                        </h5>
-                        <div class="d-flex gap-2">
-                            <a href="#" class="btn btn-outline-primary btn-sm">
-                                <i class="fab fa-facebook-f"></i>
-                            </a>
-                            <a href="#" class="btn btn-outline-primary btn-sm">
-                                <i class="fab fa-twitter"></i>
-                            </a>
-                            <a href="#" class="btn btn-outline-primary btn-sm">
-                                <i class="fab fa-instagram"></i>
-                            </a>
-                            <a href="#" class="btn btn-outline-primary btn-sm">
-                                <i class="fab fa-linkedin-in"></i>
-                            </a>
-                        </div>
+                        </li>
+                    </ul>
+                    <hr class="my-4">
+                    <h5 class="fw-bold text-dark mb-3">
+                        <i class="fas fa-share-alt text-primary me-2"></i>Síguenos
+                    </h5>
+                    <div class="d-flex gap-2">
+                        <a href="#"
+                            class="btn btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center social-icon"
+                            title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"
+                            class="btn btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center social-icon"
+                            title="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#"
+                            class="btn btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center social-icon"
+                            title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#"
+                            class="btn btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center social-icon"
+                            title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
                     </div>
                 </div>
             </div>
@@ -159,33 +127,20 @@
     </div>
 </section>
 
-<!-- Map Section -->
-<section class="py-5 bg-light">
+<section class="py-5">
     <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <div class="custom-card">
-                    <div class="card-body p-0">
-                        <h4 class="text-center mb-4 pt-4">
-                            <i class="fas fa-map-marker-alt text-primary me-2"></i>Nuestra Ubicación
-                        </h4>
-                        <div class="ratio ratio-16x9" style="border-radius: 12px; overflow: hidden;">
-                            <iframe
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3980.108155351186!2d-79.20734602572057!3d-3.998181395975548!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91cb37fe1a5adebb%3A0x4ac4a8ab7d267dbe!2sC%C3%A1mara%20de%20Comercio%20de%20Loja!5e0!3m2!1ses-419!2sec!4v1753759585751!5m2!1ses-419!2sec"
-                                style="border:0;" allowfullscreen="" loading="lazy"
-                                referrerpolicy="no-referrer-when-downgrade"
-                                title="Ubicación de la Cámara de Comercio de Loja">
-                            </iframe>
-                        </div>
-                        <div class="p-3 text-center">
-                            <p class="mb-0 text-muted">
-                                <i class="fas fa-info-circle me-1"></i>
-                                Haz clic en el mapa para ver direcciones detalladas
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="text-center mb-4">
+            <h2 class="fw-bold text-dark">
+                <i class="fas fa-map-marked-alt text-primary me-2"></i>Nuestra Ubicación
+            </h2>
+            <p class="lead text-muted">Visítanos en nuestras oficinas en el corazón de Loja.</p>
+        </div>
+        <div class="ratio ratio-16x9 shadow rounded-4 overflow-hidden">
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3980.252062973956!2d-79.2047896852399!3d-4.007629997036324!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91cb4807b0682b6b%3A0x51358788e6b3635!2sC%C3%A1mara%20de%20Comercio%20de%20Loja!5e0!3m2!1ses!2sec!4v1672878430584!5m2!1ses!2sec"
+                style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+                title="Ubicación de la Cámara de Comercio de Loja">
+            </iframe>
         </div>
     </div>
 </section>

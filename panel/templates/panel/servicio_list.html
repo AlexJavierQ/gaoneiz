@@ -14,6 +14,7 @@
         <table class="table table-hover align-middle">
             <thead class="table-light">
                 <tr>
+                    <th style="width: 80px;">Imagen</th>
                     <th>Nombre del Servicio</th>
                     <th>Categoría</th>
                     <th>Visibilidad</th>
@@ -24,10 +25,21 @@
             <tbody>
                 {% for servicio in servicios %}
                 <tr>
+                    <td>
+                        {% if servicio.imagen %}
+                        <img src="{{ servicio.imagen.url }}" alt="{{ servicio.nombre }}" class="img-fluid rounded"
+                            style="width: 60px; height: 60px; object-fit: cover;">
+                        {% else %}
+                        <div class="d-flex align-items-center justify-content-center bg-light rounded"
+                            style="width: 60px; height: 60px;">
+                            <i class="fas fa-image text-muted"></i>
+                        </div>
+                        {% endif %}
+                    </td>
                     <td><strong>{{ servicio.nombre }}</strong></td>
                     <td><span class="badge bg-secondary">{{ servicio.get_categoria_display }}</span></td>
                     <td>
-                        {% if servicio.exclusivo_para_socios %}
+                        {% if servicio.solo_socios %}
                         <span class="badge bg-info">Solo Socios</span>
                         {% else %}
                         <span class="badge bg-light text-dark border">Público</span>
@@ -43,13 +55,11 @@
                     <td class="text-end">
                         <a href="{% url 'panel:servicio_update' servicio.pk %}" class="btn btn-sm btn-outline-primary"
                             title="Editar"><i class="fas fa-pen"></i></a>
-                        <a href="{% url 'panel:servicio_delete' servicio.pk %}" class="btn btn-sm btn-outline-danger"
-                            title="Eliminar"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="5" class="text-center py-4">No hay servicios registrados.</td>
+                    <td colspan="6" class="text-center py-4">No hay servicios registrados.</td>
                 </tr>
                 {% endfor %}
             </tbody>

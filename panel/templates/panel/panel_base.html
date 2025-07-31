@@ -10,15 +10,15 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
-  
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
     :root {
-      --panel-primary: #1e3a8a;
+      --primary-color: hsl(214, 73%, 19%);
       --panel-secondary: #3b82f6;
       --panel-accent: #f59e0b;
-      --panel-success: #10b981;
+      --panel-primary: hsl(214, 73%, 19%);
       --panel-warning: #f59e0b;
       --panel-danger: #ef4444;
       --panel-light: #f8fafc;
@@ -32,7 +32,7 @@
 
     /* Navbar personalizado */
     .panel-navbar {
-      background: linear-gradient(135deg, var(--panel-primary) 0%, var(--panel-secondary) 100%);
+      background: var(--panel-primary);
       box-shadow: 0 4px 20px rgba(30, 58, 138, 0.15);
       padding: 1rem 0;
     }
@@ -77,7 +77,8 @@
     }
 
     /* Cards mejoradas */
-    .info-card, .stat-card {
+    .info-card,
+    .stat-card {
       background: white;
       border-radius: 16px;
       padding: 2rem;
@@ -149,11 +150,11 @@
       .main-content {
         padding: 1rem 0;
       }
-      
+
       .stat-card {
         padding: 1.5rem;
       }
-      
+
       .stat-number {
         font-size: 2rem;
       }
@@ -177,69 +178,68 @@
         {% with current_url=request.resolver_match.url_name %}
         <ul class="navbar-nav me-auto">
           <li class="nav-item">
-            <a class="nav-link {% if current_url == 'dashboard' %}active{% endif %}" 
-               href="{% url 'panel:dashboard' %}">
+            <a class="nav-link {% if current_url == 'dashboard' %}active{% endif %}" href="{% url 'panel:dashboard' %}">
               <i class="fas fa-tachometer-alt me-1"></i>Dashboard
             </a>
           </li>
-          
+
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle {% if 'solicitud' in current_url or 'socio' in current_url %}active{% endif %}" 
-               href="#" role="button" data-bs-toggle="dropdown">
+            <a class="nav-link dropdown-toggle {% if 'solicitud' in current_url or 'socio' in current_url %}active{% endif %}"
+              href="#" role="button" data-bs-toggle="dropdown">
               <i class="fas fa-users me-1"></i>Usuarios
             </a>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="{% url 'panel:solicitudes_afiliacion' %}">
-                <i class="fas fa-user-plus me-2"></i>Solicitudes
-              </a></li>
+                  <i class="fas fa-user-plus me-2"></i>Solicitudes
+                </a></li>
               <li><a class="dropdown-item" href="{% url 'panel:gestion_socios' %}">
-                <i class="fas fa-users me-2"></i>Socios
-              </a></li>
+                  <i class="fas fa-users me-2"></i>Socios
+                </a></li>
             </ul>
           </li>
 
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle {% if 'convenio' in current_url or 'servicio' in current_url %}active{% endif %}" 
-               href="#" role="button" data-bs-toggle="dropdown">
+            <a class="nav-link dropdown-toggle {% if 'convenio' in current_url or 'servicio' in current_url %}active{% endif %}"
+              href="#" role="button" data-bs-toggle="dropdown">
               <i class="fas fa-briefcase me-1"></i>Servicios
             </a>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="{% url 'panel:convenio_list' %}">
-                <i class="fas fa-handshake me-2"></i>Convenios
-              </a></li>
+                  <i class="fas fa-handshake me-2"></i>Convenios
+                </a></li>
               <li><a class="dropdown-item" href="{% url 'panel:servicio_panel_list' %}">
-                <i class="fas fa-concierge-bell me-2"></i>Servicios
-              </a></li>
+                  <i class="fas fa-concierge-bell me-2"></i>Servicios
+                </a></li>
             </ul>
           </li>
-          
+
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle {% if 'reserva' in current_url or 'lugar' in current_url %}active{% endif %}"
-               href="#" role="button" data-bs-toggle="dropdown">
-               <i class="fas fa-calendar-alt me-1"></i>Reservas
+              href="#" role="button" data-bs-toggle="dropdown">
+              <i class="fas fa-calendar-alt me-1"></i>Reservas
             </a>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="{% url 'panel:reserva_panel_list' %}">
-                <i class="fas fa-calendar-check me-2"></i>Gestionar Reservas
-              </a></li>
+                  <i class="fas fa-calendar-check me-2"></i>Gestionar Reservas
+                </a></li>
               <li><a class="dropdown-item" href="{% url 'panel:lugar_list' %}">
-                <i class="fas fa-map-marked-alt me-2"></i>Gestionar Lugares
-              </a></li>
+                  <i class="fas fa-map-marked-alt me-2"></i>Gestionar Lugares
+                </a></li>
               <li><a class="dropdown-item" href="{% url 'panel:tipo_lugar_list' %}">
-                <i class="fas fa-tags me-2"></i>Tipos de Lugar
-              </a></li>
+                  <i class="fas fa-tags me-2"></i>Tipos de Lugar
+                </a></li>
             </ul>
           </li>
           <li class="nav-item">
-            <a class="nav-link {% if 'noticia' in current_url %}active{% endif %}" 
-               href="{% url 'panel:noticia_panel_list' %}">
+            <a class="nav-link {% if 'noticia' in current_url %}active{% endif %}"
+              href="{% url 'panel:noticia_panel_list' %}">
               <i class="fas fa-newspaper me-1"></i>Noticias
             </a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link {% if 'registro_actividad' in current_url %}active{% endif %}" 
-               href="{% url 'panel:registro_actividad' %}">
+            <a class="nav-link {% if 'registro_actividad' in current_url %}active{% endif %}"
+              href="{% url 'panel:registro_actividad' %}">
               <i class="fas fa-history me-1"></i>Actividad
             </a>
           </li>
@@ -248,18 +248,21 @@
 
         <ul class="navbar-nav">
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button"
+              data-bs-toggle="dropdown">
               <i class="fas fa-user-circle me-2"></i>
               {{ user.first_name|default:user.email }}
             </a>
             <ul class="dropdown-menu dropdown-menu-end">
               <li><a class="dropdown-item" href="{% url 'web:home' %}">
-                <i class="fas fa-home me-2"></i>Ver Sitio Público
-              </a></li>
-              <li><hr class="dropdown-divider"></li>
+                  <i class="fas fa-home me-2"></i>Ver Sitio Público
+                </a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
               <li><a class="dropdown-item text-danger" href="{% url 'account_logout' %}">
-                <i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
-              </a></li>
+                  <i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
+                </a></li>
             </ul>
           </li>
         </ul>
@@ -269,14 +272,14 @@
 
   <main class="main-content">
     <div class="container-fluid">
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            {% endfor %}
-        {% endif %}
+      {% if messages %}
+      {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% endfor %}
+      {% endif %}
       {% block content %}{% endblock %}
     </div>
   </main>
