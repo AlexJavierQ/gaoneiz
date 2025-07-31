@@ -1,238 +1,193 @@
 {% extends 'base.html' %}
-{% load static %}
+{% load static crispy_forms_tags %}
 
 {% block title %}Nueva Reserva - Cámara de Comercio de Loja{% endblock %}
 
 {% block extra_css %}
 <style>
-    .lugar-info {
-        background: #f8f9fa;
-        border-left: 4px solid #007bff;
-        padding: 15px;
-        margin: 15px 0;
-        border-radius: 0 5px 5px 0;
+    /* Estilo para el panel de resumen que se mantiene fijo al hacer scroll */
+    .summary-panel {
+        position: sticky;
+        top: 20px;
     }
 
-    .costo-estimado {
-        background: #e8f5e8;
-        border: 1px solid #28a745;
-        padding: 10px;
-        border-radius: 5px;
-        margin-top: 15px;
+    /* Transición suave para los elementos que aparecen y desaparecen */
+    .dynamic-info {
+        transition: all 0.3s ease-in-out;
+    }
+
+    .form-control,
+    .form-select {
+        padding: 0.75rem 1rem;
     }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="container my-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card shadow border-0">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0">
-                        <i class="fas fa-calendar-plus me-2"></i>
-                        Nueva Reserva
-                    </h4>
-                </div>
-                <div class="card-body">
-                    {% if form.errors %}
-                    <div class="alert alert-danger">
-                        <h6><i class="fas fa-exclamation-triangle me-2"></i>Por favor corrige los siguientes errores:
-                        </h6>
-                        <ul class="mb-0">
-                            {% for field, errors in form.errors.items %}
-                            {% for error in errors %}
-                            <li>{{ error }}</li>
-                            {% endfor %}
-                            {% endfor %}
-                        </ul>
+    <form method="post" id="reservaForm" novalidate>
+        {% csrf_token %}
+        <div class="row g-4 justify-content-center">
+
+            <div class="col-lg-7">
+                <div class="card shadow-sm border-0 rounded-4">
+                    <div class="card-header bg-primary bg-gradient text-white border-0 py-3">
+                        <h4 class="mb-0 fw-bold">
+                            <i class="fas fa-calendar-plus me-2"></i>
+                            Completa tu Solicitud de Reserva
+                        </h4>
                     </div>
-                    {% endif %}
-
-                    <form method="post" id="reservaForm">
-                        {% csrf_token %}
-
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <label for="{{ form.lugar.id_for_label }}" class="form-label">
-                                    <i class="fas fa-map-marker-alt me-2"></i>{{ form.lugar.label }}
-                                </label>
-                                {{ form.lugar }}
-                                <div class="form-text">Selecciona el lugar que deseas reservar</div>
-                            </div>
+                    <div class="card-body p-4">
+                        {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.non_field_errors %}{{ error }}{% endfor %}
                         </div>
+                        {% endif %}
 
-                        <!-- Información del lugar seleccionado -->
-                        <div id="lugar-info" class="lugar-info" style="display: none;">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <strong>Capacidad:</strong> <span id="capacidad"></span> personas
-                                </div>
-                                <div class="col-md-6">
-                                    <strong>Precio:</strong> $<span id="precio"></span> por hora
-                                </div>
-                            </div>
-                            <div class="mt-2">
-                                <strong>Equipamiento:</strong> <span id="equipamiento"></span>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="{{ form.fecha_inicio.id_for_label }}" class="form-label">
-                                    <i class="fas fa-calendar me-2"></i>{{ form.fecha_inicio.label }}
-                                </label>
-                                {{ form.fecha_inicio }}
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="{{ form.fecha_fin.id_for_label }}" class="form-label">
-                                    <i class="fas fa-calendar me-2"></i>{{ form.fecha_fin.label }}
-                                </label>
-                                {{ form.fecha_fin }}
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="{{ form.numero_personas.id_for_label }}" class="form-label">
-                                    <i class="fas fa-users me-2"></i>{{ form.numero_personas.label }}
-                                </label>
-                                {{ form.numero_personas }}
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="{{ form.proposito.id_for_label }}" class="form-label">
-                                    <i class="fas fa-tag me-2"></i>{{ form.proposito.label }}
-                                </label>
-                                {{ form.proposito }}
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="{{ form.descripcion.id_for_label }}" class="form-label">
-                                <i class="fas fa-comment me-2"></i>{{ form.descripcion.label }}
-                            </label>
-                            {{ form.descripcion }}
-                        </div>
-
-                        <!-- Costo estimado -->
-                        <div id="costo-estimado" class="costo-estimado" style="display: none;">
-                            <div class="row align-items-center">
-                                <div class="col-md-8">
-                                    <strong>Duración estimada:</strong> <span id="duracion">0</span> horas
-                                </div>
-                                <div class="col-md-4 text-end">
-                                    <strong class="text-success">Costo total: $<span
-                                            id="costo-total">0.00</span></strong>
-                                </div>
-                            </div>
-                        </div>
+                        {{ form|crispy }}
 
                         <div class="d-flex justify-content-between mt-4">
                             <a href="{% url 'reservas:lugares_list' %}" class="btn btn-secondary">
-                                <i class="fas fa-arrow-left me-2"></i>Volver
+                                <i class="fas fa-arrow-left me-2"></i>Volver a Lugares
                             </a>
-                            <button type="submit" class="btn btn-primary">
+                            <button type="submit" id="submit-button" class="btn btn-success btn-lg">
                                 <i class="fas fa-paper-plane me-2"></i>Enviar Solicitud
                             </button>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
 
-            <!-- Información adicional -->
-            <div class="card mt-4 border-info">
-                <div class="card-header bg-info text-white">
-                    <h6 class="mb-0"><i class="fas fa-info-circle me-2"></i>Información Importante</h6>
-                </div>
-                <div class="card-body">
-                    <ul class="mb-0">
-                        <li>Las reservas están disponibles de 8:00 AM a 10:00 PM</li>
-                        <li>Duración mínima: 1 hora, máxima: 8 horas</li>
-                        <li>Solo los socios pueden realizar reservas</li>
-                        <li>Las reservas requieren aprobación administrativa</li>
-                        <li>Puedes cancelar tu reserva hasta 24 horas antes</li>
-                    </ul>
+            <div class="col-lg-5">
+                <div class="summary-panel">
+                    <div id="lugar-info-panel" class="card border-0 shadow-sm rounded-4 mb-4" style="display: none;">
+                        <div class="card-body p-4">
+                            <h5 class="card-title text-primary fw-bold mb-3">Detalles del Lugar</h5>
+                            <div class="list-group list-group-flush">
+                                <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                    <span><i class="fas fa-users me-2 text-muted"></i>Capacidad Máxima</span>
+                                    <strong id="capacidad" class="text-dark"></strong>
+                                </div>
+                                <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                    <span><i class="fas fa-dollar-sign me-2 text-muted"></i>Precio por Hora</span>
+                                    <strong id="precio" class="text-dark"></strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="costo-estimado-panel" class="dynamic-info" style="display: none;">
+                        <div class="alert alert-success p-4">
+                            <h5 class="alert-heading fw-bold">Costo Estimado</h5>
+                            <hr>
+                            <div class="d-flex justify-content-between">
+                                <span>Duración:</span>
+                                <span id="duracion" class="fw-bold">0 horas</span>
+                            </div>
+                            <div class="d-flex justify-content-between fs-4 mt-2">
+                                <span class="fw-bold">Total:</span>
+                                <span id="costo-total" class="fw-bolder">$0.00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card border-0 bg-light rounded-4 mt-4">
+                        <div class="card-body p-4">
+                            <h6 class="mb-3 text-dark fw-bold"><i class="fas fa-info-circle me-2"></i>A Considerar:</h6>
+                            <ul class="list-unstyled text-secondary small">
+                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Las reservas
+                                    requieren aprobación administrativa.</li>
+                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Solo los socios
+                                    activos pueden realizar reservas.</li>
+                                <li><i class="fas fa-check-circle text-success me-2"></i>Puede cancelar su reserva hasta
+                                    24 horas antes del inicio.</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </form>
 </div>
+
+<script id="lugares-data" type="application/json">
+    {{ lugares_data_json|safe }}
+</script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const lugarSelect = document.getElementById('{{ form.lugar.id_for_label }}');
-        const fechaInicio = document.getElementById('{{ form.fecha_inicio.id_for_label }}');
-        const fechaFin = document.getElementById('{{ form.fecha_fin.id_for_label }}');
-        const numeroPersonas = document.getElementById('{{ form.numero_personas.id_for_label }}');
+        // --- OBTENCIÓN DE ELEMENTOS DEL DOM ---
+        const lugarSelect = document.querySelector('#id_lugar');
+        const fechaInicioInput = document.querySelector('#id_fecha_inicio');
+        const fechaFinInput = document.querySelector('#id_fecha_fin');
+        const submitButton = document.getElementById('submit-button');
 
-        const lugarInfo = document.getElementById('lugar-info');
-        const costoEstimado = document.getElementById('costo-estimado');
+        // Paneles dinámicos
+        const lugarInfoPanel = document.getElementById('lugar-info-panel');
+        const costoEstimadoPanel = document.getElementById('costo-estimado-panel');
 
-        // Datos de lugares (pasados desde el backend)
-        const lugaresData = {
-        {% for lugar in lugares %}
-        { { lugar.id } }: {
-            capacidad: { { lugar.tipo.capacidad_maxima } },
-            precio: { { lugar.tipo.precio_por_hora } },
-            equipamiento: "{{ lugar.equipamiento|default:'No especificado' }}"
-        } {% if not forloop.last %}, {% endif %}
-        {% endfor %}
-    };
+        // Elementos de texto a actualizar
+        const capacidadSpan = document.getElementById('capacidad');
+        const precioSpan = document.getElementById('precio');
+        const duracionSpan = document.getElementById('duracion');
+        const costoTotalSpan = document.getElementById('costo-total');
 
-    function actualizarInfoLugar() {
-        const lugarId = lugarSelect.value;
-        if (lugarId && lugaresData[lugarId]) {
-            const lugar = lugaresData[lugarId];
-            document.getElementById('capacidad').textContent = lugar.capacidad;
-            document.getElementById('precio').textContent = lugar.precio;
-            document.getElementById('equipamiento').textContent = lugar.equipamiento;
-            lugarInfo.style.display = 'block';
+        // --- DATOS Y ESTADO ---
+        const lugaresJson = JSON.parse(document.getElementById('lugares-data').textContent);
+        const lugaresData = lugaresJson.reduce((obj, item) => {
+            obj[item.id] = {
+                nombre: item.nombre,
+                capacidad: item.tipo__capacidad_maxima,
+                precio: item.tipo__precio_por_hora
+            };
+            return obj;
+        }, {});
+        let lugarSeleccionado = null;
 
-            // Actualizar límite de personas
-            numeroPersonas.max = lugar.capacidad;
+        // --- FUNCIONES ---
+        function actualizarInfoLugar() {
+            const lugarId = lugarSelect.value;
+            lugarSeleccionado = lugarId && lugaresData[lugarId] ? lugaresData[lugarId] : null;
 
+            if (lugarSeleccionado) {
+                capacidadSpan.textContent = `${lugarSeleccionado.capacidad} personas`;
+                precioSpan.textContent = `$${parseFloat(lugarSeleccionado.precio).toFixed(2)}`;
+                lugarInfoPanel.style.display = 'block';
+            } else {
+                lugarInfoPanel.style.display = 'none';
+            }
             calcularCosto();
-        } else {
-            lugarInfo.style.display = 'none';
-            costoEstimado.style.display = 'none';
         }
-    }
 
-    function calcularCosto() {
-        const lugarId = lugarSelect.value;
-        const inicio = new Date(fechaInicio.value);
-        const fin = new Date(fechaFin.value);
+        function calcularCosto() {
+            const inicio = fechaInicioInput.value ? new Date(fechaInicioInput.value) : null;
+            const fin = fechaFinInput.value ? new Date(fechaFinInput.value) : null;
 
-        if (lugarId && lugaresData[lugarId] && inicio && fin && fin > inicio) {
-            const lugar = lugaresData[lugarId];
-            const horas = (fin - inicio) / (1000 * 60 * 60);
-            const costo = horas * lugar.precio;
+            if (lugarSeleccionado && inicio && fin && fin > inicio) {
+                const horas = (fin - inicio) / (1000 * 60 * 60);
+                const costo = horas * parseFloat(lugarSeleccionado.precio);
 
-            document.getElementById('duracion').textContent = horas.toFixed(1);
-            document.getElementById('costo-total').textContent = costo.toFixed(2);
-            costoEstimado.style.display = 'block';
-        } else {
-            costoEstimado.style.display = 'none';
+                duracionSpan.textContent = `${horas.toFixed(1)} horas`;
+                costoTotalSpan.textContent = `$${costo.toFixed(2)}`;
+                costoEstimadoPanel.style.display = 'block';
+                submitButton.disabled = false;
+            } else {
+                costoEstimadoPanel.style.display = 'none';
+                if (fin && inicio && fin <= inicio) {
+                    submitButton.disabled = true;
+                }
+            }
         }
-    }
 
-    // Event listeners
-    lugarSelect.addEventListener('change', actualizarInfoLugar);
-    fechaInicio.addEventListener('change', calcularCosto);
-    fechaFin.addEventListener('change', calcularCosto);
+        // --- EVENT LISTENERS ---
+        if (lugarSelect) lugarSelect.addEventListener('change', actualizarInfoLugar);
+        if (fechaInicioInput) fechaInicioInput.addEventListener('change', calcularCosto);
+        if (fechaFinInput) fechaFinInput.addEventListener('change', calcularCosto);
 
-    // Inicializar si hay un lugar preseleccionado
-    if (lugarSelect.value) {
-        actualizarInfoLugar();
-    }
-
-    // Preseleccionar lugar si viene en la URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const lugarParam = urlParams.get('lugar');
-    if (lugarParam) {
-        lugarSelect.value = lugarParam;
-        actualizarInfoLugar();
-    }
-});
+        // --- INICIALIZACIÓN ---
+        if (lugarSelect) {
+            actualizarInfoLugar();
+        }
+    });
 </script>
 {% endblock %}

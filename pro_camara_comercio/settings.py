@@ -132,3 +132,8 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 # --- LLAVE PRIMARIA POR DEFECTO ---
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LANGUAGE_CODE = 'es'
+TIME_ZONE = 'America/Guayaquil'
+USE_L10N = True
+USE_TZ = True

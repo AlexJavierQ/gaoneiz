@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load tz %} {# para manejo de zona horaria si usas timezone.localtime #}
 
 {% block title %}Detalle de Reserva - Cámara de Comercio de Loja{% endblock %}
 
@@ -10,8 +11,7 @@
             <div class="card shadow border-0">
                 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                     <h4 class="mb-0">
-                        <i class="fas fa-calendar-alt me-2"></i>
-                        Detalle de Reserva
+                        <i class="fas fa-calendar-alt me-2"></i>Detalle de Reserva
                     </h4>
                     {% if reserva.estado == 'pendiente' %}
                     <span class="badge bg-warning fs-6">{{ reserva.get_estado_display }}</span>
@@ -58,16 +58,19 @@
                             </h5>
                         </div>
                         <div class="col-md-6">
-                            <p><strong>Fecha:</strong> {{ reserva.fecha_inicio|date:"l, d de F de Y" }}</p>
-                            <p><strong>Hora de inicio:</strong> {{ reserva.fecha_inicio|time:"H:i" }}</p>
-                            <p><strong>Hora de fin:</strong> {{ reserva.fecha_fin|time:"H:i" }}</p>
+                            <p><strong>Fecha:</strong> {{ reserva.fecha_inicio|date:"l, d" }} de {{
+                                reserva.fecha_inicio|date:"F" }} de {{ reserva.fecha_inicio|date:"Y" }}</p>
+                            <p>
+                                <strong>Horario:</strong>
+                                {{ reserva.fecha_inicio|time:"h:i A" }} - {{ reserva.fecha_fin|time:"h:i A" }}
+                            </p>
                             <p><strong>Duración:</strong> {{ reserva.duracion_horas|floatformat:1 }} horas</p>
                         </div>
                         <div class="col-md-6">
                             <p><strong>Número de personas:</strong> {{ reserva.numero_personas }}</p>
                             <p><strong>Propósito:</strong> {{ reserva.proposito }}</p>
-                            <p><strong>Costo total:</strong> <span class="text-success">${{
-                                    reserva.costo_total|floatformat:2 }}</span></p>
+                            <p><strong>Total:</strong> <span class="text-success">${{
+                                    reserva.costo_total|floatformat:2}}</span></p>
                         </div>
                         {% if reserva.descripcion %}
                         <div class="col-12">
@@ -85,7 +88,7 @@
                             </h5>
                         </div>
                         <div class="col-md-6">
-                            <p><strong>Fecha de solicitud:</strong> {{ reserva.fecha_solicitud|date:"d/m/Y H:i" }}</p>
+                            <p><strong>Solicitada:</strong> {{ reserva.fecha_solicitud|date:"d/m/Y H:i" }}</p>
                             <p><strong>Última actualización:</strong> {{ reserva.fecha_actualizacion|date:"d/m/Y H:i" }}
                             </p>
                         </div>
