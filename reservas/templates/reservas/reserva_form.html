@@ -1,208 +1,128 @@
 {% extends 'base.html' %}
 {% load static crispy_forms_tags %}
 
-{% block title %}Nueva Reserva - Cámara de Comercio de Loja{% endblock %}
-
-{% block extra_css %}
-<style>
-    /* Estilo para el panel de resumen que se mantiene fijo al hacer scroll */
-    .summary-panel {
-        position: sticky;
-        top: 20px;
-    }
-
-    /* Transición suave para los elementos que aparecen y desaparecen */
-    .dynamic-info {
-        transition: all 0.3s ease-in-out;
-    }
-
-    .form-control,
-    .form-select {
-        padding: 0.75rem 1rem;
-    }
-</style>
-{% endblock %}
+{% block title %}{% if form.instance.pk %}Editar Reserva{% else %}Nueva Reserva{% endif %} | Cámara de Comercio de Loja{% endblock %}
 
 {% block content %}
-<div class="container my-5">
-    <form method="post" id="reservaForm" novalidate>
-        {% csrf_token %}
-        <div class="row g-4 justify-content-center">
-
-            <div class="col-lg-7">
-                <div class="card shadow-sm border-0 rounded-4">
-                    <div class="card-header bg-primary bg-gradient text-white border-0 py-3">
-                        <h4 class="mb-0 fw-bold">
-                            <i class="fas fa-calendar-plus me-2"></i>
-                            Completa tu Solicitud de Reserva
-                        </h4>
-                    </div>
-                    <div class="card-body p-4">
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white py-3">
+                    <h4 class="mb-0">
+                        {% if form.instance.pk %}
+                            <i class="fas fa-edit me-2"></i>Editar Reserva
+                        {% else %}
+                            <i class="fas fa-calendar-plus me-2"></i>Nueva Reserva
+                        {% endif %}
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        
                         {% if form.non_field_errors %}
                         <div class="alert alert-danger">
-                            {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+                            {% for error in form.non_field_errors %}
+                                {{ error }}
+                            {% endfor %}
                         </div>
                         {% endif %}
 
-                        {{ form|crispy }}
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form.lugar|as_crispy_field }}
+                                {{ form.fecha_inicio|as_crispy_field }}
+                                {{ form.fecha_fin|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.proposito|as_crispy_field }}
+                                {{ form.notas_adicionales|as_crispy_field }}
+                            </div>
+                        </div>
 
-                        <div class="d-flex justify-content-between mt-4">
-                            <a href="{% url 'reservas:lugares_list' %}" class="btn btn-secondary">
-                                <i class="fas fa-arrow-left me-2"></i>Volver a Lugares
+                        <div class="d-flex justify-content-between mt-4 pt-3 border-top">
+                            <a href="{% url 'reservas:mis_reservas' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i> Volver al listado
                             </a>
-                            <button type="submit" id="submit-button" class="btn btn-success btn-lg">
-                                <i class="fas fa-paper-plane me-2"></i>Enviar Solicitud
+                            <button type="submit" class="btn btn-primary px-4">
+                                <i class="fas fa-save me-2"></i> {% if form.instance.pk %}Actualizar{% else %}Guardar{% endif %} Reserva
                             </button>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
 
-            <div class="col-lg-5">
-                <div class="summary-panel">
-                    <div id="lugar-info-panel" class="card border-0 shadow-sm rounded-4 mb-4" style="display: none;">
-                        <div class="card-body p-4">
-                            <h5 class="card-title text-primary fw-bold mb-3">Detalles del Lugar</h5>
-                            <div class="list-group list-group-flush">
-                                <div class="list-group-item d-flex justify-content-between align-items-center px-0">
-                                    <span><i class="fas fa-users me-2 text-muted"></i>Capacidad Máxima</span>
-                                    <strong id="capacidad" class="text-dark"></strong>
-                                </div>
-                                <div class="list-group-item d-flex justify-content-between align-items-center px-0">
-                                    <span><i class="fas fa-dollar-sign me-2 text-muted"></i>Precio por Hora</span>
-                                    <strong id="precio" class="text-dark"></strong>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="{{ form.fecha_inicio.id_for_label }}" class="form-label">
-                                    <i class="fas fa-calendar me-2"></i>{{ form.fecha_inicio.label }}
-                                </label>
-                                <input type="datetime-local" name="{{ form.fecha_inicio.name }}" 
-                                       id="{{ form.fecha_inicio.id_for_label }}" 
-                                       class="form-control" required
-                                       value="{{ form.fecha_inicio.value|date:'Y-m-d\TH:i' }}">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="{{ form.fecha_fin.id_for_label }}" class="form-label">
-                                    <i class="fas fa-calendar me-2"></i>{{ form.fecha_fin.label }}
-                                </label>
-                                <input type="datetime-local" name="{{ form.fecha_fin.name }}" 
-                                       id="{{ form.fecha_fin.id_for_label }}" 
-                                       class="form-control" required
-                                       value="{{ form.fecha_fin.value|date:'Y-m-d\TH:i' }}">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card border-0 bg-light rounded-4 mt-4">
-                        <div class="card-body p-4">
-                            <h6 class="mb-3 text-dark fw-bold"><i class="fas fa-info-circle me-2"></i>A Considerar:</h6>
-                            <ul class="list-unstyled text-secondary small">
-                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Las reservas
-                                    requieren aprobación administrativa.</li>
-                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Solo los socios
-                                    activos pueden realizar reservas.</li>
-                                <li><i class="fas fa-check-circle text-success me-2"></i>Puede cancelar su reserva hasta
-                                    24 horas antes del inicio.</li>
-                            </ul>
-                        </div>
-                    </div>
+            <div class="card border-0 bg-light rounded-4 mt-4">
+                <div class="card-body p-4">
+                    <h6 class="mb-3 text-dark fw-bold"><i class="fas fa-info-circle me-2"></i>A Considerar:</h6>
+                    <ul class="list-unstyled text-secondary small">
+                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Las reservas requieren aprobación administrativa.</li>
+                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Solo los socios activos pueden realizar reservas.</li>
+                        <li><i class="fas fa-check-circle text-success me-2"></i>Puede cancelar su reserva hasta 24 horas antes del inicio.</li>
+                    </ul>
                 </div>
             </div>
         </div>
-    </form>
+    </div>
 </div>
 
-<script id="lugares-data" type="application/json">
-    {{ lugares_data_json|safe }}
-</script>
+{{ lugares_data|json_script:"lugares-data" }}
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // --- OBTENCIÓN DE ELEMENTOS DEL DOM ---
-        const lugarSelect = document.querySelector('#id_lugar');
-        const fechaInicioInput = document.querySelector('#id_fecha_inicio');
-        const fechaFinInput = document.querySelector('#id_fecha_fin');
-        const submitButton = document.getElementById('submit-button');
-
-        // Paneles dinámicos
-        const lugarInfoPanel = document.getElementById('lugar-info-panel');
-        const costoEstimadoPanel = document.getElementById('costo-estimado-panel');
-
-        // Datos de lugares (pasados desde el backend)
-        const lugaresData = JSON.parse(document.getElementById('lugares-data').textContent);
-
+document.addEventListener('DOMContentLoaded', function() {
+    // Obtener elementos del DOM
+    const lugarSelect = document.querySelector('#id_lugar');
+    const fechaInicio = document.querySelector('#id_fecha_inicio');
+    const fechaFin = document.querySelector('#id_fecha_fin');
+    const capacidadSpan = document.getElementById('capacidad');
+    const precioSpan = document.getElementById('precio');
+    const lugarInfoPanel = document.getElementById('lugar-info-panel');
+    
+    // Obtener datos de lugares
+    let lugaresData = {};
+    const lugaresDataElement = document.getElementById('lugares-data');
+    if (lugaresDataElement) {
+        lugaresData = JSON.parse(lugaresDataElement.textContent);
+    }
+    
+    // Función para actualizar la información del lugar seleccionado
     function actualizarInfoLugar() {
         const lugarId = lugarSelect.value;
         if (lugarId && lugaresData[lugarId]) {
             const lugar = lugaresData[lugarId];
-            document.getElementById('capacidad').textContent = lugar.capacidad;
-            document.getElementById('precio').textContent = lugar.precio.toFixed(2);
-            document.getElementById('equipamiento').textContent = lugar.equipamiento;
-            lugarInfo.style.display = 'block';
-
-            // Actualizar límite de personas
-            numeroPersonas.max = lugar.capacidad;
-            if (parseInt(numeroPersonas.value) > lugar.capacidad) {
-                numeroPersonas.value = lugar.capacidad;
-            }
-
-            if (lugarSeleccionado) {
-                capacidadSpan.textContent = `${lugarSeleccionado.capacidad} personas`;
-                precioSpan.textContent = `$${parseFloat(lugarSeleccionado.precio).toFixed(2)}`;
-                lugarInfoPanel.style.display = 'block';
-            } else {
-                lugarInfoPanel.style.display = 'none';
-            }
-            calcularCosto();
+            
+            // Actualizar la información del lugar
+            if (capacidadSpan) capacidadSpan.textContent = lugar.capacidad + ' personas';
+            if (precioSpan) precioSpan.textContent = '$' + parseFloat(lugar.precio_por_hora).toFixed(2);
+            
+            // Mostrar el panel de información
+            if (lugarInfoPanel) lugarInfoPanel.style.display = 'block';
+        } else if (lugarInfoPanel) {
+            // Ocultar el panel si no hay lugar seleccionado
+            lugarInfoPanel.style.display = 'none';
         }
-
-        function calcularCosto() {
-            const inicio = fechaInicioInput.value ? new Date(fechaInicioInput.value) : null;
-            const fin = fechaFinInput.value ? new Date(fechaFinInput.value) : null;
-
-            if (lugarSeleccionado && inicio && fin && fin > inicio) {
-                const horas = (fin - inicio) / (1000 * 60 * 60);
-                const costo = horas * parseFloat(lugarSeleccionado.precio);
-
-                duracionSpan.textContent = `${horas.toFixed(1)} horas`;
-                costoTotalSpan.textContent = `$${costo.toFixed(2)}`;
-                costoEstimadoPanel.style.display = 'block';
-                submitButton.disabled = false;
-            } else {
-                costoEstimadoPanel.style.display = 'none';
-                if (fin && inicio && fin <= inicio) {
-                    submitButton.disabled = true;
-                }
-            }
-        }
-
+    }
+    
     // Event listeners
-    if (lugarSelect) lugarSelect.addEventListener('change', actualizarInfoLugar);
-    if (fechaInicio) fechaInicio.addEventListener('change', calcularCosto);
-    if (fechaFin) fechaFin.addEventListener('change', calcularCosto);
-
+    if (lugarSelect) {
+        lugarSelect.addEventListener('change', actualizarInfoLugar);
+    }
+    
     // Inicializar si hay un lugar preseleccionado
     if (lugarSelect && lugarSelect.value) {
         actualizarInfoLugar();
     }
-
+    
     // Preseleccionar lugar si viene en la URL
-    if (typeof URLSearchParams !== 'undefined') {
+    if (typeof URLSearchParams !== 'undefined' && lugarSelect) {
         const urlParams = new URLSearchParams(window.location.search);
         const lugarParam = urlParams.get('lugar');
-        if (lugarParam && lugarSelect) {
+        if (lugarParam) {
             lugarSelect.value = lugarParam;
             actualizarInfoLugar();
         }
     }
-}});
+});
 </script>
-
-{{ lugares_data|json_script:"lugares-data" }}
-
 {% endblock %}

@@ -651,3 +651,51 @@ class ReservaPanelDeleteView(LoginRequiredMixin, StaffRequiredMixin, DeleteView)
         messages.success(self.request, "La reserva ha sido eliminada exitosamente.")
         # Eliminar la reserva
         return super().form_valid(form)
+
+
+def aprobar_reserva(request, pk):
+    if not request.user.is_staff:
+        return redirect('panel:reserva_panel_list')
+    
+    reserva = get_object_or_404(Reserva, pk=pk)
+    
+    if reserva.estado == 'pendiente':
+        reserva.estado = 'confirmada'
+        reserva.save()
+        
+        # Registrar la actividad
+        registrar_actividad(
+            request.user,
+            f"Aprobó la reserva #{reserva.id} - {reserva.lugar.nombre}",
+            reserva
+        )
+        
+        messages.success(request, "La reserva ha sido aprobada exitosamente.")
+    else:
+        messages.warning(request, "Solo se pueden aprobar reservas que estén en estado 'Pendiente'.")
+    
+    return redirect('panel:reserva_panel_list')
+
+
+def rechazar_reserva(request, pk):
+    if not request.user.is_staff:
+        return redirect('panel:reserva_panel_list')
+    
+    reserva = get_object_or_404(Reserva, pk=pk)
+    
+    if reserva.estado == 'pendiente':
+        reserva.estado = 'rechazada'
+        reserva.save()
+        
+        # Registrar la actividad
+        registrar_actividad(
+            request.user,
+            f"Rechazó la reserva #{reserva.id} - {reserva.lugar.nombre}",
+            reserva
+        )
+        
+        messages.success(request, "La reserva ha sido rechazada.")
+    else:
+        messages.warning(request, "Solo se pueden rechazar reservas que estén en estado 'Pendiente'.")
+    
+    return redirect('panel:reserva_panel_list')

@@ -19,7 +19,7 @@ class LugarForm(forms.ModelForm):
 class ReservaForm(forms.ModelForm):
     class Meta:
         model = Reserva
-        fields = ["lugar", "fecha_inicio", "fecha_fin", "notas_adicionales"]
+        fields = ["lugar", "fecha_inicio", "fecha_fin", "proposito", "notas_adicionales"]
         widgets = {
             "fecha_inicio": forms.DateTimeInput(
                 attrs={"type": "datetime-local"}, format="%Y-%m-%dT%H:%M"
@@ -27,9 +27,12 @@ class ReservaForm(forms.ModelForm):
             "fecha_fin": forms.DateTimeInput(
                 attrs={"type": "datetime-local"}, format="%Y-%m-%dT%H:%M"
             ),
+            "proposito": forms.TextInput(attrs={
+                "placeholder": "Ej: Reunión de equipo, Capacitación, etc.",
+                "required": "required"
+            }),
         }
 
-    # --- MÉTODO CORREGIDO ---
     def __init__(self, *args, **kwargs):
         # Se extrae el 'user' de los kwargs ANTES de continuar.
         user = kwargs.pop('user', None)
@@ -50,6 +53,7 @@ class ReservaPanelForm(forms.ModelForm):
             "lugar",
             "fecha_inicio",
             "fecha_fin",
+            "proposito",
             "estado",
             "notas_adicionales",
         ]
@@ -60,9 +64,17 @@ class ReservaPanelForm(forms.ModelForm):
             "fecha_fin": forms.DateTimeInput(
                 attrs={"type": "datetime-local"}, format="%Y-%m-%dT%H:%M"
             ),
+            "proposito": forms.TextInput(attrs={"placeholder": "Ej: Reunión de equipo"}),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["fecha_inicio"].input_formats = ("%Y-%m-%dT%H:%M",)
         self.fields["fecha_fin"].input_formats = ("%Y-%m-%dT%H:%M",)
+        # Configurar el campo proposito
+        self.fields['proposito'].required = True
+        self.fields['proposito'].label = 'Propósito de la reserva *'
+        self.fields['proposito'].help_text = 'Por favor, indique el propósito de la reserva'
+        self.fields['proposito'].widget.attrs.update({
+            'placeholder': 'Ej: Reunión de equipo, Capacitación, etc.'
+        })
