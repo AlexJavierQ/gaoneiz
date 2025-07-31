@@ -137,13 +137,14 @@ class TipoLugarForm(forms.ModelForm):
 class LugarForm(forms.ModelForm):
     class Meta:
         model = Lugar
-        fields = '__all__'
+        # --- CAMBIO AQUÍ: Se añade 'activo' a la lista de campos ---
+        fields = ['nombre', 'tipo', 'descripcion', 'imagen', 'activo']
         widgets = {
             'nombre': forms.TextInput(attrs={'class': 'form-control'}),
             'tipo': forms.Select(attrs={'class': 'form-select'}),
-            'ubicacion': forms.TextInput(attrs={'class': 'form-control'}),
             'descripcion': forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),
-            'equipamiento': forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),
+            'imagen': forms.FileInput(attrs={'class': 'form-control'}),
+            # --- CAMBIO AQUÍ: Se añade un widget para el campo 'activo' ---
             'activo': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
 

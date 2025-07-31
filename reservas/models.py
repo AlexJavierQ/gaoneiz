@@ -17,9 +17,9 @@ class Lugar(models.Model):
     nombre = models.CharField(max_length=200)
     tipo = models.ForeignKey(TipoLugar, on_delete=models.PROTECT, related_name='lugares')
     descripcion = models.TextField(blank=True)
-    # --- CAMBIO AQUÍ ---
-    # Se agrega el campo para la imagen. `upload_to` especifica la subcarpeta dentro de `media`.
     imagen = models.ImageField(upload_to='lugares/', null=True, blank=True, verbose_name="Imagen del Lugar")
+    activo = models.BooleanField(default=True, help_text="Marcar para que este lugar sea visible al público.")
+
 
     def __str__(self):
         return self.nombre

@@ -24,7 +24,11 @@ class LugarListView(ListView):
     context_object_name = 'lugares'
 
     def get_queryset(self):
-        return Lugar.objects.filter(tipo__activo=True).select_related('tipo')
+        """
+        CORREGIDO: Filtra para mostrar solo lugares y tipos de lugar que estén activos.
+        """
+        # --- CAMBIO AQUÍ: Se añade el filtro por lugar.activo ---
+        return Lugar.objects.filter(activo=True, tipo__activo=True).select_related('tipo')
 
 
 class LugarDetailView(DetailView):
