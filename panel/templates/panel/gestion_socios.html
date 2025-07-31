@@ -44,9 +44,12 @@
                             title="Editar">
                             <i class="fas fa-pen"></i>
                         </a>
-                        <a href="#" class="btn btn-sm btn-outline-danger" title="Eliminar">
-                            <i class="fas fa-trash"></i>
-                        </a>
+                        <form action="{% url 'panel:socio_delete' socio.pk %}" method="post" class="d-inline" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este socio? Esta acción no se puede deshacer.');">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Eliminar">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </form>
                     </td>
                 </tr>
                 {% empty %}

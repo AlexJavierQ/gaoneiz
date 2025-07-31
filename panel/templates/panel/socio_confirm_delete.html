@@ -6,8 +6,7 @@
     <div class="col-lg-6">
         <div class="info-card text-center">
             <h3 class="text-danger">Confirmar Eliminación de Perfil de Socio</h3>
-            <p class="lead my-4">¿Estás seguro de que quieres eliminar permanentemente el perfil de socio de <strong>"{{
-                    object.razon_social }}"</strong>?</p>
+            <p class="lead my-4">¿Estás seguro de que quieres eliminar permanentemente el perfil de socio de <strong>"{{ object.razon_social }}"</strong>?</p>
             <p class="text-muted">Esto no eliminará la cuenta de usuario, solo revocará su estatus de socio.</p>
             <form method="post">
                 {% csrf_token %}

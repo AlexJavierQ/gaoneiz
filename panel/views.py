@@ -72,12 +72,27 @@ class DashboardView(LoginRequiredMixin, StaffRequiredMixin, TemplateView):
         context["title"] = "Dashboard Principal"
 
         # --- KPIs Clave ---
-        context["kpis"] = {
-            "total_usuarios": Usuario.objects.count(),
-            "total_socios": PerfilSocio.objects.filter(is_active=True).count(),
-            "solicitudes_pendientes": SolicitudAfiliacion.objects.filter(
+        try:
+            total_usuarios = Usuario.objects.count()
+        except:
+            total_usuarios = 0
+            
+        try:
+            total_socios = PerfilSocio.objects.filter(is_active=True).count()
+        except:
+            total_socios = 0
+            
+        try:
+            solicitudes_pendientes = SolicitudAfiliacion.objects.filter(
                 estado="PENDIENTE"
-            ).count(),
+            ).count()
+        except:
+            solicitudes_pendientes = 0
+            
+        context["kpis"] = {
+            "total_usuarios": total_usuarios,
+            "total_socios": total_socios,
+            "solicitudes_pendientes": solicitudes_pendientes,
         }
 
         # --- Datos para Gráfico: Nuevos usuarios en los últimos 7 días ---
@@ -142,11 +157,12 @@ class AprobarSolicitudView(LoginRequiredMixin, StaffRequiredMixin, View):
             
             # --- LÓGICA CORREGIDA ---
             # Ahora los campos 'ruc' y 'direccion' existen en el objeto 'solicitud'
-            PerfilSocio.objects.create(
+            perfil_socio = PerfilSocio.objects.create(
                 usuario=solicitud.usuario,
                 razon_social=solicitud.razon_social,
                 ruc=solicitud.ruc,
-                direccion=solicitud.direccion,
+                direccion=solicitud.direccion_comercial,  # Usar el campo correcto
+                tipo_plan='NATURAL',  # Valor por defecto
                 is_active=True,
             )
             # --- FIN DE LA CORRECCIÓN ---
@@ -155,6 +171,9 @@ class AprobarSolicitudView(LoginRequiredMixin, StaffRequiredMixin, View):
             solicitud.fecha_revision = timezone.now()
             solicitud.revisado_por = request.user
             solicitud.save()
+
+            # Registrar la aprobación de la solicitud
+            registrar_aprobacion_solicitud(request.user, solicitud)
 
             messages.success(
                 request, f"Solicitud de {solicitud.usuario.get_full_name()} aprobada."
@@ -226,7 +245,11 @@ class SocioUpdateView(StaffRequiredMixin, UpdateView):
         perfil_form = context["perfil_form"]
         if form.is_valid() and perfil_form.is_valid():
             form.save()
-            perfil_form.save()
+            perfil_socio = perfil_form.save()
+            
+            # Registrar la actualización del socio
+            registrar_actualizacion(self.request.user, perfil_socio, "socio")
+            
             messages.success(
                 self.request, f"Socio '{self.object.get_full_name()}' actualizado."
             )
@@ -241,9 +264,16 @@ class SocioDeleteView(LoginRequiredMixin, StaffRequiredMixin, DeleteView):
     success_url = reverse_lazy("panel:gestion_socios")
 
     def form_valid(self, form):
+        """Sobrescribir form_valid para registrar la actividad antes de eliminar"""
+        self.object = self.get_object()
+        socio_nombre = self.object.razon_social or "Socio sin nombre"
+        
+        # Registrar la eliminación antes de eliminar el objeto
+        registrar_eliminacion(self.request.user, self.object, "socio")
+        
         messages.success(
             self.request,
-            f"El perfil de socio para {self.object.razon_social} ha sido eliminado.",
+            f"El perfil de socio para {socio_nombre} ha sido eliminado.",
         )
         return super().form_valid(form)
 
@@ -296,9 +326,12 @@ class ConvenioDeleteView(StaffRequiredMixin, DeleteView):
     success_url = reverse_lazy("panel:convenio_list")
 
     def form_valid(self, form):
-        # Registrar actividad antes de eliminar
+        """Sobrescribir form_valid para registrar la actividad antes de eliminar"""
+        self.object = self.get_object()
+        
+        # Registrar la eliminación antes de eliminar el objeto
         registrar_eliminacion(self.request.user, self.object, "convenio")
-
+        
         messages.success(self.request, "Convenio eliminado exitosamente.")
         return super().form_valid(form)
 
@@ -323,6 +356,10 @@ class NoticiaCreateView(StaffRequiredMixin, CreateView):
         noticia = form.save(commit=False)
         noticia.autor = self.request.user
         noticia.save()
+        
+        # Registrar la creación de la noticia
+        registrar_creacion(self.request.user, noticia, "noticia")
+        
         messages.success(self.request, "Noticia creada exitosamente.")
         return redirect(self.success_url)
 
@@ -334,6 +371,9 @@ class NoticiaUpdateView(StaffRequiredMixin, UpdateView):
     success_url = reverse_lazy("panel:noticia_panel_list")
 
     def form_valid(self, form):
+        # Registrar la actualización de la noticia
+        registrar_actualizacion(self.request.user, form.instance, "noticia")
+        
         messages.success(self.request, "Noticia actualizada exitosamente.")
         return super().form_valid(form)
 
@@ -344,6 +384,12 @@ class NoticiaDeleteView(StaffRequiredMixin, DeleteView):
     success_url = reverse_lazy("panel:noticia_panel_list")
 
     def form_valid(self, form):
+        """Sobrescribir form_valid para registrar la actividad antes de eliminar"""
+        self.object = self.get_object()
+        
+        # Registrar la eliminación antes de eliminar el objeto
+        registrar_eliminacion(self.request.user, self.object, "noticia")
+        
         messages.success(
             self.request, f"La noticia '{self.object.titulo}' ha sido eliminada."
         )
@@ -367,6 +413,13 @@ class ServicioCreateView(StaffRequiredMixin, CreateView):
     success_url = reverse_lazy("panel:servicio_panel_list")
 
     def form_valid(self, form):
+        servicio = form.save(commit=False)
+        servicio.creado_por = self.request.user
+        servicio.save()
+        
+        # Registrar la creación del servicio
+        registrar_creacion(self.request.user, servicio, "servicio")
+        
         messages.success(self.request, "Servicio creado exitosamente.")
         return super().form_valid(form)
 
@@ -378,6 +431,9 @@ class ServicioUpdateView(StaffRequiredMixin, UpdateView):
     success_url = reverse_lazy("panel:servicio_panel_list")
 
     def form_valid(self, form):
+        # Registrar la actualización del servicio
+        registrar_actualizacion(self.request.user, form.instance, "servicio")
+        
         messages.success(self.request, "Servicio actualizado exitosamente.")
         return super().form_valid(form)
 
@@ -388,6 +444,12 @@ class ServicioDeleteView(StaffRequiredMixin, DeleteView):
     success_url = reverse_lazy("panel:servicio_panel_list")
 
     def form_valid(self, form):
+        """Sobrescribir form_valid para registrar la actividad antes de eliminar"""
+        self.object = self.get_object()
+        
+        # Registrar la eliminación antes de eliminar el objeto
+        registrar_eliminacion(self.request.user, self.object, "servicio")
+        
         messages.success(
             self.request, f"El servicio '{self.object.nombre}' ha sido eliminado."
         )

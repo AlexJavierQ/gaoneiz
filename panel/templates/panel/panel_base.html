@@ -11,140 +11,258 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+  
+  <!-- Chart.js para gráficos -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
-    .sidebar {
-      width: 280px;
-      background-color: #212529;
+    :root {
+      --panel-primary: #1e3a8a;
+      --panel-secondary: #3b82f6;
+      --panel-accent: #f59e0b;
+      --panel-success: #10b981;
+      --panel-warning: #f59e0b;
+      --panel-danger: #ef4444;
+      --panel-light: #f8fafc;
+      --panel-dark: #1e293b;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
       min-height: 100vh;
     }
 
-    .sidebar .nav-link {
-      color: #adb5bd;
-      transition: all 0.2s ease;
+    /* Navbar personalizado */
+    .panel-navbar {
+      background: linear-gradient(135deg, var(--panel-primary) 0%, var(--panel-secondary) 100%);
+      box-shadow: 0 4px 20px rgba(30, 58, 138, 0.15);
+      padding: 1rem 0;
     }
 
-    .sidebar .nav-link:hover,
-    .sidebar .nav-link.active {
-      color: #fff;
-      background-color: #343a40;
+    .panel-navbar .navbar-brand {
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: white !important;
     }
 
-    .sidebar .sidebar-heading {
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      color: #6c757d;
-      padding: 0.75rem 1rem 0;
+    .panel-navbar .nav-link {
+      color: rgba(255, 255, 255, 0.9) !important;
+      font-weight: 500;
+      padding: 0.75rem 1rem !important;
+      border-radius: 8px;
+      margin: 0 0.25rem;
+      transition: all 0.3s ease;
     }
 
-    .content {
-      flex: 1;
-      padding: 30px;
-      background-color: #f8f9fa;
+    .panel-navbar .nav-link:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: white !important;
+      transform: translateY(-2px);
     }
 
+    .panel-navbar .nav-link.active {
+      background-color: var(--panel-accent);
+      color: var(--panel-primary) !important;
+      font-weight: 600;
+    }
+
+    .panel-navbar .dropdown-menu {
+      border: none;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+    }
+
+    /* Contenido principal */
+    .main-content {
+      padding: 2rem 0;
+      min-height: calc(100vh - 80px);
+    }
+
+    /* Cards mejoradas */
+    .stat-card {
+      background: white;
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--panel-primary), var(--panel-secondary));
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .stat-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: white;
+      margin-bottom: 1rem;
+    }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--panel-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      color: #64748b;
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+
+    /* Gráficos */
+    .chart-container {
+      background: white;
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      margin-bottom: 2rem;
+    }
+
+    .chart-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--panel-dark);
+      margin-bottom: 1.5rem;
+    }
+
+    /* Responsive */
     @media (max-width: 768px) {
-      .sidebar {
-        display: none;
+      .main-content {
+        padding: 1rem 0;
       }
-
-      .sidebar.show {
-        display: block;
-        position: absolute;
-        z-index: 999;
+      
+      .stat-card {
+        padding: 1.5rem;
+      }
+      
+      .stat-number {
+        font-size: 2rem;
       }
     }
   </style>
 </head>
 
-<body class="d-flex flex-column flex-md-row">
-  <!-- Sidebar -->
-  <nav class="sidebar d-flex flex-column flex-shrink-0 p-3">
-    <!-- Logo y encabezado -->
-    <a href="{% url 'panel:dashboard' %}" class="d-flex align-items-center mb-4 text-white text-decoration-none">
-      <i class="fa-solid fa-store fs-4 me-2"></i>
-      <span class="fs-5 fw-semibold">Panel de Gestión</span>
-    </a>
-
-    <hr class="text-white" />
-
-    {% with current_url=request.resolver_match.url_name %}
-    <ul class="nav nav-pills flex-column mb-auto">
-
-      <!-- Dashboard -->
-      <li class="nav-item">
-        <a href="{% url 'panel:dashboard' %}"
-          class="nav-link {% if current_url == 'dashboard' %}active text-white{% else %}text-white{% endif %}">
-          <i class="fa-solid fa-tachometer-alt me-2"></i> Dashboard
-        </a>
-      </li>
-
-      <!-- Gestión -->
-      <li class="mt-3 sidebar-heading text-uppercase text-white-50 small">Gestión</li>
-      <li><a href="{% url 'panel:solicitudes_afiliacion' %}"
-          class="nav-link {% if 'solicitud' in current_url %}active text-white{% else %}text-white{% endif %}"><i
-            class="fa-solid fa-user-plus me-2"></i>Solicitudes</a></li>
-      <li><a href="{% url 'panel:gestion_socios' %}"
-          class="nav-link {% if 'socio' in current_url %}active text-white{% else %}text-white{% endif %}"><i
-            class="fa-solid fa-users me-2"></i>Socios</a></li>
-      <li><a href="{% url 'panel:convenio_list' %}"
-          class="nav-link {% if 'convenio' in current_url %}active text-white{% else %}text-white{% endif %}"><i
-            class="fa-solid fa-handshake me-2"></i>Convenios</a></li>
-      <li><a href="{% url 'panel:noticia_panel_list' %}"
-          class="nav-link {% if 'noticia' in current_url %}active text-white{% else %}text-white{% endif %}"><i
-            class="fa-solid fa-newspaper me-2"></i>Noticias</a></li>
-      <li><a href="{% url 'panel:reserva_panel_list' %}"
-          class="nav-link {% if 'reserva' in current_url %}active text-white{% else %}text-white{% endif %}"><i
-            class="fa-solid fa-calendar-check me-2"></i>Reservas</a></li>
-      <li><a href="{% url 'panel:lugar_list' %}"
-          class="nav-link {% if 'lugar' in current_url %}active text-white{% else %}text-white{% endif %}"><i
-            class="fa-solid fa-map-marker-alt me-2"></i>Lugares</a></li>
-      <li><a href="{% url 'panel:tipo_lugar_list' %}"
-          class="nav-link {% if 'tipo_lugar' in current_url %}active text-white{% else %}text-white{% endif %}"><i
-            class="fa-solid fa-tags me-2"></i>Tipos de Lugar</a></li>
-      <li><a href="{% url 'panel:servicio_panel_list' %}"
-          class="nav-link {% if 'servicio' in current_url %}active text-white{% else %}text-white{% endif %}"><i
-            class="fa-solid fa-concierge-bell me-2"></i>Servicios</a></li>
-
-      <!-- Sistema -->
-      <li class="mt-3 sidebar-heading text-uppercase text-white-50 small">Sistema</li>
-      <li><a href="{% url 'panel:registro_actividad' %}"
-          class="nav-link {% if 'registro_actividad' in current_url %}active text-white{% else %}text-white{% endif %}"><i
-            class="fa-solid fa-history me-2"></i>Registro de Actividad</a></li>
-    </ul>
-    {% endwith %}
-
-    <hr class="text-white" />
-
-    <!-- Usuario actual -->
-    <div class="dropdown">
-      <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
-        data-bs-toggle="dropdown">
-        <i class="fa-solid fa-circle-user fs-4 me-2"></i>
-        <strong>{{ user.first_name|default:user.email }}</strong>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg panel-navbar">
+    <div class="container-fluid">
+      <!-- Brand -->
+      <a class="navbar-brand d-flex align-items-center" href="{% url 'panel:dashboard' %}">
+        <i class="fas fa-chart-line me-2"></i>
+        Panel Administrativo
       </a>
-      <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-        <li><a class="dropdown-item" href="{% url 'web:home' %}">Ver Sitio Público</a></li>
-        <li>
-          <hr class="dropdown-divider" />
-        </li>
-        <li><a class="dropdown-item" href="{% url 'account_logout' %}">Cerrar Sesión</a></li>
-      </ul>
+
+      <!-- Toggle button for mobile -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Navigation items -->
+      <div class="collapse navbar-collapse" id="navbarNav">
+        {% with current_url=request.resolver_match.url_name %}
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link {% if current_url == 'dashboard' %}active{% endif %}" 
+               href="{% url 'panel:dashboard' %}">
+              <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+            </a>
+          </li>
+          
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle {% if 'solicitud' in current_url or 'socio' in current_url %}active{% endif %}" 
+               href="#" role="button" data-bs-toggle="dropdown">
+              <i class="fas fa-users me-1"></i>Usuarios
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'panel:solicitudes_afiliacion' %}">
+                <i class="fas fa-user-plus me-2"></i>Solicitudes
+              </a></li>
+              <li><a class="dropdown-item" href="{% url 'panel:gestion_socios' %}">
+                <i class="fas fa-users me-2"></i>Socios
+              </a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle {% if 'convenio' in current_url or 'servicio' in current_url %}active{% endif %}" 
+               href="#" role="button" data-bs-toggle="dropdown">
+              <i class="fas fa-briefcase me-1"></i>Servicios
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'panel:convenio_list' %}">
+                <i class="fas fa-handshake me-2"></i>Convenios
+              </a></li>
+              <li><a class="dropdown-item" href="{% url 'panel:servicio_panel_list' %}">
+                <i class="fas fa-concierge-bell me-2"></i>Servicios
+              </a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link {% if 'noticia' in current_url %}active{% endif %}" 
+               href="{% url 'panel:noticia_panel_list' %}">
+              <i class="fas fa-newspaper me-1"></i>Noticias
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link {% if 'registro_actividad' in current_url %}active{% endif %}" 
+               href="{% url 'panel:registro_actividad' %}">
+              <i class="fas fa-history me-1"></i>Actividad
+            </a>
+          </li>
+        </ul>
+        {% endwith %}
+
+        <!-- User dropdown -->
+        <ul class="navbar-nav">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+              <i class="fas fa-user-circle me-2"></i>
+              {{ user.first_name|default:user.email }}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="{% url 'web:home' %}">
+                <i class="fas fa-home me-2"></i>Ver Sitio Público
+              </a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item text-danger" href="{% url 'account_logout' %}">
+                <i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
+              </a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
     </div>
   </nav>
 
-  <!-- Contenido Principal -->
-  <main class="content w-100">
-    {% if messages %}
-    {% for message in messages %}
-    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-      {{ message }}
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="container-fluid">
+      <!-- Page Content -->
+      {% block content %}{% endblock %}
     </div>
-    {% endfor %}
-    {% endif %}
-
-    {% block content %}{% endblock %}
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

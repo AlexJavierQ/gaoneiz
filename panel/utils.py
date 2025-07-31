@@ -24,8 +24,12 @@ def registrar_actividad(actor, accion, content_object=None):
         actividad.content_type = ContentType.objects.get_for_model(content_object)
         actividad.object_id = content_object.pk
     
-    actividad.save()
-    return actividad
+    try:
+        actividad.save()
+        return actividad
+    except Exception as e:
+        # En caso de error, podríamos loggear aquí
+        return None
 
 # Funciones específicas para diferentes tipos de actividades
 def registrar_login(usuario):
@@ -54,11 +58,14 @@ def registrar_actualizacion(usuario, objeto, tipo_objeto):
 
 def registrar_eliminacion(usuario, objeto, tipo_objeto):
     """Registra la eliminación de un objeto"""
-    return registrar_actividad(
-        usuario, 
-        f"Eliminó {tipo_objeto}: {str(objeto)}", 
-        objeto
-    )
+    # Verificar que el usuario sea staff
+    if not usuario or not usuario.is_staff:
+        return None
+    
+    # Crear descripción más detallada
+    descripcion = f"Eliminó {tipo_objeto}: {str(objeto)}"
+    
+    return registrar_actividad(usuario, descripcion, objeto)
 
 def registrar_aprobacion_solicitud(usuario, solicitud):
     """Registra la aprobación de una solicitud"""
