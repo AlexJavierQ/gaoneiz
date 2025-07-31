@@ -13,6 +13,7 @@ class Convenio(models.Model):
     fecha_inicio = models.DateField()
     fecha_vencimiento = models.DateField(null=True, blank=True)
     sitio_web = models.URLField(blank=True)
+    imagen = models.ImageField(upload_to='convenios/', null=True, blank=True, verbose_name="Imagen del Convenio")
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):

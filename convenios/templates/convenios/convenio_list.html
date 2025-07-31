@@ -50,10 +50,20 @@
                 {% for convenio in convenios %}
                 <div class="col-md-6 col-lg-4">
                     <div class="custom-card h-100">
+                        {% if convenio.imagen %}
+                        <div class="convenio-image-container" style="height: 180px; overflow: hidden; text-align: center; background-color: #f8f9fa;">
+                            <img src="{{ convenio.imagen.url }}" alt="{{ convenio.nombre_empresa }}" style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                        </div>
+                        {% else %}
+                        <div class="convenio-image-placeholder d-flex align-items-center justify-content-center" style="height: 180px; background-color: #f8f9fa;">
+                            <i class="fas fa-building fa-3x text-muted"></i>
+                        </div>
+                        {% endif %}
+                        
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start mb-3">
                                 <span class="category-badge">{{ convenio.get_categoria_display }}</span>
-                                <span class="status-badge status-active">{{ convenio.estado }}</span>
+                                <span class="status-badge status-{{ convenio.estado|lower }}">{{ convenio.estado }}</span>
                             </div>
                             
                             <h5 class="card-title">{{ convenio.nombre_empresa }}</h5>

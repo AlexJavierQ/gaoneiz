@@ -20,6 +20,7 @@ class ConvenioForm(forms.ModelForm):
             "fecha_inicio",
             "fecha_vencimiento",
             "sitio_web",
+            "imagen",
         ]
         widgets = {
             "fecha_inicio": forms.DateInput(
@@ -28,12 +29,20 @@ class ConvenioForm(forms.ModelForm):
             "fecha_vencimiento": forms.DateInput(
                 attrs={"type": "date", "class": "form-control"}
             ),
+            "imagen": forms.FileInput(
+                attrs={"class": "form-control-file", "accept": "image/*"}
+            ),
             "descripcion": forms.Textarea(attrs={"rows": 4, "class": "form-control"}),
             "nombre_empresa": forms.TextInput(attrs={"class": "form-control"}),
             "categoria": forms.Select(attrs={"class": "form-select"}),
             "estado": forms.Select(attrs={"class": "form-select"}),
             "sitio_web": forms.URLInput(attrs={"class": "form-control"}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Asegurarse de que el campo de imagen no sea requerido
+        self.fields['imagen'].required = False
 
 
 class UsuarioEditForm(forms.ModelForm):
