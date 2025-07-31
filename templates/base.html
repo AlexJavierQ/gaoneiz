@@ -41,11 +41,14 @@
                         </li>
                         {% endif %}
                         <!-- NUEVO: Menú Reservas -->
+                        {% if user.is_authenticated and user.es_socio %}
+
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                                 aria-expanded="false">
                                 Reservas
                             </a>
+
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="{% url 'reservas:lugares_list' %}"><i
                                             class="fa-solid fa-map-location-dot me-2"></i>Lugares</a></li>
@@ -54,7 +57,9 @@
                                 <li><a class="dropdown-item" href="{% url 'reservas:nueva_reserva' %}"><i
                                             class="fa-solid fa-plus me-2"></i>Crear Reserva</a></li>
                             </ul>
+
                         </li>
+                        {% endif %}
 
                         <li class="nav-item"><a class="nav-link" href="{% url 'web:nosotros' %}">Nosotros</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'web:contacto' %}">Contacto</a></li>
